@@ -13,16 +13,23 @@ import shutil
 import tarfile
 from PySide import QtCore, QtGui
 from sitecontainer import SiteContainer
-import expanduser
+import platform
+
+#import expanduser
 
 
 class Database(QtCore.QObject):
 
     def __init__(self):
 
-        self.home_directory = expanduser.expand_user()
-        #print self.home_directory
-        #self.home_directory = os.path.expanduser(u'~')
+        if platform.system() == 'Windows':
+            import expanduser
+            self.home_directory = expanduser.expand_user()
+            
+        else:
+        
+            self.home_directory = os.path.expanduser(u'~')
+            
         self.top_directory = os.path.join(self.home_directory, u'GCA Analyzer')
         self.sites_directory = os.path.join(self.top_directory, u'sites')
 
