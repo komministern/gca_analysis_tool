@@ -4,9 +4,9 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['C:\\Users\\oscfra01\\Dev\\capturesite\\project'],
-             binaries=None,
-             datas=None,
+             pathex=['C:\\Users\\Dev\\Development\\GitHub\\GCA-Analysis-Tool\\project'],
+             binaries=[],
+             datas=[],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
