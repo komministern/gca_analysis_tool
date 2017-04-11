@@ -41,12 +41,6 @@
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
            <widget class="QComboBox" name="comboBox_Coloring">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>26</height>
-             </size>
-            </property>
             <property name="toolTip">
              <string/>
             </property>
@@ -200,12 +194,6 @@
        </item>
        <item row="0" column="0" colspan="2">
         <widget class="QLineEdit" name="lineEdit_StringSearch">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>28</height>
-          </size>
-         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -253,40 +241,44 @@
       <property name="minimumSize">
        <size>
         <width>330</width>
-        <height>102</height>
+        <height>115</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>330</width>
-        <height>102</height>
+        <height>115</height>
        </size>
       </property>
       <property name="title">
-       <string>History Log Filtering</string>
+       <string>History Log Suppression</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0" colspan="2">
-        <widget class="QComboBox" name="comboBox_ChooseFilter">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>26</height>
-          </size>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
-        <widget class="QPushButton" name="pushButton_NewFilter">
+        <widget class="QCheckBox" name="checkBox_Transmitter">
          <property name="text">
-          <string>New</string>
+          <string>(0d) Transmitter On/Off</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="pushButton_EditFilter">
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="checkBox_AntennaDrive">
          <property name="text">
-          <string>Edit</string>
+          <string>(0c) Antenna Drive On/Off</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="checkBox_HeaterControl">
+         <property name="text">
+          <string>(24) Heater Control</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="checkBox_Temperature">
+         <property name="text">
+          <string>(23) Temperature</string>
          </property>
         </widget>
        </item>
