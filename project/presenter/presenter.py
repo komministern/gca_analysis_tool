@@ -58,9 +58,6 @@ class MyPresenter(QtCore.QObject):
 
 
         self.filter0 = Filter()
-        self.filter0.show = []
-        self.filter0.suppress = []
-        self.filter0.name = u'no filter'
         
         self.filter1 = Filter()
         self.filter1.show = [u'(23)']
@@ -69,7 +66,7 @@ class MyPresenter(QtCore.QObject):
         
         self.filter2 = Filter()
         self.filter2.show = []
-        self.filter2.suppress = [u'(23)']
+        self.filter2.suppress = [u'(23)', u'(24)']
         self.filter2.name = u'suppress filter 2'
 
         self.filters = [self.filter0, self.filter1, self.filter2]
@@ -301,55 +298,38 @@ class MyPresenter(QtCore.QObject):
             self.update_comment()   # Here?????????????????????????
 
 
-    # ----------- Suppressions stuff
+
+
+    # ----------- Filter stuff
 
 
     def format_text(self, text):
-        if self.current_filter.show:
-            return '\n'.join([s for s in text.splitlines() if s[0:4] in self.current_filter.show])
-        elif self.current_filter.suppress:
-            return '\n'.join([s for s in text.splitlines() if not s[0:4] in self.current_filter.suppress])
-        else:
-            return text
+        if text != u'No history log exists for this date.':
+            if self.current_filter.show:
+                return '\n'.join([s for s in text.splitlines() if s[0:4] in self.current_filter.show])
+            elif self.current_filter.suppress:
+                return '\n'.join([s for s in text.splitlines() if not s[0:4] in self.current_filter.suppress])
+        return text
 
 
-    def temperature_filter(self, newstate):
-        if newstate > 0:
-            self.suppressed_codes.append('(23)')
-        else:
-            self.suppressed_codes.remove('(23)')
-        self.update_text()
 
+    def newwindow(self):
+        self.wid = QtGui.QWidget()
+        self.wid.resize(250, 150)
+        self.wid.setWindowTitle('NewWindow')
+        self.wid.show()
 
-    def heatercontrol_filter(self, newstate):
-        if newstate > 0:
-            self.suppressed_codes.append('(24)')
-        else:
-            self.suppressed_codes.remove('(24)')
-        self.update_text()
-
-
-    def transmitter_filter(self, newstate):
-        if newstate > 0:
-            self.suppressed_codes.append('(0d)')
-        else:
-            self.suppressed_codes.remove('(0d)')
-        self.update_text()
-
-
-    def antennadrive_filter(self, newstate):
-        if newstate > 0:
-            self.suppressed_codes.append('(0c)')
-        else:
-            self.suppressed_codes.remove('(0c)')
-        self.update_text()
 
 
     def new_filter(self):
-        print 'new filter'
+        print 'up window'
+        self.newwindow()
 
     def edit_filter(self):
         print 'edit filter'
+
+    def delete_filter(self):
+        print 'delete filter'
 
     def choose_filter(self, index):
         self.current_filter = self.filters[index]
@@ -645,6 +625,7 @@ class MyPresenter(QtCore.QObject):
 
         self.view.pushButton_NewFilter.clicked.connect(self.new_filter)
         self.view.pushButton_EditFilter.clicked.connect(self.edit_filter)
+        self.view.pushButton_DeleteFilter.clicked.connect(self.delete_filter)
         self.view.comboBox_ChooseFilter.currentIndexChanged.connect(self.choose_filter)
 
         self.view.pushButton_CommitStringSearch.clicked.connect(self.commit_string_search)

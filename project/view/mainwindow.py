@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Tue Apr 11 10:58:50 2017
+# Created: Tue Apr 11 14:34:09 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -29,7 +29,7 @@ class Ui_MainWindow(object):
         self.gridLayout_4 = QtGui.QGridLayout(self.groupBox_5)
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.comboBox_Coloring = QtGui.QComboBox(self.groupBox_5)
-        self.comboBox_Coloring.setMinimumSize(QtCore.QSize(0, 26))
+        self.comboBox_Coloring.setMinimumSize(QtCore.QSize(0, 0))
         self.comboBox_Coloring.setToolTip("")
         self.comboBox_Coloring.setObjectName("comboBox_Coloring")
         self.gridLayout_4.addWidget(self.comboBox_Coloring, 0, 0, 1, 1)
@@ -81,7 +81,7 @@ class Ui_MainWindow(object):
         self.pushButton_ResetStringSearch.setObjectName("pushButton_ResetStringSearch")
         self.gridLayout_2.addWidget(self.pushButton_ResetStringSearch, 2, 2, 1, 1)
         self.lineEdit_StringSearch = QtGui.QLineEdit(self.groupBox_2)
-        self.lineEdit_StringSearch.setMinimumSize(QtCore.QSize(0, 28))
+        self.lineEdit_StringSearch.setMinimumSize(QtCore.QSize(0, 0))
         self.lineEdit_StringSearch.setToolTip("")
         self.lineEdit_StringSearch.setObjectName("lineEdit_StringSearch")
         self.gridLayout_2.addWidget(self.lineEdit_StringSearch, 0, 0, 1, 2)
@@ -91,7 +91,7 @@ class Ui_MainWindow(object):
         self.gridLayout_5 = QtGui.QGridLayout(self.groupBox_4)
         self.gridLayout_5.setObjectName("gridLayout_5")
         self.comboBox_ActiveSite = QtGui.QComboBox(self.groupBox_4)
-        self.comboBox_ActiveSite.setMinimumSize(QtCore.QSize(180, 26))
+        self.comboBox_ActiveSite.setMinimumSize(QtCore.QSize(180, 0))
         self.comboBox_ActiveSite.setMaximumSize(QtCore.QSize(180, 26))
         self.comboBox_ActiveSite.setToolTip("")
         self.comboBox_ActiveSite.setObjectName("comboBox_ActiveSite")
@@ -104,15 +104,18 @@ class Ui_MainWindow(object):
         self.gridLayout_3 = QtGui.QGridLayout(self.groupBox)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.comboBox_ChooseFilter = QtGui.QComboBox(self.groupBox)
-        self.comboBox_ChooseFilter.setMinimumSize(QtCore.QSize(0, 26))
+        self.comboBox_ChooseFilter.setMinimumSize(QtCore.QSize(0, 0))
         self.comboBox_ChooseFilter.setObjectName("comboBox_ChooseFilter")
-        self.gridLayout_3.addWidget(self.comboBox_ChooseFilter, 0, 0, 1, 2)
+        self.gridLayout_3.addWidget(self.comboBox_ChooseFilter, 0, 0, 1, 3)
         self.pushButton_NewFilter = QtGui.QPushButton(self.groupBox)
         self.pushButton_NewFilter.setObjectName("pushButton_NewFilter")
         self.gridLayout_3.addWidget(self.pushButton_NewFilter, 1, 0, 1, 1)
         self.pushButton_EditFilter = QtGui.QPushButton(self.groupBox)
         self.pushButton_EditFilter.setObjectName("pushButton_EditFilter")
         self.gridLayout_3.addWidget(self.pushButton_EditFilter, 1, 1, 1, 1)
+        self.pushButton_DeleteFilter = QtGui.QPushButton(self.groupBox)
+        self.pushButton_DeleteFilter.setObjectName("pushButton_DeleteFilter")
+        self.gridLayout_3.addWidget(self.pushButton_DeleteFilter, 1, 2, 1, 1)
         self.gridLayout_8.addWidget(self.groupBox, 3, 0, 1, 1)
         spacerItem = QtGui.QSpacerItem(17, 139, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.gridLayout_8.addItem(spacerItem, 4, 0, 1, 1)
@@ -158,7 +161,7 @@ class Ui_MainWindow(object):
         self.gridLayout_8.addWidget(self.tabWidget_TextFields, 1, 1, 4, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1114, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1114, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
@@ -196,6 +199,7 @@ class Ui_MainWindow(object):
         self.groupBox.setTitle(QtGui.QApplication.translate("MainWindow", "History Log Filtering", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_NewFilter.setText(QtGui.QApplication.translate("MainWindow", "New", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_EditFilter.setText(QtGui.QApplication.translate("MainWindow", "Edit", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton_DeleteFilter.setText(QtGui.QApplication.translate("MainWindow", "Delete", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_TextFields.setTabText(self.tabWidget_TextFields.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "History Log", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_7.setTitle(QtGui.QApplication.translate("MainWindow", "Comment", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_DeleteComment.setStatusTip(QtGui.QApplication.translate("MainWindow", "Delete this comment from database", None, QtGui.QApplication.UnicodeUTF8))

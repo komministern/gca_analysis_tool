@@ -44,7 +44,7 @@
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>26</height>
+              <height>0</height>
              </size>
             </property>
             <property name="toolTip">
@@ -203,7 +203,7 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>28</height>
+           <height>0</height>
           </size>
          </property>
          <property name="toolTip">
@@ -228,7 +228,7 @@
          <property name="minimumSize">
           <size>
            <width>180</width>
-           <height>26</height>
+           <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -266,12 +266,12 @@
        <string>History Log Filtering</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0" colspan="2">
+       <item row="0" column="0" colspan="3">
         <widget class="QComboBox" name="comboBox_ChooseFilter">
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>26</height>
+           <height>0</height>
           </size>
          </property>
         </widget>
@@ -287,6 +287,13 @@
         <widget class="QPushButton" name="pushButton_EditFilter">
          <property name="text">
           <string>Edit</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="pushButton_DeleteFilter">
+         <property name="text">
+          <string>Delete</string>
          </property>
         </widget>
        </item>
@@ -416,7 +423,7 @@
      <x>0</x>
      <y>0</y>
      <width>1114</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
