@@ -31,13 +31,13 @@ class MyPresenter(QtCore.QObject):
         self.connect_signals()
 
         # Initialize properties
-        self.suppressed_codes = []
+#        self.suppressed_codes = []
 
-        self.filters = [u'', u'1', u'2']
-        self.view.comboBox_ChooseFilter.addItems(self.filters)
-        self.filter1 = Filter()
-        self.filter1.show =
+#        self.filters = [u'', u'1', u'2']
+#        self.view.comboBox_ChooseFilter.addItems(self.filters)
+        
 
+        #self.current_filter = 
 
         self.highlight = ''
         self.presentation_dict = {}
@@ -55,6 +55,28 @@ class MyPresenter(QtCore.QObject):
 
         self.view.comboBox_Coloring.addItems([u'Normal/Degraded/Faulted', u'New Fault/Active Fault', 
                                             u'Temporary Faults (< 1 min per day)', u'Transmitter On'])
+
+
+        self.filter0 = Filter()
+        self.filter0.show = []
+        self.filter0.suppress = []
+        self.filter0.name = u'no filter'
+        
+        self.filter1 = Filter()
+        self.filter1.show = [u'(23)']
+        self.filter1.suppress = []
+        self.filter1.name = u'show filter 1'
+        
+        self.filter2 = Filter()
+        self.filter2.show = []
+        self.filter2.suppress = [u'(23)']
+        self.filter2.name = u'suppress filter 2'
+
+        self.filters = [self.filter0, self.filter1, self.filter2]
+        self.current_filter = self.filters[0]
+        
+        self.view.comboBox_ChooseFilter.addItems([each.name for each in self.filters])
+
 
         # The first element in the items list above will be initially selected
         self.color_all_dates()
@@ -283,7 +305,12 @@ class MyPresenter(QtCore.QObject):
 
 
     def format_text(self, text):
-        return '\n'.join([s for s in text.splitlines() if not s[0:4] in self.suppressed_codes])
+        if self.current_filter.show:
+            return '\n'.join([s for s in text.splitlines() if s[0:4] in self.current_filter.show])
+        elif self.current_filter.suppress:
+            return '\n'.join([s for s in text.splitlines() if not s[0:4] in self.current_filter.suppress])
+        else:
+            return text
 
 
     def temperature_filter(self, newstate):
@@ -325,7 +352,8 @@ class MyPresenter(QtCore.QObject):
         print 'edit filter'
 
     def choose_filter(self, index):
-        print index
+        self.current_filter = self.filters[index]
+        self.update_text()
 
 
     # ------------ String search stuff
