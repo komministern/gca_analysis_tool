@@ -32,7 +32,7 @@ class MyPresenter(QtCore.QObject):
         # Initialize properties
         self.suppressed_codes = []
 
-        self.filters = [u'', u'1', u'2']
+        self.filters = [u'1', u'2']
         self.view.comboBox_ChooseFilter.addItems(self.filters)
 
 
