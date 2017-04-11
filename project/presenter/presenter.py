@@ -12,6 +12,7 @@ import string
 from PySide import QtCore, QtGui
 from coloringcontainer import ColoringContainer
 import textstuff as txt
+from myfilter import Filter
 
 
 class MyPresenter(QtCore.QObject):
@@ -34,6 +35,8 @@ class MyPresenter(QtCore.QObject):
 
         self.filters = [u'', u'1', u'2']
         self.view.comboBox_ChooseFilter.addItems(self.filters)
+        self.filter1 = Filter()
+        self.filter1.show =
 
 
         self.highlight = ''
