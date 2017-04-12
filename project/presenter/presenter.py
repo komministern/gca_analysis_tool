@@ -314,10 +314,13 @@ class MyPresenter(QtCore.QObject):
 
 
     def newwindow(self):
-        self.wid = QtGui.QWidget()
-        self.wid.resize(250, 150)
-        self.wid.setWindowTitle('NewWindow')
+        from view.filterwidget import MyFilterWidget
+        self.wid = MyFilterWidget()
         self.wid.show()
+#        self.wid = QtGui.QWidget()
+#        self.wid.resize(250, 150)
+#        self.wid.setWindowTitle('NewWindow')
+#        self.wid.show()
 
 
 

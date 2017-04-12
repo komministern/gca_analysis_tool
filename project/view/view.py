@@ -8,7 +8,7 @@
 
 
 from PySide import QtGui, QtCore
-from mainwindow import Ui_MainWindow
+from ui_mainwindow import Ui_MainWindow
 #from licensewindow import MyLicenseWindow
 
 
