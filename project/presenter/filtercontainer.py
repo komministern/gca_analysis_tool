@@ -16,11 +16,14 @@ from PySide import QtCore, QtGui
 
 class Filter(QtCore.QObject):
 
+    SUPPRESS = 0
+    SHOWONLY = 1
+
     def __init__(self):
         super(Filter, self).__init__()
 
-        self.suppress = []
-        self.show = []
+        self.content = []
+        self.state = self.SUPPRESS
 
         self.name = u''
 

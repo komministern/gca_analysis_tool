@@ -12,7 +12,7 @@ import string
 from PySide import QtCore, QtGui
 from coloringcontainer import ColoringContainer
 import textstuff as txt
-from myfilter import Filter
+from filtercontainer import Filter
 
 
 class MyPresenter(QtCore.QObject):
@@ -60,13 +60,13 @@ class MyPresenter(QtCore.QObject):
         self.filter0 = Filter()
         
         self.filter1 = Filter()
-        self.filter1.show = [u'(23)']
-        self.filter1.suppress = []
+        self.filter1.content = [u'(23)']
+        self.filter1.state = 1
         self.filter1.name = u'show filter 1'
         
         self.filter2 = Filter()
-        self.filter2.show = []
-        self.filter2.suppress = [u'(23)', u'(24)']
+        self.filter2.state = 0
+        self.filter2.content = [u'(23)', u'(24)', u'(23)', u'(24)', u'(23)', u'(24)', u'(23)', u'(24)']
         self.filter2.name = u'suppress filter 2'
 
         self.filters = [self.filter0, self.filter1, self.filter2]
@@ -305,18 +305,19 @@ class MyPresenter(QtCore.QObject):
 
     def format_text(self, text):
         if text != u'No history log exists for this date.':
-            if self.current_filter.show:
-                return '\n'.join([s for s in text.splitlines() if s[0:4] in self.current_filter.show])
-            elif self.current_filter.suppress:
-                return '\n'.join([s for s in text.splitlines() if not s[0:4] in self.current_filter.suppress])
+            if self.current_filter.state == 1 and self.current_filter.content:  # Show Only
+                return '\n'.join([s for s in text.splitlines() if s[0:4] in self.current_filter.content])
+            elif self.current_filter.state == 0:        # Suppress
+                return '\n'.join([s for s in text.splitlines() if not s[0:4] in self.current_filter.content])
         return text
 
 
 
-    def newwindow(self):
-        from view.filterwidget import MyFilterWidget
-        self.wid = MyFilterWidget()
-        self.wid.show()
+    def show_filter_dialog(self, initial_filter):
+        from view.myfilterdialog import MyFilterDialog
+        self.dialog = MyFilterDialog(initial_filter)
+        if self.dialog.exec_():
+            print self.dialog.get_final_filter().name
 #        self.wid = QtGui.QWidget()
 #        self.wid.resize(250, 150)
 #        self.wid.setWindowTitle('NewWindow')
@@ -325,16 +326,22 @@ class MyPresenter(QtCore.QObject):
 
 
     def new_filter(self):
-        print 'up window'
-        self.newwindow()
+        self.show_filter_dialog(Filter())
 
     def edit_filter(self):
-        print 'edit filter'
+        self.show_filter_dialog(self.current_filter)
 
     def delete_filter(self):
         print 'delete filter'
 
     def choose_filter(self, index):
+        if index == 0:
+            self.view.pushButton_EditFilter.setEnabled(False)
+            self.view.pushButton_DeleteFilter.setEnabled(False)
+        else:
+            self.view.pushButton_EditFilter.setEnabled(True)
+            self.view.pushButton_DeleteFilter.setEnabled(True)
+            
         self.current_filter = self.filters[index]
         self.update_text()
 
