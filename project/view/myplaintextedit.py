@@ -35,7 +35,7 @@ class MyPlainTextEdit(QtGui.QPlainTextEdit):
         self.white_format.setBackground(QtGui.QBrush(self.white))
 
 
-    def setItems(self, list_of_strings, highlighted_index = 0):
+    def setItems(self, list_of_strings, dict_of_strings = {}, highlighted_index = 0):
         string = '\n'.join(list_of_strings)
         self.setPlainText(string)
         

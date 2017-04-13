@@ -36,7 +36,29 @@ class MyFilterDialog(QtGui.QDialog, Ui_Dialog):
                                      u'(19)', u'(1a)', u'(1b)', u'(1c)', u'(1d)',
                                      u'(1e)', u'(1f)', u'(20)', u'(21)', u'(22)',
                                      u'(23)', u'(24)']
-        self.plainTextEdit_PossibleContent.setItems(self.possible_identifiers)
+                                     
+        self.identifiers_explaining_text = {u'(00)': u'Radar Still On',
+                                            u'(03)': u'Minutes Normal/Degr/Fault',
+                                            u'(04)': u'Minutes Antenna Drive On',
+                                            u'(05)': u'Transmitter On',
+                                            u'(07)': u'Minutes per Radar Mode',
+                                            u'(08)': u'Minutes SSR On',
+                                            u'(09)': u'Minutes Maint Mode',
+                                            u'(10)': u'Maintenance Mode On/Off',
+                                            u'(11)': u'Runway Selection',
+                                            u'(12)': u'Minutes System Off',
+                                            u'(13)': u'Fault Condition',
+                                            u'(14)': u'Fault Details',
+                                            u'(15)': u'Further Fault Details',
+                                            u'(16)': u'New Fault/Degr Count',
+                                            u'(17)': u'Active Fault/Degr Count',
+                                            u'(1a)': u'Weather Mode',
+                                            u'(1b)': u'Antenna Tilt',
+                                            u'(1e)': u'MTI Deviation Delta',
+                                            u'(23)': u'Temperature/Auto-Test',
+                                            u'(24)': u'Heater Control'}
+                                     
+        self.plainTextEdit_PossibleContent.setItems(self.possible_identifiers, self.identifiers_explaining_text)
 
         self.filter_states = [u'Suppress', u'Show Only']
         self.comboBox_FilterState.addItems(self.filter_states)
