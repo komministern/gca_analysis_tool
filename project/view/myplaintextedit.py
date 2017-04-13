@@ -16,7 +16,9 @@ class MyPlainTextEdit(QtGui.QPlainTextEdit):
     def __init__(self, *args, **kwargs):
         super(MyPlainTextEdit, self).__init__(*args, **kwargs)
         
+        #self.setCursor(QtCore.Qt.ArrowCursor)
         self.setReadOnly(True)
+        self.viewport().setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
 
         self.chosen_index = None
 
@@ -33,6 +35,35 @@ class MyPlainTextEdit(QtGui.QPlainTextEdit):
         self.white_format.setBackground(QtGui.QBrush(self.white))
 
 
+    def setItems(self, list_of_strings, highlighted_index = 0):
+        string = '\n'.join(list_of_strings)
+        self.setPlainText(string)
+        
+        if len(string) > 0:
+            self.chosen_index = highlighted_index
+            self.highlight_block(self.chosen_index)
+        else:
+            self.chosen_index = None
+        
+        
+    def highlight_block(self, block_number):
+        for each in range(self.blockCount()):
+            self.paint_block(each, self.white_format)
+        self.paint_block(block_number, self.blue_format)
+        
+
+    def paint_block(self, block_number, char_format):
+        cursor = self.textCursor()
+        block = self.document().findBlockByLineNumber(block_number)
+
+        block_begin = block.position()
+        block_length = block.length()
+
+        cursor.setPosition(block_begin)
+        cursor.movePosition(QtGui.QTextCursor.Right, QtGui.QTextCursor.KeepAnchor, block_length)
+        cursor.mergeCharFormat(char_format)
+
+
     def mousePressEvent(self, e):
         
         super(MyPlainTextEdit, self).mousePressEvent(e)
@@ -45,41 +76,5 @@ class MyPlainTextEdit(QtGui.QPlainTextEdit):
         else:
             self.chosen_index = None
         
-        print self.chosen_index
-        
-        self.paint_block(block_number)
-        
-        
-    def paint_block(self, block_number):
-        
-        cursor = self.textCursor()
-        
-        block = self.document().findBlockByLineNumber(block_number)
-        
-        block_begin = block.position()
-        block_length = block.length()
-
-        if self.last_block_begin != None:
-            cursor.setPosition(self.last_block_begin)
-            cursor.movePosition(QtGui.QTextCursor.Right, QtGui.QTextCursor.KeepAnchor, self.last_block_length)
-            cursor.mergeCharFormat(self.white_format)
-
-        cursor.setPosition(block_begin)
-        cursor.movePosition(QtGui.QTextCursor.Right, QtGui.QTextCursor.KeepAnchor, block_length)
-        cursor.mergeCharFormat(self.blue_format)
-
-        self.last_block_begin = block_begin
-        self.last_block_length = block_length
-
-
-    def setPlainText(self, string):
-        super(MyPlainTextEdit, self).setPlainText(string)
-        
-        if len(string) > 0:
-            self.chosen_index = 0
-            self.paint_block(0)
-        else:
-            self.chosen_index = None
-            
-        print self.chosen_index
+        self.highlight_block(block_number)
         

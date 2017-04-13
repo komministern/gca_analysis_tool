@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
@@ -18,8 +18,9 @@ if __name__ == '__main__':
     
     app = QtGui.QApplication(sys.argv)
 
-    view = MyView() 
     model = Database()
+    view = MyView() 
+    #model = Database()
     presenter = MyPresenter(model, view)
     view.show()
 
