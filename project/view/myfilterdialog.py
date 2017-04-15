@@ -18,15 +18,6 @@ class MyFilterDialog(QtGui.QDialog, Ui_Dialog):
     def __init__(self, initial_filter, name_editable = True):
         super(MyFilterDialog, self).__init__()
         self.setupUi(self)
-        
-        if not name_editable:
-            self.lineEdit_FilterName.setEnabled(False)
-        
-        self.filter = initial_filter
-
-        self.lineEdit_FilterName.setText(self.filter.name)
-
-        self.plainTextEdit_FilterContent.setItems(self.filter.content)
 
         self.possible_identifiers = [u'(00)', u'(01)', u'(02)', u'(03)', u'(04)',
                                      u'(05)', u'(06)', u'(07)', u'(08)', u'(09)',
@@ -57,6 +48,15 @@ class MyFilterDialog(QtGui.QDialog, Ui_Dialog):
                                             u'(1e)': u'MTI Deviation Delta',
                                             u'(23)': u'Temperature/Auto-Test',
                                             u'(24)': u'Heater Control'}
+
+        if not name_editable:
+            self.lineEdit_FilterName.setEnabled(False)
+        
+        self.filter = initial_filter
+
+        self.lineEdit_FilterName.setText(self.filter.name)
+
+        self.plainTextEdit_FilterContent.setItems(self.filter.content, self.identifiers_explaining_text)
                                      
         self.plainTextEdit_PossibleContent.setItems(self.possible_identifiers, self.identifiers_explaining_text)
 
@@ -72,6 +72,10 @@ class MyFilterDialog(QtGui.QDialog, Ui_Dialog):
         self.pushButton_AddContent.pressed.connect(self.add_content)
         self.pushButton_RemoveContent.pressed.connect(self.remove_content)
 
+        self.plainTextEdit_PossibleContent.doubleClicked.connect(self.add_content)
+        self.plainTextEdit_FilterContent.doubleClicked.connect(self.remove_content)
+
+  
 
     
     def set_state(self, index):
@@ -84,14 +88,14 @@ class MyFilterDialog(QtGui.QDialog, Ui_Dialog):
             self.filter.content.append(self.possible_identifiers[chosen_identifier_index])
             self.filter.content.sort()
             index_to_highlight = self.filter.content.index(self.possible_identifiers[chosen_identifier_index])
-            self.plainTextEdit_FilterContent.setItems(self.filter.content, index_to_highlight)
+            self.plainTextEdit_FilterContent.setItems(self.filter.content, self.identifiers_explaining_text, index_to_highlight)
 
 
     def remove_content(self):
         chosen_content_index = self.plainTextEdit_FilterContent.chosen_index
         if chosen_content_index != None:
             del self.filter.content[chosen_content_index]
-            self.plainTextEdit_FilterContent.setItems(self.filter.content)
+            self.plainTextEdit_FilterContent.setItems(self.filter.content, self.identifiers_explaining_text)
 
 
     def get_final_filter(self):

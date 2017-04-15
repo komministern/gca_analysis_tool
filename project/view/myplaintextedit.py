@@ -12,6 +12,8 @@ from PySide import QtGui, QtCore
 #from presenter.filtercontainer import Filter
 
 class MyPlainTextEdit(QtGui.QPlainTextEdit):
+
+    doubleClicked = QtCore.Signal()
     
     def __init__(self, *args, **kwargs):
         super(MyPlainTextEdit, self).__init__(*args, **kwargs)
@@ -36,7 +38,17 @@ class MyPlainTextEdit(QtGui.QPlainTextEdit):
 
 
     def setItems(self, list_of_strings, dict_of_strings = {}, highlighted_index = 0):
-        string = '\n'.join(list_of_strings)
+        #print dict_of_strings
+        new_list_of_strings = []
+        for i in range(len(list_of_strings)):
+            temp_string = list_of_strings[i]
+            try:
+                new_list_of_strings.append(' - '.join([temp_string, dict_of_strings[temp_string]]))
+            except Exception, e:
+                new_list_of_strings.append(temp_string)
+        
+        string = '\n'.join(new_list_of_strings)
+
         self.setPlainText(string)
         
         if len(string) > 0:
@@ -78,3 +90,6 @@ class MyPlainTextEdit(QtGui.QPlainTextEdit):
         
         self.highlight_block(block_number)
         
+
+    def mouseDoubleClickEvent(self, e):
+        self.doubleClicked.emit()

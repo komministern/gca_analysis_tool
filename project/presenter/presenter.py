@@ -340,12 +340,14 @@ class MyPresenter(QtCore.QObject):
         
 
     def delete_filter(self):
-        self.model.filter_list.remove(self.current_filter)
-        self.model.update_filters()
-        self.view.comboBox_ChooseFilter.clear()
-        self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
+        clicked = self.message_with_cancel_choice(u'Delete ' + self.current_filter.name + '?', u'This will remove the filter from both memory and disc.', QtGui.QMessageBox.Cancel)
+        if clicked == QtGui.QMessageBox.Ok:
+            self.model.filter_list.remove(self.current_filter)
+            self.model.update_filters()
+            self.view.comboBox_ChooseFilter.clear()
+            self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
         
-        self.choose_filter(0)
+            self.choose_filter(0)
         
         
 
