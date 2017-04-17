@@ -6,12 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>405</width>
-    <height>341</height>
+    <width>485</width>
+    <height>274</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>485</width>
+    <height>16777215</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>History Log Filter</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0" colspan="3">
@@ -59,7 +65,14 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
-       <widget class="QPlainTextEdit" name="plainTextEdit_PossibleContent"/>
+       <widget class="QPlainTextEdit" name="plainTextEdit_PossibleContent">
+        <property name="minimumSize">
+         <size>
+          <width>192</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -87,7 +100,14 @@
        <widget class="QComboBox" name="comboBox_FilterState"/>
       </item>
       <item row="1" column="0">
-       <widget class="QPlainTextEdit" name="plainTextEdit_FilterContent"/>
+       <widget class="QPlainTextEdit" name="plainTextEdit_FilterContent">
+        <property name="minimumSize">
+         <size>
+          <width>192</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

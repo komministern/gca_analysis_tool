@@ -857,7 +857,7 @@ class MyPresenter(QtCore.QObject):
     def about(self):
 
         self.message(u'''
-GCA Analysis Tool, v0.92 Trial
+GCA Analysis Tool, v0.97 Trial
 
 Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
 
