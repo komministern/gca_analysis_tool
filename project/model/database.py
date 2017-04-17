@@ -32,11 +32,14 @@ class Database(QtCore.QObject):
             
         self.top_directory = os.path.join(self.home_directory, u'GCA Analyzer')
         self.sites_directory = os.path.join(self.top_directory, u'sites')
+        self.filters_directory = os.path.join(self.top_directory, u'filters')
 
         self.site_dictionary = {}
+        self.filter_list = []
 
         self.check_or_fix_database_directory_structure()
         self.read_all_sites_to_memory()
+        self.read_filters_to_memory()
 
 
 
@@ -47,7 +50,9 @@ class Database(QtCore.QObject):
             os.mkdir(self.top_directory)
         if not os.path.isdir(self.sites_directory):
             os.mkdir(self.sites_directory)    
-    
+        if not os.path.isdir(self.filters_directory):
+            os.mkdir(self.filters_directory)    
+  
 
 
     # Site stuff
@@ -140,6 +145,49 @@ class Database(QtCore.QObject):
 
     def get_comment_dictionary(self, site_name):
         return self.site_dictionary[site_name].comment_dictionary
+
+
+
+
+    # Filter stuff
+
+    def update_filters(self):
+        self.write_filters_to_disc()
+        self.read_filters_to_memory()
+
+    def read_filters_to_memory(self, filter_file_name = u'filters'):
+        filter_path = os.path.join(self.filters_directory, filter_file_name)
+        import pickle
+        from presenter.filtercontainer import Filter
+        try:
+            serialized_filters = pickle.load(open(filter_path, 'rb'))
+            self.filter_list = [Filter()]
+            for each in serialized_filters:
+                self.filter_list.append(self.de_serialize_filter(each))
+        except:
+            self.filter_list = [Filter()]
+
+    def write_filters_to_disc(self, filter_file_name = u'filters'):
+        filter_path = os.path.join(self.filters_directory, filter_file_name)
+        serialized_filters = []
+        for each in self.filter_list:
+            if each.name != u'':
+                serialized_filters.append(self.serialize_filter(each))
+        import pickle
+        pickle.dump(serialized_filters, open(filter_path, 'wb'))
+
+    def serialize_filter(self, filter):
+        return [filter.content, filter.state, filter.name]
+    
+    def de_serialize_filter(self, alist):
+        from presenter.filtercontainer import Filter
+        filter = Filter()
+        filter.content = alist[0]
+        filter.state = alist[1]
+        filter.name = alist[2]
+        return filter
+
+
 
 
 

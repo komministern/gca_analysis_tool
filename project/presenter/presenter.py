@@ -12,6 +12,8 @@ import string
 from PySide import QtCore, QtGui
 from coloringcontainer import ColoringContainer
 import textstuff as txt
+from filtercontainer import Filter
+from view.myfilterdialog import MyFilterDialog
 
 
 class MyPresenter(QtCore.QObject):
@@ -24,13 +26,10 @@ class MyPresenter(QtCore.QObject):
         self._view = view
 
 
-        #print self.trial_has_ended
-
         # Setup all signals.
         self.connect_signals()
 
-        # Initialize properties
-        self.suppressed_codes = []
+
         self.highlight = ''
         self.presentation_dict = {}
         self.active_site = None
@@ -46,7 +45,12 @@ class MyPresenter(QtCore.QObject):
         self.blue = QtGui.QColor.fromRgbF(0.509743, 0.734401, 1.000000, 1.000000)
 
         self.view.comboBox_Coloring.addItems([u'Normal/Degraded/Faulted', u'New Fault/Active Fault', 
-                                            u'Temporary Faults (< 1 min per day)', u'Transmitter On'])
+                                            u'Temporary Faults (< 1 min per day)', u'Transmitter On', u'Shelter Door Open'])
+
+        
+        self.current_filter = self.model.filter_list[0]
+        self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
+
 
         # The first element in the items list above will be initially selected
         self.color_all_dates()
@@ -68,11 +72,6 @@ class MyPresenter(QtCore.QObject):
         self.update_comment()
 
         self.update_menu()
-
-#        if self.trial_has_ended:
-#           self.message('Trial has ended.')
-#           print 'dddddddddd'
-#           self.view.quit.emit()
 
 
 
@@ -141,6 +140,25 @@ class MyPresenter(QtCore.QObject):
         elif self.coloring_scheme == 3:     # Transmitter on
 
             green_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if txt.transmitter_on(text)]
+            white_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if date not in green_dates]
+
+            lower_right_red_dates = []
+            upper_left_red_dates = []
+           
+            lower_right_green_dates = green_dates
+ 
+            upper_left_green_dates = green_dates
+
+            upper_left_white_dates = white_dates
+            upper_left_yellow_dates = []
+            
+            lower_right_white_dates = white_dates
+            lower_right_yellow_dates = []
+
+
+        elif self.coloring_scheme == 4:     # Shelter Door Open
+
+            green_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if (u'Shelter Door Open' in text)]
             white_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if date not in green_dates]
 
             lower_right_red_dates = []
@@ -271,42 +289,77 @@ class MyPresenter(QtCore.QObject):
             self.update_comment()   # Here?????????????????????????
 
 
-    # ----------- Suppressions stuff
+
+
+    # ----------- Filter stuff
 
 
     def format_text(self, text):
-        return '\n'.join([s for s in text.splitlines() if not s[0:4] in self.suppressed_codes])
+        if text != u'No history log exists for this date.':
+            if self.current_filter.state == 1 and self.current_filter.content:  # Show Only
+                return '\n'.join([s for s in text.splitlines() if s[0:4] in self.current_filter.content])
+            elif self.current_filter.state == 0:        # Suppress
+                return '\n'.join([s for s in text.splitlines() if not s[0:4] in self.current_filter.content])
+        return text
 
 
-    def temperature_filter(self, newstate):
-        if newstate > 0:
-            self.suppressed_codes.append('(23)')
+
+    def show_filter_dialog(self, initial_filter, name_editable = True):
+        self.dialog = MyFilterDialog(initial_filter, name_editable)
+        if self.dialog.exec_():
+            filter = self.dialog.get_final_filter()
+            self.save_filter(filter)
+            
+    def save_filter(self, filter):
+        if filter.name in set([each.name for each in self.model.filter_list]):
+            for index in range(len(self.model.filter_list)):
+                if self.model.filter_list[index].name == filter.name:
+                    break
+            del self.model.filter_list[index]
+            
+        self.model.filter_list.append(filter)
+        
+        self.model.filter_list.sort(key = lambda x: x.name)
+        self.model.update_filters()
+        
+        self.view.comboBox_ChooseFilter.clear()
+        self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
+
+        for index in range(len(self.model.filter_list)):
+            if self.model.filter_list[index].name == filter.name:
+                break
+ 
+        self.view.comboBox_ChooseFilter.setCurrentIndex(index)
+
+
+    def new_filter(self):
+        self.show_filter_dialog(Filter())
+
+    def edit_filter(self):
+        self.show_filter_dialog(self.current_filter, name_editable = False)
+        
+
+    def delete_filter(self):
+        clicked = self.message_with_cancel_choice(u'Delete ' + self.current_filter.name + '?', u'This will remove the filter from both memory and disc.', QtGui.QMessageBox.Cancel)
+        if clicked == QtGui.QMessageBox.Ok:
+            self.model.filter_list.remove(self.current_filter)
+            self.model.update_filters()
+            self.view.comboBox_ChooseFilter.clear()
+            self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
+        
+            self.choose_filter(0)
+        
+        
+
+    def choose_filter(self, index):
+        if index == 0:
+            self.view.pushButton_EditFilter.setEnabled(False)
+            self.view.pushButton_DeleteFilter.setEnabled(False)
         else:
-            self.suppressed_codes.remove('(23)')
-        self.update_text()
-
-
-    def heatercontrol_filter(self, newstate):
-        if newstate > 0:
-            self.suppressed_codes.append('(24)')
-        else:
-            self.suppressed_codes.remove('(24)')
-        self.update_text()
-
-
-    def transmitter_filter(self, newstate):
-        if newstate > 0:
-            self.suppressed_codes.append('(0d)')
-        else:
-            self.suppressed_codes.remove('(0d)')
-        self.update_text()
-
-
-    def antennadrive_filter(self, newstate):
-        if newstate > 0:
-            self.suppressed_codes.append('(0c)')
-        else:
-            self.suppressed_codes.remove('(0c)')
+            self.view.pushButton_EditFilter.setEnabled(True)
+            self.view.pushButton_DeleteFilter.setEnabled(True)
+            
+        self.current_filter = self.model.filter_list[index]
         self.update_text()
 
 
@@ -389,7 +442,6 @@ class MyPresenter(QtCore.QObject):
     def import_capturesite(self):
 
         capturesite_filename, test = QtGui.QFileDialog.getOpenFileName(self.view, u'Capturesite', self.model.home_directory, u'Capturesite (*tar.gz)')
-        #apturesite_filename, test = QtGui.QFileDialog.getOpenFileName(self.view, u'Capturesite', os.path.expanduser(u'~'), u'Capturesite (*tar.gz)')
 
         if capturesite_filename:
 
@@ -398,22 +450,10 @@ class MyPresenter(QtCore.QObject):
             self.create_site(capturesite_filename, temp_site_name)
 
             temp_dates = sorted(self.model.get_historylog_dictionary(temp_site_name).keys())
-            #print temp_dates
 
-
-#            temp_first_date = self.get_first_entry_date(temp_site_name)
-#            temp_first_date_text = self.model.get_historylog(temp_site_name, temp_first_date)
-#            temp_last_date = self.get_last_entry_date(temp_site_name)
 
             self.model.remove_site_from_disc(temp_site_name)
 
-#            possible_candidates = [site_name for site_name in self.get_site_names() if 
-                    
-                    
-#                    self.model.get_historylog(site_name, temp_first_date) == temp_first_date_text and 
-#                    self.model.get_historylog(site_name, self.get_last_entry_date(site_name)) == 
-#                        self.model.get_historylog(temp_site_name, self.get_last_entry_date(site_name))
-#                    ]
 
             possible_candidates = []
 
@@ -424,23 +464,17 @@ class MyPresenter(QtCore.QObject):
                 site_dates.extend(self.model.get_ignored_dates(site_name))
                 site_dates = sorted(site_dates)     # UGLY
 
-                #print site_name
-                #print ( set(site_dates) ^ set(temp_dates) )
-                #print '\n\n\n'
-
-                #print site_dates
+ 
 
                 # If all historylog dates are in site_name's history log
-                #print temp_dates
+                
                 if len(temp_dates) >= len(site_dates) and (set(temp_dates) >= set(site_dates)): # and (temp_dates[0] == site_dates[0]):
                     possible_candidates.append(site_name)
-                    #print site_name
-                    #print site_dates[10]
-                    #print temp_dates[10]
+                    
 
                 elif len(temp_dates) < len(site_dates) and (set(temp_dates) <= set(site_dates)):
                     possible_candidates.append(site_name)
-                    #print '_' + site_name
+                    
                     
 
 
@@ -488,7 +522,7 @@ class MyPresenter(QtCore.QObject):
 
 
     def update_site(self, site_name, capturesite_filename):
-#        print u'Updating ' + site_name + u' with ' + capturesite_filename
+
         self.model.update_site(capturesite_filename, site_name)
 
         del self.presentation_dict[site_name]
@@ -593,10 +627,10 @@ class MyPresenter(QtCore.QObject):
 
         self.view.calendarWidget.selectionChanged.connect(self.new_date_chosen)
 
-        self.view.checkBox_Temperature.stateChanged.connect(self.temperature_filter)
-        self.view.checkBox_HeaterControl.stateChanged.connect(self.heatercontrol_filter)
-        self.view.checkBox_Transmitter.stateChanged.connect(self.transmitter_filter)
-        self.view.checkBox_AntennaDrive.stateChanged.connect(self.antennadrive_filter)
+        self.view.pushButton_NewFilter.clicked.connect(self.new_filter)
+        self.view.pushButton_EditFilter.clicked.connect(self.edit_filter)
+        self.view.pushButton_DeleteFilter.clicked.connect(self.delete_filter)
+        self.view.comboBox_ChooseFilter.currentIndexChanged.connect(self.choose_filter)
 
         self.view.pushButton_CommitStringSearch.clicked.connect(self.commit_string_search)
         self.view.pushButton_ResetStringSearch.clicked.connect(self.reset_string_search)
@@ -608,7 +642,6 @@ class MyPresenter(QtCore.QObject):
         self.view.ignoreAction.triggered.connect(self.ignore_date)
         self.view.deIgnoreAction.triggered.connect(self.deignore_all_dates)
         
-#self.view.aboutAction.triggered.connect(self.view.about)
         self.view.aboutAction.triggered.connect(self.about)
 
         self.view.pushButton_FirstEntry.clicked.connect(self.set_first_date)
@@ -824,7 +857,7 @@ class MyPresenter(QtCore.QObject):
     def about(self):
 
         self.message(u'''
-GCA Analysis Tool, v0.92 Trial
+GCA Analysis Tool, v0.97 Trial
 
 Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
 

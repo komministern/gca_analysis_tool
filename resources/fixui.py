@@ -2,6 +2,6 @@
 
 import os
 
-os.system('pyside-uic mainwindow.ui -o mainwindow.py')
-os.system('cp mainwindow.py ../project/view/.')
+os.system('pyside-uic ui_mainwindow.ui -o ui_mainwindow.py')
+os.system('cp ui_mainwindow.py ../project/view/.')
 
