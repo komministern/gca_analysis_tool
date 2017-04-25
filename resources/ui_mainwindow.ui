@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1114</width>
-    <height>879</height>
+    <width>888</width>
+    <height>804</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>888</width>
+    <height>804</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>GCA Analysis Tool</string>
@@ -274,10 +280,16 @@
            <height>0</height>
           </size>
          </property>
+         <property name="statusTip">
+          <string>Choose history log filter</string>
+         </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QPushButton" name="pushButton_NewFilter">
+         <property name="statusTip">
+          <string>Create a new filter</string>
+         </property>
          <property name="text">
           <string>New</string>
          </property>
@@ -285,6 +297,9 @@
        </item>
        <item row="1" column="1">
         <widget class="QPushButton" name="pushButton_EditFilter">
+         <property name="statusTip">
+          <string>Edit currently chosen filter</string>
+         </property>
          <property name="text">
           <string>Edit</string>
          </property>
@@ -292,6 +307,9 @@
        </item>
        <item row="1" column="2">
         <widget class="QPushButton" name="pushButton_DeleteFilter">
+         <property name="statusTip">
+          <string>Delete currently chosen filter</string>
+         </property>
          <property name="text">
           <string>Delete</string>
          </property>
@@ -422,8 +440,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1114</width>
-     <height>21</height>
+     <width>888</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>

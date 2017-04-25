@@ -1,8 +1,8 @@
 ﻿# -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'mainwindow.ui'
+# Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Tue Apr 11 14:34:09 2017
+# Created: Tue Apr 25 10:59:43 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,7 +13,8 @@ from mycalendarwidget import MyCalendarWidget
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1114, 879)
+        MainWindow.resize(888, 804)
+        MainWindow.setMinimumSize(QtCore.QSize(888, 804))
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_8 = QtGui.QGridLayout(self.centralwidget)
@@ -161,7 +162,7 @@ class Ui_MainWindow(object):
         self.gridLayout_8.addWidget(self.tabWidget_TextFields, 1, 1, 4, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1114, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 888, 26))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
@@ -197,8 +198,12 @@ class Ui_MainWindow(object):
         self.groupBox_4.setTitle(QtGui.QApplication.translate("MainWindow", "Active Site", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_ActiveSite.setStatusTip(QtGui.QApplication.translate("MainWindow", "Choose active site", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setTitle(QtGui.QApplication.translate("MainWindow", "History Log Filtering", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_ChooseFilter.setStatusTip(QtGui.QApplication.translate("MainWindow", "Choose history log filter", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton_NewFilter.setStatusTip(QtGui.QApplication.translate("MainWindow", "Create a new filter", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_NewFilter.setText(QtGui.QApplication.translate("MainWindow", "New", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton_EditFilter.setStatusTip(QtGui.QApplication.translate("MainWindow", "Edit currently chosen filter", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_EditFilter.setText(QtGui.QApplication.translate("MainWindow", "Edit", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton_DeleteFilter.setStatusTip(QtGui.QApplication.translate("MainWindow", "Delete currently chosen filter", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_DeleteFilter.setText(QtGui.QApplication.translate("MainWindow", "Delete", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_TextFields.setTabText(self.tabWidget_TextFields.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "History Log", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_7.setTitle(QtGui.QApplication.translate("MainWindow", "Comment", None, QtGui.QApplication.UnicodeUTF8))
