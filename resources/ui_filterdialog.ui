@@ -6,13 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>485</width>
-    <height>274</height>
+    <width>625</width>
+    <height>247</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>625</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>485</width>
+    <width>625</width>
     <height>16777215</height>
    </size>
   </property>
@@ -68,7 +74,7 @@
        <widget class="QPlainTextEdit" name="plainTextEdit_PossibleContent">
         <property name="minimumSize">
          <size>
-          <width>192</width>
+          <width>255</width>
           <height>0</height>
          </size>
         </property>
@@ -103,7 +109,7 @@
        <widget class="QPlainTextEdit" name="plainTextEdit_FilterContent">
         <property name="minimumSize">
          <size>
-          <width>192</width>
+          <width>255</width>
           <height>0</height>
          </size>
         </property>

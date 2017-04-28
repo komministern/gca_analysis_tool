@@ -857,7 +857,7 @@ class MyPresenter(QtCore.QObject):
     def about(self):
 
         self.message(u'''
-GCA Analysis Tool, v0.98 Trial
+GCA Analysis Tool, v0.99 Trial
 
 Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
 
@@ -865,7 +865,8 @@ This is a trial version of the GCA Analysis Tool. It will be fully functional un
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Third party software used:
+Software used:
+Python 2.7.13, PSF
 PySide 1.2.4, LGPL version 2.1
 Qt 4.8.6, LGPL version 3
 ''')

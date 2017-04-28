@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_filterdialog.ui'
 #
-# Created: Mon Apr 17 22:23:33 2017
+# Created: Fri Apr 28 08:32:19 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,8 +12,9 @@ from PySide import QtCore, QtGui
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(485, 274)
-        Dialog.setMaximumSize(QtCore.QSize(485, 16777215))
+        Dialog.resize(625, 247)
+        Dialog.setMinimumSize(QtCore.QSize(625, 0))
+        Dialog.setMaximumSize(QtCore.QSize(625, 16777215))
         self.gridLayout_4 = QtGui.QGridLayout(Dialog)
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.groupBox_3 = QtGui.QGroupBox(Dialog)
@@ -37,7 +38,7 @@ class Ui_Dialog(object):
         self.gridLayout_2 = QtGui.QGridLayout(self.groupBox_2)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.plainTextEdit_PossibleContent = QtGui.QPlainTextEdit(self.groupBox_2)
-        self.plainTextEdit_PossibleContent.setMinimumSize(QtCore.QSize(192, 0))
+        self.plainTextEdit_PossibleContent.setMinimumSize(QtCore.QSize(255, 0))
         self.plainTextEdit_PossibleContent.setObjectName("plainTextEdit_PossibleContent")
         self.gridLayout_2.addWidget(self.plainTextEdit_PossibleContent, 0, 0, 1, 1)
         self.gridLayout_4.addWidget(self.groupBox_2, 1, 0, 4, 1)
@@ -51,7 +52,7 @@ class Ui_Dialog(object):
         self.comboBox_FilterState.setObjectName("comboBox_FilterState")
         self.gridLayout.addWidget(self.comboBox_FilterState, 0, 0, 1, 1)
         self.plainTextEdit_FilterContent = QtGui.QPlainTextEdit(self.groupBox)
-        self.plainTextEdit_FilterContent.setMinimumSize(QtCore.QSize(192, 0))
+        self.plainTextEdit_FilterContent.setMinimumSize(QtCore.QSize(255, 0))
         self.plainTextEdit_FilterContent.setObjectName("plainTextEdit_FilterContent")
         self.gridLayout.addWidget(self.plainTextEdit_FilterContent, 1, 0, 1, 1)
         self.gridLayout_4.addWidget(self.groupBox, 1, 2, 4, 3)
