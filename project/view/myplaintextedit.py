@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-
 #    Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@yahoo.se>
 #
 #    This file is part of GCA Analysis Tool.
@@ -26,12 +24,16 @@ class MyPlainTextEdit(QtGui.QPlainTextEdit):
 
         self.blue = QtGui.QColor.fromRgbF(0.509743, 0.734401, 1.000000, 1.000000)
         self.white = QtGui.QColor.fromRgbF(1.000000, 1.000000, 1.000000, 1.000000)
+        self.orange = QtGui.QColor.fromRgbF(1.000000, 0.820000, 0.500000, 1.000000)
 
         self.last_block_begin = None
         self.last_block_lenght = None
         
         self.blue_format = QtGui.QTextCharFormat()
         self.blue_format.setBackground(QtGui.QBrush(self.blue))
+        
+        self.orange_format = QtGui.QTextCharFormat()
+        self.orange_format.setBackground(QtGui.QBrush(self.orange))
         
         self.white_format = QtGui.QTextCharFormat()
         self.white_format.setBackground(QtGui.QBrush(self.white))
@@ -59,9 +61,10 @@ class MyPlainTextEdit(QtGui.QPlainTextEdit):
         
         
     def highlight_block(self, block_number):
+        #self.
         for each in range(self.blockCount()):
             self.paint_block(each, self.white_format)
-        self.paint_block(block_number, self.blue_format)
+        self.paint_block(block_number, self.orange_format)
         
 
     def paint_block(self, block_number, char_format):
@@ -79,6 +82,8 @@ class MyPlainTextEdit(QtGui.QPlainTextEdit):
     def mousePressEvent(self, e):
         
         super(MyPlainTextEdit, self).mousePressEvent(e)
+
+        
 
         cursor = self.textCursor()
         block_number = cursor.blockNumber()

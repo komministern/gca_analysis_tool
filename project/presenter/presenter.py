@@ -257,14 +257,23 @@ class MyPresenter(QtCore.QObject):
             text = self.get_historylog(self.active_site, date)
             self.view.textBrowser_HistoryLog.setPlainText(self.format_text(text))
 
-            if self.highlight != '' and text != u'No history log exists for this date.': 
+            if self.highlight != u'' and text != u'No history log exists for this date.': 
+
+                #palette = QtGui.QPalette()
+                #palette.setColor(QtGui.QPalette.Base,QtCore.Qt.blue)
+                #self.view.lineEdit_StringSearch.setPalette(palette)
+
+                text = self.view.tabWidget.tabText(0)
+                if text[-1] != u'*':
+                    self.view.tabWidget.setTabText(0, text + u'*')
 
                 cursor = self.view.textBrowser_HistoryLog.textCursor()
             
                 # Setup the desired format for matches
                 format = QtGui.QTextCharFormat()
                 format.setBackground(QtGui.QBrush(self.blue))
-            
+
+
                 pattern = self.highlight
 
                 pos = 0
@@ -285,6 +294,12 @@ class MyPresenter(QtCore.QObject):
                 # search!!! Weird.
                 self.view.textBrowser_HistoryLog.setLineWrapMode(QtGui.QTextEdit.NoWrap)
                 self.view.textBrowser_HistoryLog.setLineWrapMode(QtGui.QTextEdit.WidgetWidth)
+
+            else:
+                
+                text = self.view.tabWidget.tabText(0)
+                if text[-1] == u'*':
+                    self.view.tabWidget.setTabText(0, text[0:-1])
 
             self.update_comment()   # Here?????????????????????????
 
@@ -340,7 +355,7 @@ class MyPresenter(QtCore.QObject):
         
 
     def delete_filter(self):
-        clicked = self.message_with_cancel_choice(u'Delete ' + self.current_filter.name + '?', u'This will remove the filter from both memory and disc.', QtGui.QMessageBox.Cancel)
+        clicked = self.message_with_cancel_choice(u'Delete ' + self.current_filter.name + '?', u'This will completely remove the filter.', QtGui.QMessageBox.Cancel)
         if clicked == QtGui.QMessageBox.Ok:
             self.model.filter_list.remove(self.current_filter)
             self.model.update_filters()
@@ -352,10 +367,20 @@ class MyPresenter(QtCore.QObject):
         
 
     def choose_filter(self, index):
+        
         if index == 0:
+            text = self.view.tabWidget.tabText(1)
+            if text[-1] == u'*':
+                self.view.tabWidget.setTabText(1, text[0:-1])
+                
             self.view.pushButton_EditFilter.setEnabled(False)
             self.view.pushButton_DeleteFilter.setEnabled(False)
         else:
+            
+            text = self.view.tabWidget.tabText(1)
+            if text[-1] != u'*':
+                self.view.tabWidget.setTabText(1, text + u'*')
+                
             self.view.pushButton_EditFilter.setEnabled(True)
             self.view.pushButton_DeleteFilter.setEnabled(True)
             
@@ -369,6 +394,7 @@ class MyPresenter(QtCore.QObject):
 
     def commit_string_search(self):
         if self.active_site:
+        
             self.highlight = self.view.lineEdit_StringSearch.text()
 
             self.view.calendarWidget.setCircledDates(self.list_of_search_string_dates(self.view.lineEdit_StringSearch.text()))
@@ -385,9 +411,10 @@ class MyPresenter(QtCore.QObject):
 
 
     def reset_string_search(self):
+        
         self.view.calendarWidget.setCircledDates([])
-        self.view.lineEdit_StringSearch.setText('')
-        self.highlight = ''
+        self.view.lineEdit_StringSearch.setText(u'')
+        self.highlight = u''
         self.view.calendarWidget.updateCells()
         self.update_text()
 
@@ -420,9 +447,9 @@ class MyPresenter(QtCore.QObject):
 
 
     def text_changed(self):
-        if not self.highlight == '':
+        if not self.highlight == u'':
             
-            self.highlight = ''
+            self.highlight = u''
             self.update_text()
 
             self.view.calendarWidget.setCircledDates([])
@@ -651,7 +678,7 @@ class MyPresenter(QtCore.QObject):
         self.view.pushButton_NextSearch.clicked.connect(self.set_next_search_date)
         self.view.pushButton_PreviousSearch.clicked.connect(self.set_previous_search_date)
 
-        self.view.lineEdit_StringSearch.textChanged.connect(self.text_changed)
+        self.view.lineEdit_StringSearch.textEdited.connect(self.text_changed)
         self.view.lineEdit_StringSearch.returnPressed.connect(self.return_pressed)
 
         self.view.pushButton_SaveComment.clicked.connect(self.save_comment)
@@ -857,7 +884,7 @@ class MyPresenter(QtCore.QObject):
     def about(self):
 
         self.message(u'''
-GCA Analysis Tool, v0.99 Trial
+GCA Analysis Tool, v0.991 Trial
 
 Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
 
@@ -866,7 +893,7 @@ This is a trial version of the GCA Analysis Tool. It will be fully functional un
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Software used:
-Python 2.7.13, PSF
+Python 2.7.13, PSF License
 PySide 1.2.4, LGPL version 2.1
 Qt 4.8.6, LGPL version 3
 ''')

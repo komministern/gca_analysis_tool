@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-
 #    Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@yahoo.se>
 #
 #    This file is part of GCA Analysis Tool.
@@ -60,7 +58,7 @@ class MyFilterDialog(QtGui.QDialog, Ui_Dialog):
                                      
         self.plainTextEdit_PossibleContent.setItems(self.possible_identifiers, self.identifiers_explaining_text)
 
-        self.filter_states = [u'Suppress', u'Show Only']
+        self.filter_states = [u'Suppress', u'Show']
         self.comboBox_FilterState.addItems(self.filter_states)
         self.comboBox_FilterState.setCurrentIndex(self.filter.state)
 

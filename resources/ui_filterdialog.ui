@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>625</width>
-    <height>247</height>
+    <width>622</width>
+    <height>285</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>625</width>
+    <width>0</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>625</width>
+    <width>16777215</width>
     <height>16777215</height>
    </size>
   </property>
@@ -29,39 +29,61 @@
    <item row="0" column="0" colspan="3">
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Filter Name</string>
+      <string>Filter</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
-       <widget class="QLineEdit" name="lineEdit_FilterName"/>
+       <widget class="QLineEdit" name="lineEdit_FilterName">
+        <property name="statusTip">
+         <string>Name of the current filter</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="pushButton_Cancel">
+        <property name="maximumSize">
+         <size>
+          <width>75</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="statusTip">
+         <string>Cancel editing discarding possible changes</string>
+        </property>
+        <property name="text">
+         <string>Cancel</string>
+        </property>
+        <property name="autoDefault">
+         <bool>false</bool>
+        </property>
+        <property name="default">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="pushButton_Save">
+        <property name="maximumSize">
+         <size>
+          <width>75</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="statusTip">
+         <string>Save current filter settings</string>
+        </property>
+        <property name="text">
+         <string>Save</string>
+        </property>
+        <property name="autoDefault">
+         <bool>false</bool>
+        </property>
+        <property name="default">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QPushButton" name="pushButton_Cancel">
-     <property name="maximumSize">
-      <size>
-       <width>75</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Cancel</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="4">
-    <widget class="QPushButton" name="pushButton_Save">
-     <property name="maximumSize">
-      <size>
-       <width>75</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Save</string>
-     </property>
     </widget>
    </item>
    <item row="1" column="0" rowspan="4">
@@ -74,9 +96,15 @@
        <widget class="QPlainTextEdit" name="plainTextEdit_PossibleContent">
         <property name="minimumSize">
          <size>
-          <width>255</width>
+          <width>0</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="statusTip">
+         <string>Possible codes used to filter history log content</string>
+        </property>
+        <property name="lineWrapMode">
+         <enum>QPlainTextEdit::NoWrap</enum>
         </property>
        </widget>
       </item>
@@ -96,22 +124,32 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="2" rowspan="4" colspan="3">
+   <item row="1" column="2" rowspan="4">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Filter</string>
+      <string>Filter Content</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QComboBox" name="comboBox_FilterState"/>
+       <widget class="QComboBox" name="comboBox_FilterState">
+        <property name="statusTip">
+         <string>Choose suppressing or highlighting function</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QPlainTextEdit" name="plainTextEdit_FilterContent">
         <property name="minimumSize">
          <size>
-          <width>255</width>
+          <width>0</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="statusTip">
+         <string>Currently picked codes for filter</string>
+        </property>
+        <property name="lineWrapMode">
+         <enum>QPlainTextEdit::NoWrap</enum>
         </property>
        </widget>
       </item>
@@ -126,6 +164,9 @@
        <height>16777215</height>
       </size>
      </property>
+     <property name="statusTip">
+      <string>Add code to filter</string>
+     </property>
      <property name="text">
       <string>&gt;&gt;</string>
      </property>
@@ -138,6 +179,9 @@
        <width>31</width>
        <height>16777215</height>
       </size>
+     </property>
+     <property name="statusTip">
+      <string>Remove code from filter</string>
      </property>
      <property name="text">
       <string>&lt;&lt;</string>
