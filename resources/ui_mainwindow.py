@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Sat Apr 29 17:20:36 2017
+# Created: Tue Jun 27 19:51:47 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -116,11 +116,13 @@ class Ui_MainWindow(object):
         self.tab_3.setObjectName("tab_3")
         self.gridLayout_2 = QtGui.QGridLayout(self.tab_3)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.lineEdit_StringSearch = QtGui.QLineEdit(self.tab_3)
-        self.lineEdit_StringSearch.setMinimumSize(QtCore.QSize(0, 0))
-        self.lineEdit_StringSearch.setToolTip("")
-        self.lineEdit_StringSearch.setObjectName("lineEdit_StringSearch")
-        self.gridLayout_2.addWidget(self.lineEdit_StringSearch, 0, 0, 1, 2)
+        self.plainTextEdit_StringSearch = QtGui.QPlainTextEdit(self.tab_3)
+        self.plainTextEdit_StringSearch.setMaximumSize(QtCore.QSize(16777215, 23))
+        self.plainTextEdit_StringSearch.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.plainTextEdit_StringSearch.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.plainTextEdit_StringSearch.setLineWrapMode(QtGui.QPlainTextEdit.NoWrap)
+        self.plainTextEdit_StringSearch.setObjectName("plainTextEdit_StringSearch")
+        self.gridLayout_2.addWidget(self.plainTextEdit_StringSearch, 0, 0, 1, 2)
         self.pushButton_CommitStringSearch = QtGui.QPushButton(self.tab_3)
         self.pushButton_CommitStringSearch.setToolTip("")
         self.pushButton_CommitStringSearch.setObjectName("pushButton_CommitStringSearch")
@@ -198,7 +200,6 @@ class Ui_MainWindow(object):
         self.pushButton_SaveComment.setStatusTip(QtGui.QApplication.translate("MainWindow", "Save this comment to database", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_SaveComment.setText(QtGui.QApplication.translate("MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_TextFields.setTabText(self.tabWidget_TextFields.indexOf(self.tab_2), QtGui.QApplication.translate("MainWindow", "Comment", None, QtGui.QApplication.UnicodeUTF8))
-        self.lineEdit_StringSearch.setStatusTip(QtGui.QApplication.translate("MainWindow", "Enter search string", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_CommitStringSearch.setStatusTip(QtGui.QApplication.translate("MainWindow", "Commit search", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_CommitStringSearch.setText(QtGui.QApplication.translate("MainWindow", "Search", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_PreviousSearch.setStatusTip(QtGui.QApplication.translate("MainWindow", "Focus calendar on the previous date in which history log contains search string", None, QtGui.QApplication.UnicodeUTF8))

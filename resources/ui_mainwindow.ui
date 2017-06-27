@@ -284,18 +284,21 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0" colspan="2">
-         <widget class="QLineEdit" name="lineEdit_StringSearch">
-          <property name="minimumSize">
+         <widget class="QPlainTextEdit" name="plainTextEdit_StringSearch">
+          <property name="maximumSize">
            <size>
-            <width>0</width>
-            <height>0</height>
+            <width>16777215</width>
+            <height>23</height>
            </size>
           </property>
-          <property name="toolTip">
-           <string/>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>
-          <property name="statusTip">
-           <string>Enter search string</string>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="lineWrapMode">
+           <enum>QPlainTextEdit::NoWrap</enum>
           </property>
          </widget>
         </item>

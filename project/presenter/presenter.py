@@ -19,7 +19,9 @@ from view.myfilterdialog import MyFilterDialog
 class MyPresenter(QtCore.QObject):
 
     def __init__(self, model, view, **kwds):
-	super(MyPresenter, self).__init__(**kwds)
+        super(MyPresenter, self).__init__(**kwds)
+
+        self.test = False
 
         # Store view and model.
         self._model = model
@@ -188,11 +190,11 @@ class MyPresenter(QtCore.QObject):
 
     @property
     def model(self):
-	return self._model
+        return self._model
 
     @property
     def view(self):
-	return self._view
+        return self._view
 
 
     # -------- Calendar stuff
@@ -395,12 +397,44 @@ class MyPresenter(QtCore.QObject):
     def commit_string_search(self):
         if self.active_site:
         
-            self.highlight = self.view.lineEdit_StringSearch.text()
+            #self.test = 1
+        
+            self.highlight = self.view.plainTextEdit_StringSearch.toPlainText()
 
-            self.view.calendarWidget.setCircledDates(self.list_of_search_string_dates(self.view.lineEdit_StringSearch.text()))
+            self.view.calendarWidget.setCircledDates(self.list_of_search_string_dates(self.view.plainTextEdit_StringSearch.toPlainText()))
         
             self.view.calendarWidget.updateCells()
             self.update_text()
+            
+            #self.test = 2
+            
+            # Lets set highlight in the plainTextEdit text here!!!
+            
+            #print self.view.lineEdit_StringSearch.textCursor()
+            cursor = self.view.plainTextEdit_StringSearch.textCursor()
+            #self.view.lineEdit_StringSearch.end(False)
+
+            #self.test = 3
+
+            format = QtGui.QTextCharFormat()
+            format.setBackground(QtGui.QBrush(self.blue))
+
+            # Select the matched text and apply the desired format
+            cursor.setPosition(0)
+            
+            #self.test = 4
+            
+            cursor.movePosition(QtGui.QTextCursor.End, QtGui.QTextCursor.KeepAnchor, 1)
+            
+            #self.test = 5
+            
+            self.ignore = True
+            
+            cursor.mergeCharFormat(format)
+            
+            #self.test = 6
+
+
 
 
     def list_of_search_string_dates(self, astring):
@@ -412,16 +446,30 @@ class MyPresenter(QtCore.QObject):
 
     def reset_string_search(self):
         
+        cursor = self.view.plainTextEdit_StringSearch.textCursor()
+
+        format = QtGui.QTextCharFormat()
+        format.setBackground(QtGui.QBrush(QtCore.Qt.white))
+            # Select the matched text and apply the desired format
+        cursor.setPosition(0)
+        cursor.movePosition(QtGui.QTextCursor.End, QtGui.QTextCursor.KeepAnchor, 1)
+        self.ignore = True
+        cursor.mergeCharFormat(format)
+        
+        
+        
         self.view.calendarWidget.setCircledDates([])
-        self.view.lineEdit_StringSearch.setText(u'')
+        self.view.plainTextEdit_StringSearch.setPlainText(u'')
         self.highlight = u''
         self.view.calendarWidget.updateCells()
         self.update_text()
 
 
+
+
     def set_next_search_date(self):
         if self.active_site:
-            dates = sorted(self.list_of_search_string_dates(self.view.lineEdit_StringSearch.text()))
+            dates = sorted(self.list_of_search_string_dates(self.view.plainTextEdit_StringSearch.toPlainText()))
             if not len(dates) == 0:
                 greater_dates = [date for date in dates if date > self.view.calendarWidget.selectedDate()]
 
@@ -435,7 +483,7 @@ class MyPresenter(QtCore.QObject):
 
     def set_previous_search_date(self):
         if self.active_site:
-            dates = sorted(self.list_of_search_string_dates(self.view.lineEdit_StringSearch.text()))
+            dates = sorted(self.list_of_search_string_dates(self.view.plainTextEdit_StringSearch.toPlainText()))
             if not len(dates) == 0:
                 lesser_dates = [date for date in dates if date < self.view.calendarWidget.selectedDate()]
                 if len(lesser_dates) == 0:
@@ -447,7 +495,10 @@ class MyPresenter(QtCore.QObject):
 
 
     def text_changed(self):
-        if not self.highlight == u'':
+        
+        #print self.test
+        
+        if not self.highlight == u'' and not self.ignore:
             
             self.highlight = u''
             self.update_text()
@@ -455,6 +506,21 @@ class MyPresenter(QtCore.QObject):
             self.view.calendarWidget.setCircledDates([])
             self.view.calendarWidget.updateCells()
             
+            cursor = self.view.plainTextEdit_StringSearch.textCursor()
+            #self.view.lineEdit_StringSearch.end(False)
+
+            format = QtGui.QTextCharFormat()
+            format.setBackground(QtGui.QBrush(QtCore.Qt.white))
+            #print self.test
+
+        
+            # Select the matched text and apply the desired format
+            cursor.setPosition(0)
+            cursor.movePosition(QtGui.QTextCursor.EndOfLine, QtGui.QTextCursor.KeepAnchor, 1)
+            cursor.mergeCharFormat(format)
+            
+#            self.test = False
+        self.ignore = False
 
     def return_pressed(self):
         self.view.pushButton_CommitStringSearch.animateClick()
@@ -678,8 +744,8 @@ class MyPresenter(QtCore.QObject):
         self.view.pushButton_NextSearch.clicked.connect(self.set_next_search_date)
         self.view.pushButton_PreviousSearch.clicked.connect(self.set_previous_search_date)
 
-        self.view.lineEdit_StringSearch.textEdited.connect(self.text_changed)
-        self.view.lineEdit_StringSearch.returnPressed.connect(self.return_pressed)
+        self.view.plainTextEdit_StringSearch.textChanged.connect(self.text_changed)
+        self.view.plainTextEdit_StringSearch.returnPressed.connect(self.return_pressed)
 
         self.view.pushButton_SaveComment.clicked.connect(self.save_comment)
         self.view.pushButton_DeleteComment.clicked.connect(self.delete_comment)
@@ -884,7 +950,7 @@ class MyPresenter(QtCore.QObject):
     def about(self):
 
         self.message(u'''
-GCA Analysis Tool, v0.991 Trial
+GCA Analysis Tool, v1.0 Trial
 
 Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
 
