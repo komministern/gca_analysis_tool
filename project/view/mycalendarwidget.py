@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
@@ -15,6 +15,7 @@ class MyCalendarWidget(QtGui.QCalendarWidget):
         QtGui.QCalendarWidget.__init__(self, parent)
         
         self.setFirstDayOfWeek(QtCore.Qt.DayOfWeek.Monday)
+        #self.setHorizontalHeaderFormat(QtGui.QCalendarWidget.SingleLetterDayNames)
 
         self.setCircledDates([])
         self.setTriangleDates([])

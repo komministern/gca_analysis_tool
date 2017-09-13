@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Tue Jun 27 19:51:47 2017
+# Created: Wed Sep 13 19:57:35 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PySide import QtCore, QtGui
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(964, 606)
+        MainWindow.resize(900, 670)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -51,8 +51,21 @@ class Ui_MainWindow(object):
         self.gridLayout_4.addWidget(self.comboBox_Coloring, 0, 0, 1, 1)
         self.gridLayout_6.addWidget(self.groupBox_5, 0, 0, 1, 3)
         self.calendarWidget = QtGui.QCalendarWidget(self.groupBox_3)
-        self.calendarWidget.setMinimumSize(QtCore.QSize(300, 240))
-        self.calendarWidget.setMaximumSize(QtCore.QSize(300, 240))
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.calendarWidget.sizePolicy().hasHeightForWidth())
+        self.calendarWidget.setSizePolicy(sizePolicy)
+        self.calendarWidget.setMinimumSize(QtCore.QSize(304, 240))
+        self.calendarWidget.setMaximumSize(QtCore.QSize(304, 240))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setWeight(50)
+        font.setItalic(False)
+        font.setBold(False)
+        self.calendarWidget.setFont(font)
+        self.calendarWidget.setFirstDayOfWeek(QtCore.Qt.Sunday)
+        self.calendarWidget.setSelectionMode(QtGui.QCalendarWidget.SingleSelection)
         self.calendarWidget.setObjectName("calendarWidget")
         self.gridLayout_6.addWidget(self.calendarWidget, 1, 0, 1, 3)
         self.pushButton_FirstEntry = QtGui.QPushButton(self.groupBox_3)
@@ -164,7 +177,7 @@ class Ui_MainWindow(object):
         self.gridLayout_7.addItem(spacerItem2, 3, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 964, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 900, 26))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
