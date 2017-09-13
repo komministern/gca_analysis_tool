@@ -62,8 +62,10 @@ class MyPresenter(QtCore.QObject):
 
             # Check if trial is up
             #self.trial_has_ended = False
+            
             for site_name in self.get_site_names():
-                if self.get_third_last_entry_date(site_name).year() > 2017:
+                
+                if (self.get_third_last_entry_date(site_name).year() >= 2018) and (self.get_third_last_entry_date(site_name).month() >= 7):
                     self.trial_has_ended = True
 
             self.view.comboBox_ActiveSite.addItems(self.get_site_names())
@@ -954,7 +956,7 @@ GCA Analysis Tool, v1.01 Trial
 
 Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
 
-This is a trial version of the GCA Analysis Tool. It will be fully functional until January 2018, and may during this time be copied freely and used without restrictions.
+This is a trial version of the GCA Analysis Tool. It will be fully functional until July 2018, and may during this time be copied freely and used without restrictions.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 

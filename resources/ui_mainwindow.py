@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Wed Sep 13 19:57:35 2017
+# Created: Wed Sep 13 20:23:18 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PySide import QtCore, QtGui
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(900, 670)
+        MainWindow.resize(1000, 670)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -64,7 +64,7 @@ class Ui_MainWindow(object):
         font.setItalic(False)
         font.setBold(False)
         self.calendarWidget.setFont(font)
-        self.calendarWidget.setFirstDayOfWeek(QtCore.Qt.Sunday)
+        self.calendarWidget.setFirstDayOfWeek(QtCore.Qt.Monday)
         self.calendarWidget.setSelectionMode(QtGui.QCalendarWidget.SingleSelection)
         self.calendarWidget.setObjectName("calendarWidget")
         self.gridLayout_6.addWidget(self.calendarWidget, 1, 0, 1, 3)
@@ -177,7 +177,7 @@ class Ui_MainWindow(object):
         self.gridLayout_7.addItem(spacerItem2, 3, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 900, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1000, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
