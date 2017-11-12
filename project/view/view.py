@@ -19,7 +19,7 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self, **kwds):
         super(MyView, self).__init__(**kwds)
         
-        # This is for the munu to get the right font !?!
+        # This is for the menu to get the right font !?! (Why???)
         #font = self.font()
         #font.setPointSize(8)
         #pixelsize = math.floor(406.0 / 24)
@@ -31,15 +31,15 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         
         width_of_textedit = self.plainTextEdit_StringSearch.geometry().width()
-        pixelsize_standard = int(width_of_textedit / 24.0)
-        pixelsize_calendar = int(width_of_textedit / 24.0 * 0.81)
+        self.pixelsize_standard = int(width_of_textedit / 24.0)
+        self.pixelsize_calendar = int(width_of_textedit / 24.0 * 0.81)
 
         font = self.font()
-        font.setPixelSize(pixelsize_standard)
+        font.setPixelSize(self.pixelsize_standard)
         self.setFont(font)
 
         font = self.calendarWidget.font()
-        font.setPixelSize(pixelsize_calendar)
+        font.setPixelSize(self.pixelsize_calendar)
         self.calendarWidget.setFont(font)
         
         #font = self.plainTextEdit_StringSearch.font()
@@ -80,9 +80,15 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
 
         menubar = self.menuBar()
         
+        font = menubar.font()
+        #font.setPixelSize(self.pixelsize_standard)     # This does not work!!!
+        font.setPointSize(9)
+        menubar.setFont(font)
+        
         #menubar.setFont(self.myfont)
 
         capturesite_menu = menubar.addMenu('Capturesite')
+        #print capturesite_menu.font()
         capturesite_menu.addAction(self.importAction)
 
         database_menu = menubar.addMenu('Ignorelist')

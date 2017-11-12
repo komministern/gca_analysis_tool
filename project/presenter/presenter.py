@@ -324,7 +324,7 @@ class MyPresenter(QtCore.QObject):
 
 
     def show_filter_dialog(self, initial_filter, name_editable = True):
-        self.dialog = MyFilterDialog(initial_filter, name_editable)
+        self.dialog = MyFilterDialog(initial_filter, name_editable, self.view)
         if self.dialog.exec_():
             filter = self.dialog.get_final_filter()
             self.save_filter(filter)

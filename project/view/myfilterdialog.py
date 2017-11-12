@@ -13,12 +13,13 @@ class MyFilterDialog(QtGui.QDialog, Ui_Dialog):
 
 #    quit = QtCore.Signal()
 
-    def __init__(self, initial_filter, name_editable = True):
-        super(MyFilterDialog, self).__init__()
+    def __init__(self, initial_filter, name_editable = True, parent=None):
+        super(MyFilterDialog, self).__init__(parent)
         
-        font = self.font()
-        font.setPointSize(8)
-        self.setFont(font)
+        # This really is not nice. Font size is set with pixel in view.
+        #font = self.font()
+        #font.setPointSize(9)
+        #self.setFont(font)
         
         self.setupUi(self)
 
