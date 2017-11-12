@@ -18,11 +18,18 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
 
     def __init__(self, **kwds):
         super(MyView, self).__init__(**kwds)
+        
+        font = self.font()
+        font.setPointSize(8)
+        self.setFont(font)
+        
         self.setupUi(self)
+        
+        font = self.calendarWidget.font()
+        font.setPointSize(7)
+        self.calendarWidget.setFont(font)
+        
         self.setupMenu()
-
-#    def about(self):
-#        self.win = MyLicenseWindow()
 
     def close(self):
         self.quit.emit()
@@ -45,6 +52,8 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
 #        self.aboutAction.setStatusTip('About...')
 
         menubar = self.menuBar()
+        
+        #menubar.setFont(self.myfont)
 
         capturesite_menu = menubar.addMenu('Capturesite')
         capturesite_menu.addAction(self.importAction)

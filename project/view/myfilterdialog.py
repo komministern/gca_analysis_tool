@@ -15,6 +15,11 @@ class MyFilterDialog(QtGui.QDialog, Ui_Dialog):
 
     def __init__(self, initial_filter, name_editable = True):
         super(MyFilterDialog, self).__init__()
+        
+        font = self.font()
+        font.setPointSize(8)
+        self.setFont(font)
+        
         self.setupUi(self)
 
         self.possible_identifiers = [u'(00)', u'(01)', u'(02)', u'(03)', u'(04)',
