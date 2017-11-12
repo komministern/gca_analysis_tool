@@ -17,9 +17,8 @@ class MyFilterDialog(QtGui.QDialog, Ui_Dialog):
         super(MyFilterDialog, self).__init__(parent)
         
         # This really is not nice. Font size is set with pixel in view.
-        #font = self.font()
-        #font.setPointSize(9)
-        #self.setFont(font)
+        font = parent.font()
+        self.setFont(font)
         
         self.setupUi(self)
 
