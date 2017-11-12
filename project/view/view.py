@@ -19,15 +19,23 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self, **kwds):
         super(MyView, self).__init__(**kwds)
         
+        # This is for the munu to get the right font !?!
         font = self.font()
         font.setPointSize(8)
         self.setFont(font)
         
+        #print font.pixelSize()
+        
         self.setupUi(self)
         
-        font = self.calendarWidget.font()
-        font.setPointSize(7)
+        font = self.font()
+        font.setPointSize(8)
+        self.setFont(font)
         self.calendarWidget.setFont(font)
+        
+        #font = self.calendarWidget.font()
+        #font.setPointSize(7)
+        #self.calendarWidget.setFont(font)
         
         self.setupMenu()
 
