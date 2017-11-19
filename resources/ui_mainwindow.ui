@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1227</width>
-    <height>905</height>
+    <height>765</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -83,6 +83,18 @@
        </item>
        <item row="2" column="0">
         <widget class="QPushButton" name="pushButton_FirstEntry">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>30</height>
+          </size>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -96,6 +108,18 @@
        </item>
        <item row="2" column="1">
         <widget class="QPushButton" name="pushButton_LastEntry">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>30</height>
+          </size>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -109,6 +133,18 @@
        </item>
        <item row="2" column="2">
         <widget class="QPushButton" name="pushButton_Today">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>30</height>
+          </size>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -197,6 +233,18 @@
           <layout class="QGridLayout" name="gridLayout_9">
            <item row="0" column="0">
             <widget class="QPushButton" name="pushButton_DeleteComment">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
              <property name="statusTip">
               <string>Delete this comment from database</string>
              </property>
@@ -220,6 +268,18 @@
            </item>
            <item row="0" column="2">
             <widget class="QPushButton" name="pushButton_PreviousComment">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
              <property name="statusTip">
               <string>Jump to previous comment</string>
              </property>
@@ -230,6 +290,18 @@
            </item>
            <item row="0" column="3">
             <widget class="QPushButton" name="pushButton_NextComment">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
              <property name="statusTip">
               <string>Jump to next comment</string>
              </property>
@@ -253,6 +325,18 @@
            </item>
            <item row="0" column="5">
             <widget class="QPushButton" name="pushButton_SaveComment">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
              <property name="statusTip">
               <string>Save this comment to database</string>
              </property>
@@ -351,7 +435,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>29</height>
+            <height>30</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -569,7 +653,7 @@
      <x>0</x>
      <y>0</y>
      <width>1227</width>
-     <height>31</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
