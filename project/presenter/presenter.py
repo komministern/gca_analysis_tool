@@ -949,26 +949,26 @@ class MyPresenter(QtCore.QObject):
 
 
 
-#    def about(self):
-
-#        self.message(u'''
-#GCA Analysis Tool, v1.01 Trial
-
-#Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
-
-#This is a trial version of the GCA Analysis Tool. It will be fully functional until July 2018, and may during this time be copied freely and used without restrictions.
-
-#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-#Software used:
-#Python 2.7.13, PSF License
-#PySide 1.2.4, LGPL version 2.1
-#Qt 4.8.6, LGPL version 3
-#''')
-
-
     def about(self):
 
         self.message(u'''
-<a rel="license" href="http://creativecommons.org/licenses/by-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nd/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nd/4.0/">Creative Commons Attribution-NoDerivatives 4.0 International License</a>.
+GCA Analysis Tool, v1.18 Trial
+
+Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
+
+This is a trial version of the GCA Analysis Tool. It will be fully functional until July 2018, and may during this time be copied freely and used without restrictions.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Software used:
+Python 2.7.13, PSF License
+PySide 1.2.4, LGPL version 2.1
+Qt 4.8.6, LGPL version 3
 ''')
+
+
+#    def about(self):
+
+#        self.message(u'''
+#<a rel="license" href="http://creativecommons.org/licenses/by-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nd/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nd/4.0/">Creative Commons Attribution-NoDerivatives 4.0 International License</a>.
+#''')
