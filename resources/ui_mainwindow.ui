@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1227</width>
+    <width>1154</width>
     <height>765</height>
    </rect>
   </property>
@@ -32,7 +32,7 @@
       <property name="minimumSize">
        <size>
         <width>330</width>
-        <height>0</height>
+        <height>403</height>
        </size>
       </property>
       <property name="maximumSize">
@@ -213,7 +213,17 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="QTextBrowser" name="textBrowser_HistoryLog"/>
+         <widget class="QTextBrowser" name="textBrowser_HistoryLog">
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="lineWrapMode">
+           <enum>QTextEdit::NoWrap</enum>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -652,7 +662,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1227</width>
+     <width>1154</width>
      <height>26</height>
     </rect>
    </property>

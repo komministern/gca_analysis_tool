@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Sun Nov 19 23:17:23 2017
+# Created: Mon Nov 20 13:29:50 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PySide import QtCore, QtGui
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1227, 765)
+        MainWindow.resize(1154, 765)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
         self.gridLayout_7 = QtGui.QGridLayout(self.centralwidget)
         self.gridLayout_7.setObjectName("gridLayout_7")
         self.groupBox_3 = QtGui.QGroupBox(self.centralwidget)
-        self.groupBox_3.setMinimumSize(QtCore.QSize(330, 0))
+        self.groupBox_3.setMinimumSize(QtCore.QSize(330, 403))
         self.groupBox_3.setMaximumSize(QtCore.QSize(330, 435))
         self.groupBox_3.setObjectName("groupBox_3")
         self.gridLayout_6 = QtGui.QGridLayout(self.groupBox_3)
@@ -86,6 +86,9 @@ class Ui_MainWindow(object):
         self.gridLayout = QtGui.QGridLayout(self.tab)
         self.gridLayout.setObjectName("gridLayout")
         self.textBrowser_HistoryLog = QtGui.QTextBrowser(self.tab)
+        self.textBrowser_HistoryLog.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.textBrowser_HistoryLog.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.textBrowser_HistoryLog.setLineWrapMode(QtGui.QTextEdit.NoWrap)
         self.textBrowser_HistoryLog.setObjectName("textBrowser_HistoryLog")
         self.gridLayout.addWidget(self.textBrowser_HistoryLog, 0, 0, 1, 1)
         self.tabWidget_TextFields.addTab(self.tab, "")
@@ -211,7 +214,7 @@ class Ui_MainWindow(object):
         self.gridLayout_7.addWidget(self.groupBox_4, 0, 0, 1, 2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1227, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1154, 26))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
