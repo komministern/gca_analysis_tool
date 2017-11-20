@@ -33,7 +33,7 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
         width_of_textedit = self.plainTextEdit_StringSearch.geometry().width()
         self.pixelsize_standard = int(round(width_of_textedit / 24.0) * 0.9)
         #self.pixelsize_calendar = int(width_of_textedit / 24.0 * 0.81)
-        self.pixelsize_calendar = int(round(width_of_textedit / 24.0 * 0.9))
+        self.pixelsize_calendar = int(round(width_of_textedit / 24.0 * 0.78))
 
         font = self.font()
         font.setPixelSize(self.pixelsize_standard)
