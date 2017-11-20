@@ -6,7 +6,7 @@
 #
 #    This file is part of GCA Analysis Tool.
 
-import math
+#import math
 from PySide import QtGui, QtCore
 from ui_mainwindow import Ui_MainWindow
 #from licensewindow import MyLicenseWindow
@@ -31,8 +31,9 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         
         width_of_textedit = self.plainTextEdit_StringSearch.geometry().width()
-        self.pixelsize_standard = int(width_of_textedit / 24.0)
-        self.pixelsize_calendar = int(width_of_textedit / 24.0 * 0.81)
+        self.pixelsize_standard = int(round(width_of_textedit / 24.0))
+        #self.pixelsize_calendar = int(width_of_textedit / 24.0 * 0.81)
+        self.pixelsize_calendar = int(round(width_of_textedit / 24.0 * 0.9))
 
         font = self.font()
         font.setPixelSize(self.pixelsize_standard)
