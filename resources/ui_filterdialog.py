@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_filterdialog.ui'
 #
-# Created: Mon Nov 20 13:29:50 2017
+# Created: Sun Nov 26 13:55:29 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -85,7 +85,7 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "History Log Filter", None, QtGui.QApplication.UnicodeUTF8))
+        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Edit history log filter", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_3.setTitle(QtGui.QApplication.translate("Dialog", "Filter", None, QtGui.QApplication.UnicodeUTF8))
         self.lineEdit_FilterName.setStatusTip(QtGui.QApplication.translate("Dialog", "Name of the current filter", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_Cancel.setStatusTip(QtGui.QApplication.translate("Dialog", "Cancel editing discarding possible changes", None, QtGui.QApplication.UnicodeUTF8))

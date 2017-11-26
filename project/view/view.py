@@ -7,6 +7,7 @@
 #    This file is part of GCA Analysis Tool.
 
 #import math
+import os
 from PySide import QtGui, QtCore
 from ui_mainwindow import Ui_MainWindow
 #from licensewindow import MyLicenseWindow
@@ -29,6 +30,8 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
         #print font.pixelSize()
         
         self.setupUi(self)
+
+        self.setWindowIcon(QtGui.QIcon('gca.ico'))
         
         width_of_textedit = self.plainTextEdit_StringSearch.geometry().width()
         self.pixelsize_standard = int(round(width_of_textedit / 24.0) * 0.9)

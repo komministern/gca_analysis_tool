@@ -533,7 +533,7 @@ class MyPresenter(QtCore.QObject):
 
     def import_capturesite(self):
 
-        capturesite_filename, _ = QtGui.QFileDialog.getOpenFileName(self.view, u'Capturesite', self.model.home_directory, u'Capturesite (*tar.gz *TAR.Z)')
+        capturesite_filename, _ = QtGui.QFileDialog.getOpenFileName(self.view, u'Choose capturesite file to import', self.model.home_directory, u'Capturesite (*tar.gz *TAR.Z)')
 
         if capturesite_filename[-2:] == '.Z':
             
@@ -630,7 +630,7 @@ class MyPresenter(QtCore.QObject):
 
     # Create a new site from scratch
     def create_new_site(self, capturesite_filename):
-        site_name, ok = QtGui.QInputDialog.getText(self.view, u'New Site', u'This capturesite file does not seem to be associated with any of the existing sites. Please name the new site:') 
+        site_name, ok = QtGui.QInputDialog.getText(self.view, u'Enter a name for the new site', u'This capturesite file does not seem to be associated with any of the existing sites. Please name the new site:') 
 
         if ok:
 
@@ -676,9 +676,11 @@ class MyPresenter(QtCore.QObject):
 
     # Messaging the user stuff
 
-    def message(self, text):
-        msgBox = QtGui.QMessageBox()
+    def message(self, text, title_text=''):
+        msgBox = QtGui.QMessageBox(parent=self.view)
         msgBox.setText(text)
+        if title_text:
+            msgBox.setWindowTitle(title_text)
         msgBox.exec_()
         
     def message_with_cancel_choice(self, text, informative_text, default_button):
@@ -688,6 +690,8 @@ class MyPresenter(QtCore.QObject):
         msgBox.setStandardButtons(QtGui.QMessageBox.Cancel | QtGui.QMessageBox.Ok)
         msgBox.setDefaultButton(default_button)
         return msgBox.exec_()
+    
+
 
 
 
@@ -916,8 +920,23 @@ class MyPresenter(QtCore.QObject):
 
     def about(self):
 
+#        QtGui.QMessageBox.about(self.view, u'About', u'''
+#GCA Analysis Tool, v1.29 Trial
+#
+#Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
+#
+#This is a trial version of the GCA Analysis Tool. It will be fully functional until July 2018, and may during this time be copied freely and used without restrictions.
+#
+#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+#Software used:
+#Python 2.7.13, PSF License
+#PySide 1.2.4, LGPL version 2.1
+#Qt 4.8.6, LGPL version 3
+#''')
+
         self.message(u'''
-GCA Analysis Tool, v1.29 Trial
+GCA Analysis Tool, v1.29 (Trial)
 
 Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
 
@@ -929,7 +948,7 @@ Software used:
 Python 2.7.13, PSF License
 PySide 1.2.4, LGPL version 2.1
 Qt 4.8.6, LGPL version 3
-''')
+''', u'About GCA Analysis Tool')
 
 
 #    def about(self):

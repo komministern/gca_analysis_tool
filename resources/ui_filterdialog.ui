@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>History Log Filter</string>
+   <string>Edit history log filter</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0" colspan="3">
