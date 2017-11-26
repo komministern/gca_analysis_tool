@@ -11,6 +11,7 @@ import sys
 import os
 import shutil
 import tarfile
+import subprocess
 from PySide import QtCore, QtGui
 from sitecontainer import SiteContainer
 import platform
@@ -33,6 +34,10 @@ class Database(QtCore.QObject):
         self.top_directory = os.path.join(self.home_directory, u'GCA Analyzer')
         self.sites_directory = os.path.join(self.top_directory, u'sites')
         self.filters_directory = os.path.join(self.top_directory, u'filters')
+        
+        #self.temp_files_directory = os.path.join(self.top_directory, u'temp')
+        
+        self.path_to_7z_filename = os.path.join(self.top_directory, u'location7z.txt')
 
         self.site_dictionary = {}
         self.filter_list = []
@@ -78,6 +83,7 @@ class Database(QtCore.QObject):
 
     def create_new_site(self, capturesite_filename, site_name):
 #        self.site_dictionary[site_name].check_or_fix_site_directory_structure()
+
         self.copy_historylogs_from_capturesite_file(capturesite_filename, site_name)
         self.read_site_to_memory(site_name)
 
@@ -88,6 +94,7 @@ class Database(QtCore.QObject):
         previously_ignored_dates = self.site_dictionary[site_name].get_ignored_dates_list()
         shutil.rmtree(this_historylog_directory)
         self.site_dictionary[site_name].check_or_fix_site_directory_structure()
+
         self.copy_historylogs_from_capturesite_file(capturesite_filename, site_name)
         self.remove_site_from_memory(site_name)
         self.read_site_to_memory(site_name)
@@ -97,7 +104,61 @@ class Database(QtCore.QObject):
         shutil.rmtree(os.path.join(self.sites_directory, site_name))
 
 
+    def exist_7z(self):
+        if not os.path.exists(self.path_to_7z_filename):
+            # Assumed standard path
+            self.set_path_to_7z(os.path.join('C:', os.sep, 'Program Files', '7-Zip', '7z.exe'))
+        return os.path.exists(self.get_path_to_7z())
+
+
+    def set_path_to_7z(self, path):
+        f = open(self.path_to_7z_filename, 'w')
+        f.write(path)
+        f.close()
+
+
+    def get_path_to_7z(self):
+        f = open(self.path_to_7z_filename, 'r')
+        path = f.readline()
+        f.close()
+        return path
+
+
     def copy_historylogs_from_capturesite_file(self, capturesite_filename, site_name):
+        if capturesite_filename[-2:] == '.Z':
+            self.copy_historylogs_from_older_capturesite_file(capturesite_filename, site_name)
+        else:
+            self.copy_historylogs_from_newer_capturesite_file(capturesite_filename, site_name)
+
+
+    def copy_historylogs_from_older_capturesite_file(self, capturesite_filename, site_name):
+        # This method reads all historylog files from a tar file (the .Z decompression has previously been done by 7z)
+        # UGLY CODE!!!!
+        this_site_directory = os.path.join(self.sites_directory, site_name)
+        this_historylog_directory = os.path.join(this_site_directory, u'historylogs')
+
+        prg_path = self.get_path_to_7z()
+        dest_path = this_site_directory
+
+        self.extractZfiles(prg_path, capturesite_filename, dest_path)
+        
+        with tarfile.open( os.path.join(dest_path, 'CAPTURESITE_TAR') ) as tar:
+            history_members = [member for member in tar.getmembers() if '.txt' in member.name and member.name.startswith('/local/gca_history/')]
+            for member in history_members:
+                member.name = os.path.basename(member.name)
+                tar.extract(member, this_historylog_directory)
+
+        os.remove( os.path.join(dest_path, 'CAPTURESITE_TAR') )
+
+
+    def extractZfiles(self, prg_path, archive_path, dest_path):
+        dest_switch = '-o' + dest_path
+        system = subprocess.Popen([prg_path, 'e', dest_switch, archive_path], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+        return(system.communicate())
+
+
+    def copy_historylogs_from_newer_capturesite_file(self, capturesite_filename, site_name):
+        # This method reads all historylog files from a tar.gz file (the tar module handles the zipping)
         this_site_directory = os.path.join(self.sites_directory, site_name)
         this_historylog_directory = os.path.join(this_site_directory, u'historylogs')
         with tarfile.open(capturesite_filename) as tar:

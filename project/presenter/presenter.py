@@ -58,18 +58,18 @@ class MyPresenter(QtCore.QObject):
         self.color_all_dates()
 
         self.trial_has_ended = False
-        if len(self.get_site_names()) > 0:
+        if len(self.model.get_site_names()) > 0:
 
             # Check if trial is up
             #self.trial_has_ended = False
             
-            for site_name in self.get_site_names():
+            for site_name in self.model.get_site_names():
                 
-                if (self.get_third_last_entry_date(site_name).year() >= 2018) and (self.get_third_last_entry_date(site_name).month() >= 7):
+                if (self.model.get_third_last_entry_date(site_name).year() >= 2018) and (self.model.get_third_last_entry_date(site_name).month() >= 7):
                     self.trial_has_ended = True
 
-            self.view.comboBox_ActiveSite.addItems(self.get_site_names())
-            self.active_site = self.get_site_names()[0]
+            self.view.comboBox_ActiveSite.addItems(self.model.get_site_names())
+            self.active_site = self.model.get_site_names()[0]
 
         self.update_calendar()
         self.update_text()
@@ -83,7 +83,7 @@ class MyPresenter(QtCore.QObject):
 
 
     def color_all_dates(self):
-        for site_name in self.get_site_names():
+        for site_name in self.model.get_site_names():
             self.presentation_dict[site_name] = self.colored_dates(site_name)
 
 
@@ -91,10 +91,10 @@ class MyPresenter(QtCore.QObject):
 
         if self.coloring_scheme == 0:       # Normal/Degraded/Faulted
 
-            red_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if txt.faulted(text)]
-            yellow_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if txt.degraded(text) and date not in red_dates]
-            green_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if txt.normal(text) and (date not in red_dates) and (date not in yellow_dates)]
-            white_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if (date not in red_dates) and (date not in yellow_dates) and (date not in green_dates)]
+            red_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if txt.faulted(text)]
+            yellow_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if txt.degraded(text) and date not in red_dates]
+            green_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if txt.normal(text) and (date not in red_dates) and (date not in yellow_dates)]
+            white_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if (date not in red_dates) and (date not in yellow_dates) and (date not in green_dates)]
 
             lower_right_red_dates = red_dates
             lower_right_green_dates = green_dates
@@ -110,23 +110,23 @@ class MyPresenter(QtCore.QObject):
 
         elif self.coloring_scheme == 1:     # New Fault/Active Fault
         
-            lower_right_red_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if txt.active_fault_in(text)]
-            lower_right_green_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if txt.no_active_fault_in(text)]
+            lower_right_red_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if txt.active_fault_in(text)]
+            lower_right_green_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if txt.no_active_fault_in(text)]
  
-            upper_left_red_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if txt.new_fault_in(text)]
-            upper_left_green_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if txt.no_new_fault_in(text)]
+            upper_left_red_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if txt.new_fault_in(text)]
+            upper_left_green_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if txt.no_new_fault_in(text)]
 
-            upper_left_white_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if date not in upper_left_red_dates and date not in upper_left_green_dates]
+            upper_left_white_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if date not in upper_left_red_dates and date not in upper_left_green_dates]
             upper_left_yellow_dates = []
             
-            lower_right_white_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if date not in lower_right_red_dates and date not in lower_right_green_dates]
+            lower_right_white_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if date not in lower_right_red_dates and date not in lower_right_green_dates]
             lower_right_yellow_dates = []
 
         elif self.coloring_scheme == 2:     # Temporary Faults
 
-            red_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if txt.new_fault_in(text) and 
+            red_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if txt.new_fault_in(text) and 
                             (not txt.degraded(text)) and (not txt.faulted(text))]
-            white_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if date not in red_dates]
+            white_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if date not in red_dates]
 
             lower_right_red_dates = red_dates
             upper_left_red_dates = red_dates
@@ -143,8 +143,8 @@ class MyPresenter(QtCore.QObject):
 
         elif self.coloring_scheme == 3:     # Transmitter on
 
-            green_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if txt.transmitter_on(text)]
-            white_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if date not in green_dates]
+            green_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if txt.transmitter_on(text)]
+            white_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if date not in green_dates]
 
             lower_right_red_dates = []
             upper_left_red_dates = []
@@ -162,8 +162,8 @@ class MyPresenter(QtCore.QObject):
 
         elif self.coloring_scheme == 4:     # Shelter Door Open
 
-            green_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if (u'Shelter Door Open' in text)]
-            white_dates = [date for date, text in self.get_historylog_dictionary(site_name).items() if date not in green_dates]
+            green_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if (u'Shelter Door Open' in text)]
+            white_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if date not in green_dates]
 
             lower_right_red_dates = []
             upper_left_red_dates = []
@@ -219,7 +219,7 @@ class MyPresenter(QtCore.QObject):
             self.view.calendarWidget.updateCells()
 
     def set_active_site(self, index):
-        self.active_site = self.get_site_names()[index]
+        self.active_site = self.model.get_site_names()[index]
         self.commit_string_search()     # self.update_text() is called in this procedure.
         #self.update_text()
         self.update_calendar()
@@ -234,12 +234,12 @@ class MyPresenter(QtCore.QObject):
 
     def set_last_date(self):
         if self.active_site:
-            self.set_selected_date(self.get_last_entry_date(self.active_site))
+            self.set_selected_date(self.model.get_last_entry_date(self.active_site))
             self.update_calendar()
 
     def set_first_date(self):
         if self.active_site:
-            self.set_selected_date(self.get_first_entry_date(self.active_site))
+            self.set_selected_date(self.model.get_first_entry_date(self.active_site))
             self.update_calendar()
 
     def set_active_date(self):
@@ -258,7 +258,7 @@ class MyPresenter(QtCore.QObject):
 
         if self.active_site:
             date = self.view.calendarWidget.selectedDate()
-            text = self.get_historylog(self.active_site, date)
+            text = self.model.get_historylog(self.active_site, date)
             self.view.textBrowser_HistoryLog.setPlainText(self.format_text(text))
 
             if self.highlight != u'' and text != u'No history log exists for this date.': 
@@ -441,7 +441,7 @@ class MyPresenter(QtCore.QObject):
 
     def list_of_search_string_dates(self, astring):
         if not astring == '':
-            return [date for date, text in self.get_historylog_dictionary(self.active_site).items() if astring in text]
+            return [date for date, text in self.model.get_historylog_dictionary(self.active_site).items() if astring in text]
         else:
             return []
 
@@ -529,104 +529,106 @@ class MyPresenter(QtCore.QObject):
         self.view.pushButton_CommitStringSearch.clicked.emit()
 
 
-
-
     # ---------- Import a capturesite file
-
 
     def import_capturesite(self):
 
-        capturesite_filename, test = QtGui.QFileDialog.getOpenFileName(self.view, u'Capturesite', self.model.home_directory, u'Capturesite (*tar.gz)')
+        capturesite_filename, _ = QtGui.QFileDialog.getOpenFileName(self.view, u'Capturesite', self.model.home_directory, u'Capturesite (*tar.gz *TAR.Z)')
 
-        if capturesite_filename:
+        if capturesite_filename[-2:] == '.Z':
+            
+            if not self.model.exist_7z():
+                
+                self.message(u'To decompress this Capturesite file, the application 7z needs to be installed. Either this is not the case, or it is installed in a non default location. Please enter the location of the file 7z.exe.')
+
+                path_to_7z, _ = QtGui.QFileDialog.getOpenFileName(self.view, u'Path to 7z.exe', self.model.home_directory, u'7z console application (7z.exe)')
+                self.model.set_path_to_7z(path_to_7z)
+
+        
+        if capturesite_filename and self.model.exist_7z():
 
             temp_site_name = u'_TEMP'
 
-            self.create_site(capturesite_filename, temp_site_name)
+            try:
+            
+                # Create a temporary site _TEMP
+                # The self.mode.create_site decompresses and copies all historylog files to temp_site_name
+                # and (!) reads all these in to memory
+                self.model.create_new_site(capturesite_filename, temp_site_name)
 
-            temp_dates = sorted(self.model.get_historylog_dictionary(temp_site_name).keys())
-
-
-            self.model.remove_site_from_disc(temp_site_name)
-
-
-            possible_candidates = []
-
-            for site_name in self.get_site_names():
-
-                # Create list of all site dates, including the ignored dates
-                site_dates = self.model.get_historylog_dictionary(site_name).keys()
-                site_dates.extend(self.model.get_ignored_dates(site_name))
-                site_dates = sorted(site_dates)     # UGLY
-
- 
-
-                # If all historylog dates are in site_name's history log
+                # List all the dates of the historylog files (sorted not needed?!?)
+                temp_dates = sorted(self.model.get_historylog_dictionary(temp_site_name).keys())
                 
-                if len(temp_dates) >= len(site_dates) and (set(temp_dates) >= set(site_dates)): # and (temp_dates[0] == site_dates[0]):
-                    possible_candidates.append(site_name)
+                # Delete the site on disc. It is still in memory though!!!!
+                self.model.remove_site_from_disc(temp_site_name)
+
+                # Now let's check if the capturesite file is an update of an existing site
+                possible_candidates = []
+
+                for site_name in self.model.get_site_names():
+
+                    # Create a sorted (why?) list of all site dates, including the ignored dates
+                    site_dates = self.model.get_historylog_dictionary(site_name).keys()
+                    site_dates.extend(self.model.get_ignored_dates(site_name))
+                    #site_dates = sorted(site_dates)     # UGLY
+
+
+                    T = set(temp_dates)
+                    S = set(site_dates)
                     
-
-                elif len(temp_dates) < len(site_dates) and (set(temp_dates) <= set(site_dates)):
-                    possible_candidates.append(site_name)
+                    # If the difference between the set of site dates and the intersection of the set of temporary dates and the set of site dates is empty,
+                    # this temporary site most probably is an update of the site.
+                    if len( S - (T & S) ) == 0 or len( T - (T & S) ) == 0:
+                        possible_candidates.append(site_name)
                     
-                    
+                if len(possible_candidates) > 1:
 
+                    print u'Rethink the way you check uniqueness of sites!!!'
+                    print u'This must never ever ever happen!!!!!!'
 
+                elif len(possible_candidates) == 1:
 
-            if len(possible_candidates) > 1:
+                    site_to_be_updated = possible_candidates[0]
 
-                print u'Rethink the way you check uniqueness of sites!!!'
-                print u'This must never happen!!!!!!'
+                    site_to_be_updated_dates = self.model.get_historylog_dictionary(site_to_be_updated).keys()
+                    site_to_be_updated_dates.extend(self.model.get_ignored_dates(site_to_be_updated))
 
-            elif len(possible_candidates) == 1:
+                    if len(site_to_be_updated_dates) > len(temp_dates):
+                        self.message(u'The capturesite file seems to be affiliated with the already existing ' + 
+                                     site_to_be_updated + u' site, but it contains fewer history log entries and thus ' +
+                                     u'probably predates it. Aborting import.')
 
-                site_to_be_updated = possible_candidates[0]
-
-                site_to_be_updated_dates = self.model.get_historylog_dictionary(site_to_be_updated).keys()
-                site_to_be_updated_dates.extend(self.model.get_ignored_dates(site_to_be_updated))
-
-                if len(site_to_be_updated_dates) > len(temp_dates):
-                    self.message(u'The capturesite file seems to be affiliated with the already existing ' + site_to_be_updated + ' site, but it contains fewer history log entries and thus probably predates it. Aborting import.')
-
-                elif len(site_to_be_updated_dates) == len(temp_dates):
-
-                    clicked = self.message_with_cancel_choice(u'The capturesite file seems to be affiliated with the already existing ' +
-                                                            site_to_be_updated + u' site. However, the number of entries in ' +
-                                                            u'the capturesite file is the same as in your database. No new information will be added.', 
-                                                            u'Do you still want to update ' + site_to_be_updated + '?',
-                                                            QtGui.QMessageBox.Cancel)
-                    if clicked == QtGui.QMessageBox.Ok:
-                        self.update_site(site_to_be_updated, capturesite_filename)
+                    elif len(site_to_be_updated_dates) == len(temp_dates):
+                        self.message(u'The capturesite file seems to be affiliated with the already existing ' + 
+                                     site_to_be_updated + u' site. However, the number of entries in ' + 
+                                     u'the capturesite file is the same as in your database. No new information will ' +
+                                     u'be added. Aborting import.')
+                    else:
+                        clicked = self.message_with_cancel_choice(u'The capturesite file seems to be affiliated with the already existing ' + site_to_be_updated + ' site.', 
+                                                            'Update ' + site_to_be_updated + '?', QtGui.QMessageBox.Ok)
+                        if clicked == QtGui.QMessageBox.Ok:
+                            self.update_site(site_to_be_updated, capturesite_filename)
 
                 else:
-                    clicked = self.message_with_cancel_choice(u'The capturesite file seems to be affiliated with the already existing ' + site_to_be_updated + ' site.', 
-                                                            'Update ' + site_to_be_updated + '?', QtGui.QMessageBox.Ok)
-                    if clicked == QtGui.QMessageBox.Ok:
-                        self.update_site(site_to_be_updated, capturesite_filename)
 
-            else:
+                    self.create_new_site(capturesite_filename)
 
-                self.create_new_site(capturesite_filename)
+                self.model.remove_site_from_memory(temp_site_name)      # This could happen earlier!?!?!?!?!
 
-            self.model.remove_site_from_memory(temp_site_name)      # This could happen earlier!?!?!?!?!
-
+            except Exception, e:
+                self.message('Import failed.\n' + repr(e))
+                #print 'Something went haywire when importint Capturesite.\n' + repr(e)
 
 
     # Update an existing site
-
-
     def update_site(self, site_name, capturesite_filename):
-
         self.model.update_site(capturesite_filename, site_name)
-
         del self.presentation_dict[site_name]
-        
         self.presentation_dict[site_name] = self.colored_dates(site_name)
 
+
+
     # Create a new site from scratch
-
-
     def create_new_site(self, capturesite_filename):
         site_name, ok = QtGui.QInputDialog.getText(self.view, u'New Site', u'This capturesite file does not seem to be associated with any of the existing sites. Please name the new site:') 
 
@@ -637,7 +639,7 @@ class MyPresenter(QtCore.QObject):
  
             if set(site_name) <= allowed_set and site_name != '':
 
-                if site_name in self.get_site_names():
+                if site_name in self.model.get_site_names():
                     self.message(u'Site name already exists. Aborting.')
 
                 else:
@@ -651,23 +653,24 @@ class MyPresenter(QtCore.QObject):
                         self.view.comboBox_ActiveSite.clear()
 
                         # Repopulate comboBox
-                        self.view.comboBox_ActiveSite.addItems(self.get_site_names())
+                        self.view.comboBox_ActiveSite.addItems(self.model.get_site_names())
 
-                        new_index = self.get_site_names().index(site_name)
+                        new_index = self.model.get_site_names().index(site_name)
                     
                         self.view.comboBox_ActiveSite.setCurrentIndex(new_index)    # This also triggers the set_active_site method and makes the new site active!!!!
 
-                    except Exception:
+                    except Exception, e:
 
-                        self.message(u'An unexpected error occured. Aborting.')
+                        self.message(u'An unexpected error occured during import. Aborting.')
 
             else:
 
                 self.message(u'Site name may only contain letters, numbers, -_ and space. Aborting.')
 
-        else:
+        #else:
 
-            pass
+        #    pass
+
 
 
 
@@ -766,7 +769,7 @@ class MyPresenter(QtCore.QObject):
         if self.active_site:
             date = self.view.calendarWidget.selectedDate()
 
-            if (self.get_historylog(self.active_site, date) != u'No history log exists for this date.') and (date not in self.ignored_dates(self.active_site)): 
+            if (self.model.get_historylog(self.active_site, date) != u'No history log exists for this date.') and (date not in self.ignored_dates(self.active_site)): 
                 try:
 
                     self.model.add_ignored_date(self.active_site, date)
@@ -821,7 +824,7 @@ class MyPresenter(QtCore.QObject):
 
     def save_comment(self):
         if self.active_site:
-            commented_dates = [date for date in self.get_comment_dictionary(self.active_site).keys()]
+            commented_dates = [date for date in self.model.get_comment_dictionary(self.active_site).keys()]
             if self.active_date() in commented_dates:
 
             # Does comment exist for this date?
@@ -848,7 +851,7 @@ class MyPresenter(QtCore.QObject):
 
     def delete_comment(self):
         if self.active_site:
-            commented_dates = [date for date in self.get_comment_dictionary(self.active_site).keys()]
+            commented_dates = [date for date in self.model.get_comment_dictionary(self.active_site).keys()]
             if self.active_date() in commented_dates:
         
                 clicked = self.message_with_cancel_choice(u'Comment will be removed from the database.', u'Continue?', QtGui.QMessageBox.Cancel)
@@ -871,13 +874,13 @@ class MyPresenter(QtCore.QObject):
             else:
                 self.view.plainTextEdit_Comment.clear()
 
-            comment_dates = [date for date in self.get_comment_dictionary(self.active_site).keys()]
+            comment_dates = [date for date in self.model.get_comment_dictionary(self.active_site).keys()]
             self.view.calendarWidget.setTriangleDates(comment_dates)
 
 
     def set_next_comment_date(self):
         if self.active_site:
-            dates = sorted([date for date, _ in self.get_comment_dictionary(self.active_site).items()])
+            dates = sorted([date for date, _ in self.model.get_comment_dictionary(self.active_site).items()])
             if not len(dates) == 0:
                 greater_dates = [date for date in dates if date > self.active_date()]
                 if len(greater_dates) == 0:
@@ -891,7 +894,7 @@ class MyPresenter(QtCore.QObject):
 
     def set_previous_comment_date(self):
         if self.active_site:
-            dates = sorted([date for date, _ in self.get_comment_dictionary(self.active_site).items()])
+            dates = sorted([date for date, _ in self.model.get_comment_dictionary(self.active_site).items()])
             if not len(dates) == 0:
                 lesser_dates = [date for date in dates if date < self.active_date()]
                 if len(lesser_dates) == 0:
@@ -908,44 +911,6 @@ class MyPresenter(QtCore.QObject):
 
 
 
-
-# --------- Methods accessing the model (remove altogether???)
-
-    def create_site(self, capturesite_filename, site_name):
-        self.model.create_new_site(capturesite_filename, site_name)
-
-
-    def remove_site(self, site_name):
-        self.model.remove_site_from_memory(site_name)
-        self.model.remove_site_from_disc(site_name)
-
-
-    def get_site_names(self):
-        return self.model.get_site_names()
-
-
-    def get_historylog(self, site_name, date):
-        return self.model.get_historylog(site_name, date)
-
-
-    def get_historylog_dictionary(self, site_name):
-        return self.model.get_historylog_dictionary(site_name)
-
-    
-    def get_comment_dictionary(self, site_name):
-        return self.model.get_comment_dictionary(site_name)
-
-
-    def get_first_entry_date(self, site_name):
-        return self.model.get_first_entry_date(site_name)
-
-
-    def get_last_entry_date(self, site_name):
-        return self.model.get_last_entry_date(site_name)
-
-
-    def get_third_last_entry_date(self, site_name):
-        return self.model.get_third_last_entry_date(site_name)
 
 
 
