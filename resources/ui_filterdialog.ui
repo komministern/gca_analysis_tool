@@ -29,7 +29,7 @@
    <item row="0" column="0" colspan="3">
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Filter</string>
+      <string>Filter Name</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
@@ -113,7 +113,7 @@
    <item row="1" column="0" rowspan="4">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Possible Identifiers</string>
+      <string>Identifiers</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">

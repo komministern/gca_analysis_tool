@@ -1,8 +1,7 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
-#    Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@yahoo.se>
+#    Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 #
 #    This file is part of GCA Analysis Tool.
 
@@ -936,9 +935,9 @@ class MyPresenter(QtCore.QObject):
 #''')
 
         self.message(u'''
-GCA Analysis Tool, v1.30 (Trial)
+GCA Analysis Tool, v1.31 (trial version)
 
-Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
+Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 
 This is a trial version of the GCA Analysis Tool. It will be fully functional until July 2018, and may during this time be copied freely and used without restrictions.
 

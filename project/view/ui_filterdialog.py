@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_filterdialog.ui'
 #
-# Created: Sun Nov 26 13:55:29 2017
+# Created: Sat Dec 02 06:15:37 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -86,13 +86,13 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Edit history log filter", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_3.setTitle(QtGui.QApplication.translate("Dialog", "Filter", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_3.setTitle(QtGui.QApplication.translate("Dialog", "Filter Name", None, QtGui.QApplication.UnicodeUTF8))
         self.lineEdit_FilterName.setStatusTip(QtGui.QApplication.translate("Dialog", "Name of the current filter", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_Cancel.setStatusTip(QtGui.QApplication.translate("Dialog", "Cancel editing discarding possible changes", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_Cancel.setText(QtGui.QApplication.translate("Dialog", "Cancel", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_Save.setStatusTip(QtGui.QApplication.translate("Dialog", "Save current filter settings", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_Save.setText(QtGui.QApplication.translate("Dialog", "Save", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_2.setTitle(QtGui.QApplication.translate("Dialog", "Possible Identifiers", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_2.setTitle(QtGui.QApplication.translate("Dialog", "Identifiers", None, QtGui.QApplication.UnicodeUTF8))
         self.plainTextEdit_PossibleContent.setStatusTip(QtGui.QApplication.translate("Dialog", "Possible codes used to filter history log content", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setTitle(QtGui.QApplication.translate("Dialog", "Filter Content", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_FilterState.setStatusTip(QtGui.QApplication.translate("Dialog", "Choose suppressing or highlighting function", None, QtGui.QApplication.UnicodeUTF8))

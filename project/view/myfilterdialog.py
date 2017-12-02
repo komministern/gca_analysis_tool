@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#    Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@yahoo.se>
+
+#    Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 #
 #    This file is part of GCA Analysis Tool.
+
 
 
 from PySide import QtGui, QtCore
@@ -120,12 +122,12 @@ class MyFilterDialog(QtGui.QDialog, Ui_Dialog):
 
 
     def message(self, text):
-        msgBox = QtGui.QMessageBox()
+        msgBox = QtGui.QMessageBox(parent=self)
         msgBox.setText(text)
         msgBox.exec_()
         
     def message_with_cancel_choice(self, text, informative_text, default_button):
-        msgBox = QtGui.QMessageBox()
+        msgBox = QtGui.QMessageBox(parent=self)
         msgBox.setText(text)
         msgBox.setInformativeText(informative_text)
         msgBox.setStandardButtons(QtGui.QMessageBox.Cancel | QtGui.QMessageBox.Ok)
