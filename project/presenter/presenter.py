@@ -624,7 +624,16 @@ class MyPresenter(QtCore.QObject):
         self.model.update_site(capturesite_filename, site_name)
         del self.presentation_dict[site_name]
         self.presentation_dict[site_name] = self.colored_dates(site_name)
-
+        
+        # Change the active_site to the site that just got updated. This also
+        # updates the calendar!!!
+        new_index = self.model.get_site_names().index(site_name)
+        self.view.comboBox_ActiveSite.setCurrentIndex(new_index)
+        
+        # If the new_index is the current actual index, the calendar will not get updated.
+        # So, a bit ugly, here I force another update_calendar()!!!
+        
+        self.update_calendar()
 
 
     # Create a new site from scratch
