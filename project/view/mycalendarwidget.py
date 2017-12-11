@@ -13,6 +13,24 @@ class MyCalendarWidget(QtGui.QCalendarWidget):
     def __init__(self, parent=None):
         QtGui.QCalendarWidget.__init__(self, parent)
         
+        
+        self.tableView = self.findChild(QtGui.QTableView)
+        #self.tableView.hideColumn(0)
+        self.tableView.horizontalHeader().setResizeMode(QtGui.QHeaderView.Fixed)
+        for i in range(8):
+            self.tableView.horizontalHeader().resizeSection(i, 38)
+        #print self.table.width()
+        #print self.table.columnWidth(0)
+        #self.table.setColumnWidth(0, 39*2)
+        #print self.table.columnWidth(0)
+        
+        #table.resizeColumnsToContents()
+        
+        #self.calendarWidget.findChild(QtGui.QTableView).setColumnWidth(1, 39*2)
+        
+        #self.calendarWidget.findChild(QtGui.QTableView).hideColumn(0)
+        
+        
         self.setFirstDayOfWeek(QtCore.Qt.DayOfWeek.Monday)
         #self.setHorizontalHeaderFormat(QtGui.QCalendarWidget.SingleLetterDayNames)
 
