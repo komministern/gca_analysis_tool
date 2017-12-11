@@ -46,6 +46,10 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
         font.setPixelSize(self.pixelsize_calendar)
         self.calendarWidget.setFont(font)
         
+        table = self.calendarWidget.findChild(QtGui.QTableView)
+        table.horizontalHeader().setStretchLastSection(True)
+        
+        
         #font = self.plainTextEdit_StringSearch.font()
         #font.setPointSize(8)
         #width_of_textedit = self.plainTextEdit_StringSearch.geometry().width()
