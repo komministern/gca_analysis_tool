@@ -19,16 +19,7 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
 
     def __init__(self, **kwds):
         super(MyView, self).__init__(**kwds)
-        
-        # This is for the menu to get the right font !?! (Why???)
-        #font = self.font()
-        #font.setPointSize(8)
-        #pixelsize = math.floor(406.0 / 24)
-        #font.setPixelSize(pixelsize)
-        #self.setFont(font)
-        
-        #print font.pixelSize()
-        
+                
         self.setupUi(self)
 
         self.setWindowIcon(QtGui.QIcon('gca.ico'))
@@ -45,33 +36,6 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
         font = self.calendarWidget.font()
         font.setPixelSize(self.pixelsize_calendar)
         self.calendarWidget.setFont(font)
-        
-#        self.table = self.calendarWidget.findChild(QtGui.QTableView)
-#        print self.table.width()
-#        print self.table.columnWidth(0)
-#        self.table.setColumnWidth(0, 39*2)
-#        print self.table.columnWidth(0)
-        
-        #table.resizeColumnsToContents()
-        
-#        self.calendarWidget.findChild(QtGui.QTableView).setColumnWidth(1, 39*2)
-        
-#        self.calendarWidget.findChild(QtGui.QTableView).hideColumn(0)
-        
-        
-        #font = self.plainTextEdit_StringSearch.font()
-        #font.setPointSize(8)
-        #width_of_textedit = self.plainTextEdit_StringSearch.geometry().width()
-        #font_metrics = QtGui.QFontMetrics(font)
-        #width_of_string = font_metrics.width(u'aaaaaaaaaaaaaaaaaaaaaaa')
-        #width_of_string = font_metrics.width(u'aaaaaaaaaaaaaaaaaaaaaaa')
-        #print width_of_textedit
-        #print width_of_string
-        
-        
-        #font = self.calendarWidget.font()
-        #font.setPointSize(7)
-        #self.calendarWidget.setFont(font)
         
         self.setupMenu()
 
