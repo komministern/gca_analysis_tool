@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Sat Dec 02 06:15:36 2017
+# Created: Mon Dec 11 20:49:31 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -30,7 +30,7 @@ class Ui_MainWindow(object):
         self.gridLayout_6 = QtGui.QGridLayout(self.groupBox_3)
         self.gridLayout_6.setObjectName("gridLayout_6")
         self.calendarWidget = MyCalendarWidget(self.groupBox_3)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.calendarWidget.sizePolicy().hasHeightForWidth())

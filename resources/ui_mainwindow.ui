@@ -48,7 +48,7 @@
        <item row="1" column="0" colspan="3">
         <widget class="MyCalendarWidget" name="calendarWidget">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
