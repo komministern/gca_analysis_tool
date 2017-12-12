@@ -55,6 +55,7 @@ class MyPresenter(QtCore.QObject):
         i = 0
         n = len(self.model.get_site_names())
 
+        #print 'creating progress dialog'
         self.progress = QtGui.QProgressDialog(u"Reading history logs...", u"Abort", 0, n, self.view)
         self.progress.setWindowModality(QtCore.Qt.WindowModal)
 
@@ -66,6 +67,8 @@ class MyPresenter(QtCore.QObject):
 
             if self.progress.wasCanceled():
                 break
+        
+        #print 'progress dialog done'
     
         if not self.progress.wasCanceled():
 
