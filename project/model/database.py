@@ -44,8 +44,12 @@ class Database(QtCore.QObject):
         self.filter_list = []
 
         self.check_or_fix_database_directory_structure()
-        self.read_all_sites_to_memory()
-        self.read_filters_to_memory()
+        
+        #self.read_filters_to_memory()
+        
+
+        #self.read_all_sites_to_memory()
+        #self.read_filters_to_memory()
 
 
 

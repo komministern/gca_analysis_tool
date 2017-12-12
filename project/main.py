@@ -19,12 +19,15 @@ if __name__ == '__main__':
 
     model = Database()
     view = MyView() 
+    view.show()
     #model = Database()
     presenter = MyPresenter(model, view)
-    view.show()
+    #view.show()
+    
+    presenter.start_app()
 
-    if presenter.trial_has_ended:
-        presenter.message(u'Trial has ended.\n\nCopyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>')
+    if presenter.trial_has_ended or presenter.progress.wasCanceled():
+        presenter.message(u'Trial has ended.\n\nCopyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>')
     else:
         sys.exit(app.exec_())
 

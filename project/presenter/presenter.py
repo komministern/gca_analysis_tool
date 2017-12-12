@@ -45,36 +45,62 @@ class MyPresenter(QtCore.QObject):
         self.yellow = QtGui.QColor.fromRgbF(1.000000, 0.997757, 0.346044, 1.000000)
         self.blue = QtGui.QColor.fromRgbF(0.509743, 0.734401, 1.000000, 1.000000)
 
-        self.view.comboBox_Coloring.addItems([u'Normal/Degraded/Faulted', u'New Fault/Active Fault', 
+        #self.start_app()
+
+
+
+
+    def start_app(self):
+
+        i = 0
+        n = len(self.model.get_site_names())
+
+        self.progress = QtGui.QProgressDialog(u"Reading history logs...", u"Abort", 0, n, self.view)
+        self.progress.setWindowModality(QtCore.Qt.WindowModal)
+
+        
+        for site_name in self.model.get_site_names():
+            self.model.read_site_to_memory(site_name)
+            i += 1
+            self.progress.setValue(i)
+
+            if self.progress.wasCanceled():
+                break
+    
+        if not self.progress.wasCanceled():
+
+            self.model.read_filters_to_memory()
+
+            self.view.comboBox_Coloring.addItems([u'Normal/Degraded/Faulted', u'New Fault/Active Fault', 
                                             u'Temporary Faults (< 1 min per day)', u'Transmitter On', u'Shelter Door Open'])
 
         
-        self.current_filter = self.model.filter_list[0]
-        self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
+            self.current_filter = self.model.filter_list[0]
+            self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
 
 
-        # The first element in the items list above will be initially selected
-        self.color_all_dates()
+            # The first element in the items list above will be initially selected
+            self.color_all_dates()
 
-        self.trial_has_ended = False
-        if len(self.model.get_site_names()) > 0:
+            self.trial_has_ended = False
+            if len(self.model.get_site_names()) > 0:
 
-            # Check if trial is up
-            #self.trial_has_ended = False
+                # Check if trial is up
+                #self.trial_has_ended = False
             
-            for site_name in self.model.get_site_names():
+                for site_name in self.model.get_site_names():
                 
-                if (self.model.get_third_last_entry_date(site_name).year() >= 2018) and (self.model.get_third_last_entry_date(site_name).month() >= 7):
-                    self.trial_has_ended = True
+                    if (self.model.get_third_last_entry_date(site_name).year() >= 2018) and (self.model.get_third_last_entry_date(site_name).month() >= 7):
+                        self.trial_has_ended = True
 
-            self.view.comboBox_ActiveSite.addItems(self.model.get_site_names())
-            self.active_site = self.model.get_site_names()[0]
+                self.view.comboBox_ActiveSite.addItems(self.model.get_site_names())
+                self.active_site = self.model.get_site_names()[0]
 
-        self.update_calendar()
-        self.update_text()
-        self.update_comment()
+            self.update_calendar()
+            self.update_text()
+            self.update_comment()
 
-        self.update_menu()
+            self.update_menu()
 
 
 
@@ -944,7 +970,7 @@ class MyPresenter(QtCore.QObject):
 #''')
 
         self.message(u'''
-GCA Analysis Tool, v1.34 (trial version)
+GCA Analysis Tool, v1.35 (trial version)
 
 Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 
