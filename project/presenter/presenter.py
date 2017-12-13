@@ -287,7 +287,28 @@ class MyPresenter(QtCore.QObject):
         self.active_site = site_items[index]
         
         if not self.active_site == u'':
+            print 'tjo'
+            progress = QtGui.QProgressDialog(u"Reading history logs...", u"Abort", 0, 1, self.view)
+            progress.setWindowModality(QtCore.Qt.WindowModal)
+            progress.setCancelButton(None)
+        
+        #if n > 0: 
+            #self.progress = QtGui.QProgressDialog(u"Reading history logs...", u"Abort", 0, n, self.view)
+            #self.progress.setWindowModality(QtCore.Qt.WindowModal)
+
+        #for site_name in site_names:
+        #    self.model.read_site_to_memory(site_name)
+        #    i += 1
+        #    self.progress.setValue(i)
+
+        #    if self.progress.wasCanceled():
+        #        break
+            
+            
             self.model.read_site_to_memory(self.active_site)
+            print 'ho'
+            progress.setValue(1)
+            
 
         self.presentation_dict[self.active_site] = self.colored_dates(self.active_site)
             
