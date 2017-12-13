@@ -45,7 +45,7 @@ class Database(QtCore.QObject):
 
         self.check_or_fix_database_directory_structure()
         
-        #self.read_filters_to_memory()
+        self.read_filters_to_memory()
         
 
         #self.read_all_sites_to_memory()
@@ -73,8 +73,11 @@ class Database(QtCore.QObject):
 
 
     def read_site_to_memory(self, site_name):
-        site_directory = os.path.join(self.sites_directory, site_name)
-        self.site_dictionary[site_name] = SiteContainer(site_directory)
+        #print 'request reading of site ' + site_name
+        if not site_name in self.site_dictionary.keys():
+            #print 'actually read site ' + site_name
+            site_directory = os.path.join(self.sites_directory, site_name)
+            self.site_dictionary[site_name] = SiteContainer(site_directory)
 
 
     def remove_site_from_memory(self, site_name):

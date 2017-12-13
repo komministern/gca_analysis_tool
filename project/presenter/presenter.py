@@ -28,12 +28,15 @@ class MyPresenter(QtCore.QObject):
 
 
         # Setup all signals.
-        self.connect_signals()
+        #self.connect_signals()
 
 
         self.highlight = ''
         self.presentation_dict = {}
         self.active_site = None
+        
+        self.active_site_name = None
+        
         self.coloring_scheme = 0
 
         self.comment_text_changed = False
@@ -45,65 +48,82 @@ class MyPresenter(QtCore.QObject):
         self.yellow = QtGui.QColor.fromRgbF(1.000000, 0.997757, 0.346044, 1.000000)
         self.blue = QtGui.QColor.fromRgbF(0.509743, 0.734401, 1.000000, 1.000000)
 
-        #self.start_app()
+        self.start_app()
 
-
+        self.connect_signals()
 
 
     def start_app(self):
 
-        i = 0
-        n = len(self.model.get_site_names())
-
-        #print 'creating progress dialog'
-        self.progress = QtGui.QProgressDialog(u"Reading history logs...", u"Abort", 0, n, self.view)
-        self.progress.setWindowModality(QtCore.Qt.WindowModal)
+        #if test == False:
+        #    site_names = self.model.get_site_names()
+        #elif test == True:
+        #    site_names = []
+            
+        #i = 0
+        #n = len(site_names)
+        
+        #self.progress = QtGui.QProgressDialog(u"Reading history logs...", u"Abort", 0, n, self.view)
+        #self.progress.setWindowModality(QtCore.Qt.WindowModal)
 
         
-        for site_name in self.model.get_site_names():
-            self.model.read_site_to_memory(site_name)
-            i += 1
-            self.progress.setValue(i)
+        #if n > 0: 
+            #self.progress = QtGui.QProgressDialog(u"Reading history logs...", u"Abort", 0, n, self.view)
+            #self.progress.setWindowModality(QtCore.Qt.WindowModal)
 
-            if self.progress.wasCanceled():
-                break
+        #for site_name in site_names:
+        #    self.model.read_site_to_memory(site_name)
+        #    i += 1
+        #    self.progress.setValue(i)
+
+        #    if self.progress.wasCanceled():
+        #        break
         
         #print 'progress dialog done'
     
-        if not self.progress.wasCanceled():
+        #if not self.progress.wasCanceled():
+            
+        #    if test == False:
+        #        self.model.read_filters_to_memory()
 
-            self.model.read_filters_to_memory()
-
-            self.view.comboBox_Coloring.addItems([u'Normal/Degraded/Faulted', u'New Fault/Active Fault', 
+        self.view.comboBox_Coloring.addItems([u'Normal/Degraded/Faulted', u'New Fault/Active Fault', 
                                             u'Temporary Faults (< 1 min per day)', u'Transmitter On', u'Shelter Door Open'])
 
         
-            self.current_filter = self.model.filter_list[0]
-            self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
+        self.current_filter = self.model.filter_list[0]
+        self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
+        # The first element in the items list above will be initially selected
+        
+        #    if test == False:
+        #        self.color_all_dates()
 
-
-            # The first element in the items list above will be initially selected
-            self.color_all_dates()
-
-            self.trial_has_ended = False
-            if len(self.model.get_site_names()) > 0:
+        self.trial_has_ended = False
+            
+        #    if len(site_names) > 0:
 
                 # Check if trial is up
                 #self.trial_has_ended = False
-            
-                for site_name in self.model.get_site_names():
+        
+        # Should this test be removed?
+        #for site_name in self.model.get_site_names():
                 
-                    if (self.model.get_third_last_entry_date(site_name).year() >= 2018) and (self.model.get_third_last_entry_date(site_name).month() >= 7):
-                        self.trial_has_ended = True
+        #    if (self.model.get_third_last_entry_date(site_name).year() >= 2018) and (self.model.get_third_last_entry_date(site_name).month() >= 7):
+        #        self.trial_has_ended = True
 
-                self.view.comboBox_ActiveSite.addItems(self.model.get_site_names())
-                self.active_site = self.model.get_site_names()[0]
+        site_items = [u''] + self.model.get_site_names()
+        self.view.comboBox_ActiveSite.addItems(site_items)
+        
+        self.active_site = site_items[0]
+        
+        self.active_site = u''
+        self.active_site_name = u''
 
-            self.update_calendar()
-            self.update_text()
-            self.update_comment()
+        #    if test == False:
+        #        self.update_calendar()
+        #        self.update_text()
+        #        self.update_comment()
 
-            self.update_menu()
+        #        self.update_menu()
 
 
 
@@ -117,7 +137,22 @@ class MyPresenter(QtCore.QObject):
 
     def colored_dates(self, site_name):
 
-        if self.coloring_scheme == 0:       # Normal/Degraded/Faulted
+        if site_name == u'':    # All gray!!!!
+            
+            lower_right_red_dates = []
+            lower_right_green_dates = []
+ 
+            upper_left_red_dates = []
+            upper_left_green_dates = []
+
+            upper_left_white_dates = []
+            upper_left_yellow_dates = []
+
+            lower_right_white_dates = []
+            lower_right_yellow_dates = []
+
+
+        elif self.coloring_scheme == 0:       # Normal/Degraded/Faulted
 
             red_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if txt.faulted(text)]
             yellow_dates = [date for date, text in self.model.get_historylog_dictionary(site_name).items() if txt.degraded(text) and date not in red_dates]
@@ -232,24 +267,34 @@ class MyPresenter(QtCore.QObject):
 
     def update_calendar(self):
 
-        if self.active_site:
+        #if self.active_site:
 
-            self.view.calendarWidget.setUpperLeftRedDates( self.presentation_dict[self.active_site].upper_left_red_dates )
-            self.view.calendarWidget.setUpperLeftGreenDates( self.presentation_dict[self.active_site].upper_left_green_dates )
-            self.view.calendarWidget.setUpperLeftWhiteDates( self.presentation_dict[self.active_site].upper_left_white_dates )
-            self.view.calendarWidget.setUpperLeftYellowDates( self.presentation_dict[self.active_site].upper_left_yellow_dates )
+        self.view.calendarWidget.setUpperLeftRedDates( self.presentation_dict[self.active_site].upper_left_red_dates )
+        self.view.calendarWidget.setUpperLeftGreenDates( self.presentation_dict[self.active_site].upper_left_green_dates )
+        self.view.calendarWidget.setUpperLeftWhiteDates( self.presentation_dict[self.active_site].upper_left_white_dates )
+        self.view.calendarWidget.setUpperLeftYellowDates( self.presentation_dict[self.active_site].upper_left_yellow_dates )
 
-            self.view.calendarWidget.setLowerRightRedDates( self.presentation_dict[self.active_site].lower_right_red_dates )
-            self.view.calendarWidget.setLowerRightGreenDates( self.presentation_dict[self.active_site].lower_right_green_dates )
-            self.view.calendarWidget.setLowerRightWhiteDates( self.presentation_dict[self.active_site].lower_right_white_dates )
-            self.view.calendarWidget.setLowerRightYellowDates( self.presentation_dict[self.active_site].lower_right_yellow_dates )
+        self.view.calendarWidget.setLowerRightRedDates( self.presentation_dict[self.active_site].lower_right_red_dates )
+        self.view.calendarWidget.setLowerRightGreenDates( self.presentation_dict[self.active_site].lower_right_green_dates )
+        self.view.calendarWidget.setLowerRightWhiteDates( self.presentation_dict[self.active_site].lower_right_white_dates )
+        self.view.calendarWidget.setLowerRightYellowDates( self.presentation_dict[self.active_site].lower_right_yellow_dates )
 
-            self.view.calendarWidget.updateCells()
+        self.view.calendarWidget.updateCells()
 
     def set_active_site(self, index):
-        self.active_site = self.model.get_site_names()[index]
+        
+        site_items = [u''] + self.model.get_site_names()
+        self.active_site = site_items[index]
+        
+        if not self.active_site == u'':
+            self.model.read_site_to_memory(self.active_site)
+
+        self.presentation_dict[self.active_site] = self.colored_dates(self.active_site)
+            
         self.commit_string_search()     # self.update_text() is called in this procedure.
-        #self.update_text()
+
+
+
         self.update_calendar()
 
         self.update_comment()
@@ -284,9 +329,16 @@ class MyPresenter(QtCore.QObject):
 
     def update_text(self):
 
-        if self.active_site:
+        
+        if True:
+        #if not self.active_site == u'':
+            
             date = self.view.calendarWidget.selectedDate()
-            text = self.model.get_historylog(self.active_site, date)
+            if self.active_site == u'':
+                text = u''
+            else:
+                text = self.model.get_historylog(self.active_site, date)
+                
             self.view.textBrowser_HistoryLog.setPlainText(self.format_text(text))
 
             if self.highlight != u'' and text != u'No history log exists for this date.': 
@@ -425,42 +477,43 @@ class MyPresenter(QtCore.QObject):
 
 
     def commit_string_search(self):
-        if self.active_site:
+        #if True:
+        #if self.active_site:
         
             #self.test = 1
         
-            self.highlight = self.view.plainTextEdit_StringSearch.toPlainText()
+        self.highlight = self.view.plainTextEdit_StringSearch.toPlainText()
 
-            self.view.calendarWidget.setCircledDates(self.list_of_search_string_dates(self.view.plainTextEdit_StringSearch.toPlainText()))
+        self.view.calendarWidget.setCircledDates(self.list_of_search_string_dates(self.view.plainTextEdit_StringSearch.toPlainText()))
         
-            self.view.calendarWidget.updateCells()
-            self.update_text()
+        self.view.calendarWidget.updateCells()
+        self.update_text()
             
             #self.test = 2
             
             # Lets set highlight in the plainTextEdit text here!!!
             
             #print self.view.lineEdit_StringSearch.textCursor()
-            cursor = self.view.plainTextEdit_StringSearch.textCursor()
+        cursor = self.view.plainTextEdit_StringSearch.textCursor()
             #self.view.lineEdit_StringSearch.end(False)
 
             #self.test = 3
 
-            format = QtGui.QTextCharFormat()
-            format.setBackground(QtGui.QBrush(self.blue))
+        format = QtGui.QTextCharFormat()
+        format.setBackground(QtGui.QBrush(self.blue))
 
             # Select the matched text and apply the desired format
-            cursor.setPosition(0)
+        cursor.setPosition(0)
             
             #self.test = 4
-            
-            cursor.movePosition(QtGui.QTextCursor.End, QtGui.QTextCursor.KeepAnchor, 1)
+        
+        cursor.movePosition(QtGui.QTextCursor.End, QtGui.QTextCursor.KeepAnchor, 1)
             
             #self.test = 5
             
-            self.ignore = True
+        self.ignore = True
             
-            cursor.mergeCharFormat(format)
+        cursor.mergeCharFormat(format)
             
             #self.test = 6
 
@@ -468,7 +521,7 @@ class MyPresenter(QtCore.QObject):
 
 
     def list_of_search_string_dates(self, astring):
-        if not astring == '':
+        if not astring == '' and not self.active_site == u'':
             return [date for date, text in self.model.get_historylog_dictionary(self.active_site).items() if astring in text]
         else:
             return []
@@ -480,7 +533,7 @@ class MyPresenter(QtCore.QObject):
 
         format = QtGui.QTextCharFormat()
         format.setBackground(QtGui.QBrush(QtCore.Qt.white))
-            # Select the matched text and apply the desired format
+        # Select the matched text and apply the desired format
         cursor.setPosition(0)
         cursor.movePosition(QtGui.QTextCursor.End, QtGui.QTextCursor.KeepAnchor, 1)
         self.ignore = True
@@ -498,7 +551,7 @@ class MyPresenter(QtCore.QObject):
 
 
     def set_next_search_date(self):
-        if self.active_site:
+        if not self.active_site == u'':
             dates = sorted(self.list_of_search_string_dates(self.view.plainTextEdit_StringSearch.toPlainText()))
             if not len(dates) == 0:
                 greater_dates = [date for date in dates if date > self.view.calendarWidget.selectedDate()]
@@ -512,7 +565,7 @@ class MyPresenter(QtCore.QObject):
 
 
     def set_previous_search_date(self):
-        if self.active_site:
+        if not self.active_site == u'':
             dates = sorted(self.list_of_search_string_dates(self.view.plainTextEdit_StringSearch.toPlainText()))
             if not len(dates) == 0:
                 lesser_dates = [date for date in dates if date < self.view.calendarWidget.selectedDate()]
@@ -690,11 +743,13 @@ class MyPresenter(QtCore.QObject):
                         self.view.comboBox_ActiveSite.clear()
 
                         # Repopulate comboBox
-                        self.view.comboBox_ActiveSite.addItems(self.model.get_site_names())
+                        site_items = [u''] + self.model.get_site_names()
+                        self.view.comboBox_ActiveSite.addItems(site_items)
 
-                        new_index = self.model.get_site_names().index(site_name)
-                    
+                        new_index = site_items.index(site_name)
                         self.view.comboBox_ActiveSite.setCurrentIndex(new_index)    # This also triggers the set_active_site method and makes the new site active!!!!
+                        
+                        self.active_site_name = site_name
 
                     except Exception, e:
 
@@ -736,7 +791,7 @@ class MyPresenter(QtCore.QObject):
 
     def update_menu(self):
         
-        if not self.active_site:
+        if self.active_site == u'':
 
             self.view.ignoreAction.setEnabled(False)
             self.view.deIgnoreAction.setEnabled(False)
@@ -807,7 +862,7 @@ class MyPresenter(QtCore.QObject):
 
     def ignore_date(self):
         
-        if self.active_site:
+        if not self.active_site == u'':
             date = self.view.calendarWidget.selectedDate()
 
             if (self.model.get_historylog(self.active_site, date) != u'No history log exists for this date.') and (date not in self.ignored_dates(self.active_site)): 
@@ -838,7 +893,7 @@ class MyPresenter(QtCore.QObject):
 
 
     def deignore_all_dates(self):
-        if self.active_site:
+        if not self.active_site == u'':
 
             try:
                 self.model.deignore_all_dates(self.active_site)
@@ -864,7 +919,7 @@ class MyPresenter(QtCore.QObject):
 
 
     def save_comment(self):
-        if self.active_site:
+        if not self.active_site == u'':
             commented_dates = [date for date in self.model.get_comment_dictionary(self.active_site).keys()]
             if self.active_date() in commented_dates:
 
@@ -891,7 +946,7 @@ class MyPresenter(QtCore.QObject):
 
 
     def delete_comment(self):
-        if self.active_site:
+        if not self.active_site == u'':
             commented_dates = [date for date in self.model.get_comment_dictionary(self.active_site).keys()]
             if self.active_date() in commented_dates:
         
@@ -907,20 +962,29 @@ class MyPresenter(QtCore.QObject):
 
 
     def update_comment(self):
-        if self.active_site:
-            date = self.view.calendarWidget.selectedDate()
+        
+        date = self.view.calendarWidget.selectedDate()
+            
+        if self.active_site == u'':
+            text = u''
+        else:
             text = self.model.get_comment(self.active_site, self.view.calendarWidget.selectedDate())
-            if text:
-                self.view.plainTextEdit_Comment.setPlainText(text)
-            else:
-                self.view.plainTextEdit_Comment.clear()
+            
+        if text:
+            self.view.plainTextEdit_Comment.setPlainText(text)
+        else:
+            self.view.plainTextEdit_Comment.clear()
 
+        if self.active_site == u'':
+            comment_dates = []
+        else:
             comment_dates = [date for date in self.model.get_comment_dictionary(self.active_site).keys()]
-            self.view.calendarWidget.setTriangleDates(comment_dates)
+            
+        self.view.calendarWidget.setTriangleDates(comment_dates)
 
 
     def set_next_comment_date(self):
-        if self.active_site:
+        if not self.active_site == u'':
             dates = sorted([date for date, _ in self.model.get_comment_dictionary(self.active_site).items()])
             if not len(dates) == 0:
                 greater_dates = [date for date in dates if date > self.active_date()]
@@ -934,7 +998,7 @@ class MyPresenter(QtCore.QObject):
 
 
     def set_previous_comment_date(self):
-        if self.active_site:
+        if not self.active_site == u'':
             dates = sorted([date for date, _ in self.model.get_comment_dictionary(self.active_site).items()])
             if not len(dates) == 0:
                 lesser_dates = [date for date in dates if date < self.active_date()]
@@ -973,7 +1037,7 @@ class MyPresenter(QtCore.QObject):
 #''')
 
         self.message(u'''
-GCA Analysis Tool, v1.36 (trial version)
+GCA Analysis Tool, v1.46 (trial version)
 
 Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 
