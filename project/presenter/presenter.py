@@ -287,10 +287,10 @@ class MyPresenter(QtCore.QObject):
         self.active_site = site_items[index]
         
         if not self.active_site == u'':
-            print 'tjo'
-            progress = QtGui.QProgressDialog(u"Reading history logs...", u"Abort", 0, 1, self.view)
-            progress.setWindowModality(QtCore.Qt.WindowModal)
-            progress.setCancelButton(None)
+            #print 'tjo'
+            #progress = QtGui.QProgressDialog(u"Reading history logs...", u"Abort", 0, 1, self.view)
+            #progress.setWindowModality(QtCore.Qt.WindowModal)
+            #progress.setCancelButton(None)
         
         #if n > 0: 
             #self.progress = QtGui.QProgressDialog(u"Reading history logs...", u"Abort", 0, n, self.view)
@@ -306,8 +306,8 @@ class MyPresenter(QtCore.QObject):
             
             
             self.model.read_site_to_memory(self.active_site)
-            print 'ho'
-            progress.setValue(1)
+            #print 'ho'
+            #progress.setValue(1)
             
 
         self.presentation_dict[self.active_site] = self.colored_dates(self.active_site)
@@ -1058,7 +1058,7 @@ class MyPresenter(QtCore.QObject):
 #''')
 
         self.message(u'''
-GCA Analysis Tool, v1.46 (trial version)
+GCA Analysis Tool, v1.47 (trial version)
 
 Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 

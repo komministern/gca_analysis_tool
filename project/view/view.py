@@ -37,6 +37,8 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
         font.setPixelSize(self.pixelsize_calendar)
         self.calendarWidget.setFont(font)
         
+        self.calendarWidget.setMaximumDate(QtCore.QDate(2018, 7, 1))
+        
         self.setupMenu()
 
     def close(self):
