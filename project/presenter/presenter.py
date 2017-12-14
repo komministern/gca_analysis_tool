@@ -94,7 +94,9 @@ class MyPresenter(QtCore.QObject):
         
         self.current_filter = self.model.filter_list[0]
         self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
-        # The first element in the items list above will be initially selected
+        
+        self.view.pushButton_EditFilter.setEnabled(False)
+        self.view.pushButton_DeleteFilter.setEnabled(False)
         
         #    if test == False:
         #        self.color_all_dates()
@@ -1162,7 +1164,7 @@ class MyPresenter(QtCore.QObject):
 #''')
 
         self.message(u'''
-GCA Analysis Tool, v1.54 (trial version)
+GCA Analysis Tool, v1.60 (trial version)
 
 Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 

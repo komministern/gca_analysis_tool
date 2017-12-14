@@ -121,7 +121,7 @@ class Database(QtCore.QObject):
 
     def set_path_to_7z(self, path):
         f = open(self.path_to_7z_filename, 'w')
-        f.write(path).encode('utf8')
+        f.write(path.encode('utf8'))
         f.close()
 
 
