@@ -13,22 +13,22 @@ import tarfile
 import subprocess
 from PySide import QtCore, QtGui
 from sitecontainer import SiteContainer
-#import platform
+import platform
 
-#import expanduser
+import expanduser
 
 
 class Database(QtCore.QObject):
 
     def __init__(self):
 
-        #if platform.system() == 'Windows':
-        #    import expanduser
-        #    self.home_directory = expanduser.expand_user()
+        if platform.system() == 'Windows':
+            #import expanduser
+            self.home_directory = expanduser.expand_user()
             
-        #else:
+        else:
         
-        #    self.home_directory = os.path.expanduser(u'~')
+            self.home_directory = os.path.expanduser(u'~')
         
         self.home_directory = os.path.expanduser(u'~')
             
