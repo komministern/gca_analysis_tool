@@ -120,6 +120,8 @@ class MyPresenter(QtCore.QObject):
         self.active_site = u''
         self.active_site_name = u''
 
+        self.update_menu()
+
         #    if test == False:
         #        self.update_calendar()
         #        self.update_text()
@@ -812,6 +814,7 @@ class MyPresenter(QtCore.QObject):
         self.activate_progressbar(2)
         self.view.progressBar.setValue(1)
         self.update_calendar()
+        self.update_menu()
         self.view.progressBar.setValue(2)
         self.deactivate_progressbar()
 
@@ -975,18 +978,28 @@ class MyPresenter(QtCore.QObject):
 
             if (self.model.get_historylog(self.active_site, date) != u'No history log exists for this date.') and (date not in self.ignored_dates(self.active_site)): 
                 try:
-
+                    
+                    
                     self.model.add_ignored_date(self.active_site, date)
-
                     self.model.remove_site_from_memory(self.active_site)
                     self.model.read_site_to_memory(self.active_site)
 
+                    site_items = [u''] + self.model.get_site_names()
+                    index = site_items.index(self.active_site)
+                    self.set_active_site(index)
             
-                    self.color_all_dates()
-                    self.commit_string_search()
-                    self.update_calendar()
+                    #del self.presentation_dict[self.active_site]
+                    #self.presentation_dict[self.active_site] = self.colored_dates(self.active_site)
+            
+                    #self.color_all_dates()
+                    #print 'e'
+                    #self.commit_string_search()
+                    #print 'f'
+                    #self.update_calendar()
+                    #print 'g'
                     #self.update_text()
-                    self.update_menu()
+                    #self.update_menu()
+                    #print 'h'
 
                 except Exception:
 
@@ -1011,11 +1024,15 @@ class MyPresenter(QtCore.QObject):
             self.model.remove_site_from_memory(self.active_site)
             self.model.read_site_to_memory(self.active_site)
 
-            self.color_all_dates()
-            self.commit_string_search()
-            self.update_calendar()
-            #self.update_text()
-            self.update_menu()
+            site_items = [u''] + self.model.get_site_names()
+            index = site_items.index(self.active_site)
+            self.set_active_site(index)
+
+            #self.color_all_dates()
+            #self.commit_string_search()
+            #self.update_calendar()
+            ##self.update_text()
+            #self.update_menu()
 
 
 
@@ -1145,7 +1162,7 @@ class MyPresenter(QtCore.QObject):
 #''')
 
         self.message(u'''
-GCA Analysis Tool, v1.51 (trial version)
+GCA Analysis Tool, v1.52 (trial version)
 
 Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 

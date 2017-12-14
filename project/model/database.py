@@ -281,14 +281,17 @@ class Database(QtCore.QObject):
     # Ignore stuff
 
     def add_ignored_date(self, site_name, date):
+        #self.read_site_to_memory(site_name)
         self.site_dictionary[site_name].add_ignored_date(date)
 
 
     def get_ignored_dates(self, site_name):
+        #self.read_site_to_memory(site_name)
         return self.site_dictionary[site_name].get_ignored_dates_list()
 
 
     def deignore_all_dates(self, site_name):
+        #self.read_site_to_memory(site_name)
         self.site_dictionary[site_name].remove_all_ignored_dates()
 
 

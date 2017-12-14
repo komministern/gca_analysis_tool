@@ -74,7 +74,7 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
         #print capturesite_menu.font()
         capturesite_menu.addAction(self.importAction)
 
-        database_menu = menubar.addMenu('Ignorelist')
+        database_menu = menubar.addMenu('Ignored dates')
         database_menu.addAction(self.ignoreAction)
         database_menu.addAction(self.deIgnoreAction)
 
