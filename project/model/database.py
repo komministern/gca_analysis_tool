@@ -30,7 +30,7 @@ class Database(QtCore.QObject):
         
             self.home_directory = os.path.expanduser(u'~')
         
-        self.home_directory = os.path.expanduser(u'~')
+        #self.home_directory = os.path.expanduser(u'~')
             
         self.top_directory = os.path.join(self.home_directory, u'GCA Analyzer')
         self.sites_directory = os.path.join(self.top_directory, u'sites')
@@ -121,13 +121,13 @@ class Database(QtCore.QObject):
 
     def set_path_to_7z(self, path):
         f = open(self.path_to_7z_filename, 'w')
-        f.write(path)
+        f.write(path).encode('utf8')
         f.close()
 
 
     def get_path_to_7z(self):
         f = open(self.path_to_7z_filename, 'r')
-        path = f.readline()
+        path = f.readline().decode('utf8')
         f.close()
         return path
 
@@ -160,8 +160,12 @@ class Database(QtCore.QObject):
 
 
     def extractZfiles(self, prg_path, archive_path, dest_path):
+        
+        fs_enc = sys.getfilesystemencoding()
+        
         dest_switch = '-o' + dest_path
-        system = subprocess.Popen([prg_path, 'e', dest_switch, archive_path], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+        
+        system = subprocess.Popen([prg_path.encode(fs_enc), u'e'.encode(fs_enc), dest_switch.encode(fs_enc), archive_path.encode(fs_enc)], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
         return(system.communicate())
 
 
