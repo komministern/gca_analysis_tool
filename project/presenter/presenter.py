@@ -1134,7 +1134,7 @@ class MyPresenter(QtCore.QObject):
 #
 #Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
 #
-#This is a trial version of the GCA Analysis Tool. It will be fully functional until July 2018, and may during this time be copied freely and used without restrictions.
+#This is a trial version of the GCA Analysis Tool. It is fully functional, but will only display dates prior to July 2, 2018.
 #
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
@@ -1145,11 +1145,11 @@ class MyPresenter(QtCore.QObject):
 #''')
 
         self.message(u'''
-GCA Analysis Tool, v1.47 (trial version)
+GCA Analysis Tool, v1.51 (trial version)
 
 Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 
-This is a trial version of the GCA Analysis Tool. It will be fully functional until July 2018, and may during this time be copied freely and used without restrictions.
+This is a trial version of the GCA Analysis Tool. The trial version is fully functional, but will only display dates prior to July 2, 2018. It may be copied freely.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
