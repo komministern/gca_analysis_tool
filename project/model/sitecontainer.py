@@ -12,7 +12,9 @@ import shutil
 import codecs
 
 
-class SiteContainer(object):
+class SiteContainer(QtCore.QObject):
+    
+    tick = QtCore.Signal()
     
     def __init__(self, site_directory):
 
@@ -28,6 +30,8 @@ class SiteContainer(object):
 
         self.ignored_dates_list = self.read_all_ignored_dates()
         self.historylog_dictionary = self.read_all_historylogs()
+        
+        self.number_of_historylogs = len(self.historylog_dictionary)
 
         self.chronological_dates = sorted([date for date, _ in self.historylog_dictionary.items()])
         self.first_date = self.chronological_dates[0]
@@ -87,7 +91,8 @@ class SiteContainer(object):
                     with codecs.open(source_path, mode='r', encoding='utf-8') as f:
                         string_dictionary[date] = f.read()
                 except Exception as e:
-                    print e
+                    #print e
+                    pass
         return string_dictionary
 
 
@@ -107,14 +112,16 @@ class SiteContainer(object):
         try:
             os.remove(path)
         except Exception as e:
-            print e
+            pass
+            #print e
 
 
         if date in self.comment_dictionary:
             del self.comment_dictionary[date]
 
         else:
-            print 'Error deleting comment'
+            pass
+            #print 'Error deleting comment'
 
 
 
@@ -139,7 +146,11 @@ class SiteContainer(object):
                         # The history log files usually only contains ASCII characters it seems. Some erroneous files
                         # does differ on this though. The utf-8 decoding prohibit errors due to this.
             except ValueError as e:                
-                print e
+                pass
+                #print e
+            
+            self.tick.emit()
+            
         return string_dictionary
 
 

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Mon Dec 11 23:23:45 2017
+# Created: Thu Dec 14 10:15:40 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PySide import QtCore, QtGui
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1154, 765)
+        MainWindow.resize(1168, 738)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -23,6 +23,17 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_7 = QtGui.QGridLayout(self.centralwidget)
         self.gridLayout_7.setObjectName("gridLayout_7")
+        self.groupBox_4 = QtGui.QGroupBox(self.centralwidget)
+        self.groupBox_4.setObjectName("groupBox_4")
+        self.gridLayout_2 = QtGui.QGridLayout(self.groupBox_4)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.comboBox_ActiveSite = QtGui.QComboBox(self.groupBox_4)
+        self.comboBox_ActiveSite.setMinimumSize(QtCore.QSize(180, 30))
+        self.comboBox_ActiveSite.setMaximumSize(QtCore.QSize(180, 30))
+        self.comboBox_ActiveSite.setToolTip("")
+        self.comboBox_ActiveSite.setObjectName("comboBox_ActiveSite")
+        self.gridLayout_2.addWidget(self.comboBox_ActiveSite, 0, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.groupBox_4, 0, 0, 1, 2)
         self.groupBox_3 = QtGui.QGroupBox(self.centralwidget)
         self.groupBox_3.setMinimumSize(QtCore.QSize(330, 403))
         self.groupBox_3.setMaximumSize(QtCore.QSize(330, 435))
@@ -129,7 +140,7 @@ class Ui_MainWindow(object):
         self.gridLayout_9.addWidget(self.pushButton_SaveComment, 0, 5, 1, 1)
         self.gridLayout_10.addWidget(self.groupBox_7, 1, 0, 1, 1)
         self.tabWidget_TextFields.addTab(self.tab_2, "")
-        self.gridLayout_7.addWidget(self.tabWidget_TextFields, 1, 1, 3, 1)
+        self.gridLayout_7.addWidget(self.tabWidget_TextFields, 1, 1, 4, 1)
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
         self.tabWidget.setMinimumSize(QtCore.QSize(330, 130))
         self.tabWidget.setMaximumSize(QtCore.QSize(330, 130))
@@ -199,22 +210,17 @@ class Ui_MainWindow(object):
         self.gridLayout_3.addWidget(self.pushButton_DeleteFilter, 1, 2, 1, 1)
         self.tabWidget.addTab(self.tab_4, "")
         self.gridLayout_7.addWidget(self.tabWidget, 2, 0, 1, 1)
+        self.progressBar = QtGui.QProgressBar(self.centralwidget)
+        self.progressBar.setMaximumSize(QtCore.QSize(331, 16777215))
+        self.progressBar.setProperty("value", 0)
+        self.progressBar.setTextVisible(False)
+        self.progressBar.setObjectName("progressBar")
+        self.gridLayout_7.addWidget(self.progressBar, 3, 0, 1, 1)
         spacerItem2 = QtGui.QSpacerItem(17, 139, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.gridLayout_7.addItem(spacerItem2, 3, 0, 1, 1)
-        self.groupBox_4 = QtGui.QGroupBox(self.centralwidget)
-        self.groupBox_4.setObjectName("groupBox_4")
-        self.gridLayout_2 = QtGui.QGridLayout(self.groupBox_4)
-        self.gridLayout_2.setObjectName("gridLayout_2")
-        self.comboBox_ActiveSite = QtGui.QComboBox(self.groupBox_4)
-        self.comboBox_ActiveSite.setMinimumSize(QtCore.QSize(180, 30))
-        self.comboBox_ActiveSite.setMaximumSize(QtCore.QSize(180, 30))
-        self.comboBox_ActiveSite.setToolTip("")
-        self.comboBox_ActiveSite.setObjectName("comboBox_ActiveSite")
-        self.gridLayout_2.addWidget(self.comboBox_ActiveSite, 0, 0, 1, 1)
-        self.gridLayout_7.addWidget(self.groupBox_4, 0, 0, 1, 2)
+        self.gridLayout_7.addItem(spacerItem2, 4, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1154, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1168, 26))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
@@ -228,6 +234,8 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "GCA Analysis Tool", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_4.setTitle(QtGui.QApplication.translate("MainWindow", "Active Site", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_ActiveSite.setStatusTip(QtGui.QApplication.translate("MainWindow", "Choose active site", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_3.setTitle(QtGui.QApplication.translate("MainWindow", "Calendar", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_FirstEntry.setStatusTip(QtGui.QApplication.translate("MainWindow", "Focus calendar on the  first recorded date in the history log (excluding ignored dates)", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_FirstEntry.setText(QtGui.QApplication.translate("MainWindow", "First Date", None, QtGui.QApplication.UnicodeUTF8))
@@ -265,8 +273,6 @@ class Ui_MainWindow(object):
         self.pushButton_DeleteFilter.setStatusTip(QtGui.QApplication.translate("MainWindow", "Delete currently chosen filter", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_DeleteFilter.setText(QtGui.QApplication.translate("MainWindow", "Delete", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QtGui.QApplication.translate("MainWindow", "Filter", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_4.setTitle(QtGui.QApplication.translate("MainWindow", "Active Site", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_ActiveSite.setStatusTip(QtGui.QApplication.translate("MainWindow", "Choose active site", None, QtGui.QApplication.UnicodeUTF8))
 
 from mycalendarwidget import MyCalendarWidget
 from mystringsearchplaintextedit import MyStringSearchPlainTextEdit

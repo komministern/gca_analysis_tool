@@ -14,6 +14,8 @@ import textstuff as txt
 from filtercontainer import Filter
 from view.myfilterdialog import MyFilterDialog
 
+import time
+
 
 class MyPresenter(QtCore.QObject):
 
@@ -97,7 +99,7 @@ class MyPresenter(QtCore.QObject):
         #    if test == False:
         #        self.color_all_dates()
 
-        self.trial_has_ended = False
+        self.trial_has_ended = False    # To be removed I guess
             
         #    if len(site_names) > 0:
 
@@ -130,9 +132,12 @@ class MyPresenter(QtCore.QObject):
     # --------- Coloring the dates
 
 
-    def color_all_dates(self):
-        for site_name in self.model.get_site_names():
-            self.presentation_dict[site_name] = self.colored_dates(site_name)
+#    def color_all_dates(self):
+        
+        
+        
+#        for site_name in self.model.get_site_names():
+#            self.presentation_dict[site_name] = self.colored_dates(site_name)
 
 
     def colored_dates(self, site_name):
@@ -281,6 +286,23 @@ class MyPresenter(QtCore.QObject):
 
         self.view.calendarWidget.updateCells()
 
+
+
+    def activate_progressbar(self, max_ticks):
+        self.view.progressBar.setMaximum(max_ticks)
+        self.progressbar_activated = True
+    
+    def deactivate_progressbar(self):
+        time.sleep(0.1)                         # Just for the feeling
+        self.progressbar_activated = False
+        self.view.progressBar.setValue(0)
+        
+#    def progress_tick(self):
+#        if self.progressbar_activated:
+#            old_value = self.view.progressBar.value()
+#            if old_value < self.progressBar.maximum():
+#                self.view.progressBar.setValue(old_value + 1)
+
     def set_active_site(self, index):
         
         site_items = [u''] + self.model.get_site_names()
@@ -293,8 +315,16 @@ class MyPresenter(QtCore.QObject):
             #progress.setCancelButton(None)
         
         #if n > 0: 
-            #self.progress = QtGui.QProgressDialog(u"Reading history logs...", u"Abort", 0, n, self.view)
+            
+            #print 'progress window'
+        
+            #self.progress = QtGui.QProgressDialog(parent=self.view)
             #self.progress.setWindowModality(QtCore.Qt.WindowModal)
+            #self.progress.setMinimum(0)
+            #self.progress.setMaximum(1)
+            #self.progress.setMinimumDuration(1000)
+            #self.progress.setLabelText(u'Testing...')
+            #self.progress.setValue(0)
 
         #for site_name in site_names:
         #    self.model.read_site_to_memory(site_name)
@@ -304,27 +334,37 @@ class MyPresenter(QtCore.QObject):
         #    if self.progress.wasCanceled():
         #        break
             
+            #self.view.progressBar.setValue(50)
             
+            
+            self.activate_progressbar(2)
+            self.view.progressBar.setValue(1)
             self.model.read_site_to_memory(self.active_site)
-            #print 'ho'
-            #progress.setValue(1)
-            
+            self.view.progressBar.setValue(2)
+            self.deactivate_progressbar()
 
+        self.activate_progressbar(5)
         self.presentation_dict[self.active_site] = self.colored_dates(self.active_site)
-            
-        self.commit_string_search()     # self.update_text() is called in this procedure.
-
-
-
+        self.view.progressBar.setValue(1)
+        self.commit_string_search()     # self.update_text() is called in this procedure
+        self.view.progressBar.setValue(2)
         self.update_calendar()
-
+        self.view.progressBar.setValue(3)
         self.update_comment()
+        self.view.progressBar.setValue(4)
         self.update_menu()
+        self.view.progressBar.setValue(5)
+        self.deactivate_progressbar()
 
     def set_coloring_scheme(self, index):
         self.coloring_scheme = index
-        self.color_all_dates()
-        self.update_calendar() 
+        self.activate_progressbar(2)
+        self.presentation_dict[self.active_site] = self.colored_dates(self.active_site)
+        #self.color_all_dates()
+        self.view.progressBar.setValue(1)
+        self.update_calendar()
+        self.view.progressBar.setValue(2)
+        self.deactivate_progressbar()
 
     def set_last_date(self):
         if self.active_site:
@@ -653,13 +693,18 @@ class MyPresenter(QtCore.QObject):
 
             try:
             
+                self.activate_progressbar(2)
+                
+                self.view.progressBar.setValue(1)
+            
                 # Create a temporary site _TEMP
                 # The self.mode.create_site decompresses and copies all historylog files to temp_site_name
                 # and (!) reads all these in to memory
                 self.model.create_new_site(capturesite_filename, temp_site_name)
 
                 # List all the dates of the historylog files (sorted not needed?!?)
-                temp_dates = sorted(self.model.get_historylog_dictionary(temp_site_name).keys())
+                #temp_dates = sorted(self.model.get_historylog_dictionary(temp_site_name).keys())
+                temp_dates = self.model.get_historylog_dictionary(temp_site_name).keys()
                 
                 # Delete the site on disc. It is still in memory though!!!!
                 self.model.remove_site_from_disc(temp_site_name)
@@ -667,22 +712,35 @@ class MyPresenter(QtCore.QObject):
                 # Now let's check if the capturesite file is an update of an existing site
                 possible_candidates = []
 
-                for site_name in self.model.get_site_names():
+                self.view.progressBar.setValue(2)
+                self.deactivate_progressbar()
 
-                    # Create a sorted (why?) list of all site dates, including the ignored dates
+                self.activate_progressbar(len(self.model.get_site_names()))
+                i = 0
+
+                for site_name in self.model.get_site_names():
+                    
+                    # For this code to work, all sites must be read to memory first.
+                    self.model.read_site_to_memory(site_name)
+                    
+                    # Create a sorted (why sorted?) list of all site dates, including the ignored dates
                     site_dates = self.model.get_historylog_dictionary(site_name).keys()
                     site_dates.extend(self.model.get_ignored_dates(site_name))
                     #site_dates = sorted(site_dates)     # UGLY
 
-
                     T = set(temp_dates)
                     S = set(site_dates)
-                    
+
                     # If the difference between the set of site dates and the intersection of the set of temporary dates and the set of site dates is empty,
                     # this temporary site most probably is an update of the site.
                     if len( S - (T & S) ) == 0 or len( T - (T & S) ) == 0:
                         possible_candidates.append(site_name)
                     
+                    i += 1
+                    self.view.progressBar.setValue(i)
+    
+                self.deactivate_progressbar()
+                
                 if len(possible_candidates) > 1:
 
                     print u'Rethink the way you check uniqueness of sites!!!'
@@ -717,27 +775,45 @@ class MyPresenter(QtCore.QObject):
 
                 self.model.remove_site_from_memory(temp_site_name)      # This could happen earlier!?!?!?!?!
 
+                self.deactivate_progressbar()
+
+
             except Exception, e:
                 self.message('Import failed.\n' + repr(e))
                 #print 'Something went haywire when importint Capturesite.\n' + repr(e)
+                self.deactivate_progressbar()
 
 
     # Update an existing site
     def update_site(self, site_name, capturesite_filename):
+        
+        self.activate_progressbar(3)
+        self.view.progressBar.setValue(1)
+        
         self.model.update_site(capturesite_filename, site_name)
+
+        self.view.progressBar.setValue(2)
+
         del self.presentation_dict[site_name]
         self.presentation_dict[site_name] = self.colored_dates(site_name)
         
+        self.view.progressBar.setValue(3)
+        self.deactivate_progressbar()
+        
         # Change the active_site to the site that just got updated. This also
         # updates the calendar!!!
-        new_index = self.model.get_site_names().index(site_name)
+        site_items = [u''] + self.model.get_site_names()
+        new_index = site_items.index(site_name)
         self.view.comboBox_ActiveSite.setCurrentIndex(new_index)
         
         # If the new_index is the current actual index, the calendar will not get updated.
         # So, a bit ugly, here I force another update_calendar()!!!
         
+        self.activate_progressbar(2)
+        self.view.progressBar.setValue(1)
         self.update_calendar()
-
+        self.view.progressBar.setValue(2)
+        self.deactivate_progressbar()
 
     # Create a new site from scratch
     def create_new_site(self, capturesite_filename):
@@ -756,9 +832,18 @@ class MyPresenter(QtCore.QObject):
                 else:
                     
                     try:
+                        
+                        self.activate_progressbar(3)
+                        self.view.progressBar.setValue(1)
+                        
                         self.model.create_new_site(capturesite_filename, site_name)
 
+                        self.view.progressBar.setValue(2)
+
                         self.presentation_dict[site_name] = self.colored_dates(site_name)
+
+                        self.view.progressBar.setValue(3)
+                        self.deactivate_progressbar()
 
                         # Remove all items from comboBox
                         self.view.comboBox_ActiveSite.clear()
@@ -775,10 +860,12 @@ class MyPresenter(QtCore.QObject):
                     except Exception, e:
 
                         self.message(u'An unexpected error occured during import. Aborting.')
+                        self.deactivate_progressbar()
 
             else:
 
                 self.message(u'Site name may only contain letters, numbers, -_ and space. Aborting.')
+                self.deactivate_progressbar()
 
         #else:
 
@@ -1052,7 +1139,7 @@ class MyPresenter(QtCore.QObject):
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 #Software used:
-#Python 2.7.13, PSF License
+#Python 2.7.14, PSF License
 #PySide 1.2.4, LGPL version 2.1
 #Qt 4.8.6, LGPL version 3
 #''')
@@ -1067,7 +1154,7 @@ This is a trial version of the GCA Analysis Tool. It will be fully functional un
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Software used:
-Python 2.7.13, PSF License
+Python 2.7.14, PSF License
 PySide 1.2.4, LGPL version 2.1
 Qt 4.8.6, LGPL version 3
 ''', u'About GCA Analysis Tool')
