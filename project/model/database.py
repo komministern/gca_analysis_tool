@@ -15,28 +15,30 @@ from PySide import QtCore, QtGui
 from sitecontainer import SiteContainer
 import platform
 
-import expanduser
+#import expanduser
 
 
 class Database(QtCore.QObject):
 
+    io_progress = QtCore.Signal(int)
+
     def __init__(self):
 
+        super(Database, self).__init__()
+
         if platform.system() == 'Windows':
-            #import expanduser
+            import expanduser
             self.home_directory = expanduser.expand_user()
             
         else:
         
             self.home_directory = os.path.expanduser(u'~')
-        
-        #self.home_directory = os.path.expanduser(u'~')
             
         self.top_directory = os.path.join(self.home_directory, u'GCA Analyzer')
         self.sites_directory = os.path.join(self.top_directory, u'sites')
         self.filters_directory = os.path.join(self.top_directory, u'filters')
-        
-        #self.temp_files_directory = os.path.join(self.top_directory, u'temp')
+
+        self.temp_site_name = '_temp'
         
         self.path_to_7z_filename = os.path.join(self.top_directory, u'location7z.txt')
 
@@ -47,9 +49,11 @@ class Database(QtCore.QObject):
         
         self.read_filters_to_memory()
         
+        self.read_all_sites_to_memory()
+        
 
-        #self.read_all_sites_to_memory()
-        #self.read_filters_to_memory()
+    def tick(self, progress):
+        self.io_progress.emit(progress)
 
 
 
@@ -72,16 +76,30 @@ class Database(QtCore.QObject):
         return sites
 
 
+
     def read_site_to_memory(self, site_name):
-        #print 'request reading of site ' + site_name
         if not site_name in self.site_dictionary.keys():
-            #print 'actually read site ' + site_name
+            
             site_directory = os.path.join(self.sites_directory, site_name)
             self.site_dictionary[site_name] = SiteContainer(site_directory)
+            
+            #print type(self.site_dictionary[site_name].historylog_file_progress)
+            
+            self.site_dictionary[site_name].historylog_file_progress.connect(self.tick)
+            
+            print 'Read ' + site_name + ' to memory.'
+        else:
+            print site_name + ' was already read to memory. Did not read.' 
+
 
 
     def remove_site_from_memory(self, site_name):
-        del self.site_dictionary[site_name]
+        if site_name in self.site_dictionary.keys():
+            del self.site_dictionary[site_name]
+            print 'Removed ' + site_name + ' from memory.'
+        else:
+            print 'Tried to remove ' + site_name + ' from memory, but failed.'
+        
 
 
     def read_all_sites_to_memory(self):
@@ -89,27 +107,67 @@ class Database(QtCore.QObject):
             self.read_site_to_memory(site_name)
 
 
-    def create_new_site(self, capturesite_filename, site_name):
-#        self.site_dictionary[site_name].check_or_fix_site_directory_structure()
 
-        self.copy_historylogs_from_capturesite_file(capturesite_filename, site_name)
-        self.read_site_to_memory(site_name)
+    def rename_site(self, old_site_name, new_site_name):
+        source_site_directory = os.path.join(self.sites_directory, old_site_name)
+        dest_site_directory = os.path.join(self.sites_directory, new_site_name)
+
+        os.rename(source_site_directory, dest_site_directory)
+        
+        print 'Renamed ' + old_site_name + ' to ' + new_site_name + ' on disc.'
+
+        self.read_site_to_memory(new_site_name)
+        
+        
+
+    def create_new_site_from_capturesite_file(self, capturesite_file_name, new_site_name):
+
+        self.copy_historylogs_from_capturesite_file(capturesite_file_name, new_site_name)
+        self.read_site_to_memory(new_site_name)
+        print 'Created the ' + new_site_name + ' site.'
 
 
-    def update_site(self, capturesite_filename, site_name):
+
+    def update_site(self, site_name, temp_site_name):
+        
         this_site_directory = os.path.join(self.sites_directory, site_name)
         this_historylog_directory = os.path.join(this_site_directory, u'historylogs')
-        previously_ignored_dates = self.site_dictionary[site_name].get_ignored_dates_list()
-        shutil.rmtree(this_historylog_directory)
-        self.site_dictionary[site_name].check_or_fix_site_directory_structure()
 
-        self.copy_historylogs_from_capturesite_file(capturesite_filename, site_name)
+        shutil.rmtree(this_historylog_directory)
+
+        self.copy_historylogs_from_site_to_site(temp_site_name, site_name)
+        
         self.remove_site_from_memory(site_name)
         self.read_site_to_memory(site_name)
 
 
+
+    def copy_historylogs_from_site_to_site(self, from_site_name, to_site_name):
+        source_site_directory = os.path.join(self.sites_directory, from_site_name)
+        source_historylog_directory = os.path.join(source_site_directory, u'historylogs')
+        
+        dest_site_directory = os.path.join(self.sites_directory, to_site_name)
+        dest_historylog_directory = os.path.join(dest_site_directory, u'historylogs')
+        
+        shutil.rmtree(dest_historylog_directory)
+
+        shutil.copytree(source_historylog_directory, dest_historylog_directory)
+
+        print 'Copied historylog files from ' + from_site_name + ' to ' + to_site_name + '.'
+
+
+
     def remove_site_from_disc(self, site_name):
-        shutil.rmtree(os.path.join(self.sites_directory, site_name))
+        
+        site_directory = os.path.join(self.sites_directory, site_name)
+        
+        if os.path.isdir(site_directory):
+            shutil.rmtree(os.path.join(self.sites_directory, site_name))
+            print 'Deleted ' + site_name + ' from disk.'
+        
+        else:
+            print site_name + ' did not exist. Not deleted from disc.'
+
 
 
     def exist_7z(self):
@@ -119,10 +177,12 @@ class Database(QtCore.QObject):
         return os.path.exists(self.get_path_to_7z())
 
 
+
     def set_path_to_7z(self, path):
         f = open(self.path_to_7z_filename, 'w')
         f.write(path.encode('utf8'))
         f.close()
+
 
 
     def get_path_to_7z(self):
@@ -132,11 +192,13 @@ class Database(QtCore.QObject):
         return path
 
 
+
     def copy_historylogs_from_capturesite_file(self, capturesite_filename, site_name):
         if capturesite_filename[-2:] == '.Z':
             self.copy_historylogs_from_older_capturesite_file(capturesite_filename, site_name)
         else:
             self.copy_historylogs_from_newer_capturesite_file(capturesite_filename, site_name)
+
 
 
     def copy_historylogs_from_older_capturesite_file(self, capturesite_filename, site_name):
@@ -148,7 +210,11 @@ class Database(QtCore.QObject):
         prg_path = self.get_path_to_7z()
         dest_path = this_site_directory
 
+        self.io_progress.emit(25)
+
         self.extractZfiles(prg_path, capturesite_filename, dest_path)
+        
+        self.io_progress.emit(50)
         
         with tarfile.open( os.path.join(dest_path, 'CAPTURESITE_TAR') ) as tar:
             history_members = [member for member in tar.getmembers() if '.txt' in member.name and member.name.startswith('/local/gca_history/')]
@@ -158,6 +224,10 @@ class Database(QtCore.QObject):
 
         os.remove( os.path.join(dest_path, 'CAPTURESITE_TAR') )
 
+        self.io_progress.emit(100)
+        
+        
+        
 
     def extractZfiles(self, prg_path, archive_path, dest_path):
         
@@ -169,16 +239,28 @@ class Database(QtCore.QObject):
         return(system.communicate())
 
 
+
     def copy_historylogs_from_newer_capturesite_file(self, capturesite_filename, site_name):
         # This method reads all historylog files from a tar.gz file (the tar module handles the zipping)
         this_site_directory = os.path.join(self.sites_directory, site_name)
         this_historylog_directory = os.path.join(this_site_directory, u'historylogs')
+        
+        self.io_progress.emit(25)
+        
         with tarfile.open(capturesite_filename) as tar:
             history_members = [member for member in tar.getmembers() if '.txt' in member.name and member.name.startswith('/local/history/')]
+            
+            self.io_progress.emit(50)
+            
+            number_of_files_to_be_extracted = len(history_members)
+            counter = 0
             for member in history_members:
                 member.name = os.path.basename(member.name)
                 tar.extract(member, this_historylog_directory)
-
+                
+                counter += 0
+                self.io_progress.emit(50 + int(round(50.0*counter/number_of_files_to_be_extracted)))
+                
 
 
 
@@ -192,10 +274,25 @@ class Database(QtCore.QObject):
         return text
 
 
+
     def get_historylog_dictionary(self, site_name):
-        return self.site_dictionary[site_name].historylog_dictionary
+        return self.site_dictionary[site_name].get_historylog_dictionary()
 
 
+
+    def get_number_of_historylog_files(self, site_name):
+        return self.site_dictionary[site_name].get_number_of_historylog_files()
+
+
+
+    def get_historylog_from_disc(self, site_name, date):
+        #print site_name
+        #print date
+        
+        #return 'test'
+        return self.site_dictionary[site_name].read_historylog(date)
+        #print inb
+        #return inb
 
 
     # Comment stuff
@@ -263,21 +360,14 @@ class Database(QtCore.QObject):
 
 
 
-
-
-
     # Date navigation stuff
 
     def get_first_entry_date(self, site_name):
-        return self.site_dictionary[site_name].first_date
+        return self.site_dictionary[site_name].get_first_date()
 
 
     def get_last_entry_date(self, site_name):
-        return self.site_dictionary[site_name].last_date
-
-
-    def get_third_last_entry_date(self, site_name):
-        return self.site_dictionary[site_name].chronological_dates[-3]
+        return self.site_dictionary[site_name].get_last_date()
 
 
 
@@ -285,17 +375,14 @@ class Database(QtCore.QObject):
     # Ignore stuff
 
     def add_ignored_date(self, site_name, date):
-        #self.read_site_to_memory(site_name)
         self.site_dictionary[site_name].add_ignored_date(date)
 
 
     def get_ignored_dates(self, site_name):
-        #self.read_site_to_memory(site_name)
         return self.site_dictionary[site_name].get_ignored_dates_list()
 
 
     def deignore_all_dates(self, site_name):
-        #self.read_site_to_memory(site_name)
         self.site_dictionary[site_name].remove_all_ignored_dates()
 
 

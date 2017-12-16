@@ -14,7 +14,8 @@ import codecs
 
 class SiteContainer(QtCore.QObject):
     
-    tick = QtCore.Signal()
+    # The int is the progress (0-100)
+    historylog_file_progress = QtCore.Signal(int)
     
     def __init__(self, site_directory):
 
@@ -29,13 +30,33 @@ class SiteContainer(QtCore.QObject):
         self.comment_dictionary = self.read_all_comments()
 
         self.ignored_dates_list = self.read_all_ignored_dates()
-        self.historylog_dictionary = self.read_all_historylogs()
         
-        self.number_of_historylogs = len(self.historylog_dictionary)
+        self.historylog_dictionary = None
+        
 
-        self.chronological_dates = sorted([date for date, _ in self.historylog_dictionary.items()])
-        self.first_date = self.chronological_dates[0]
-        self.last_date = self.chronological_dates[-1]
+
+
+    def get_dates_except_ignored_list(self):
+        all_dates = self.get_historylog_dictionary().keys()
+        ignored_dates = self.get_ignored_dates_list()
+        return [date for date in all_dates if date not in ignored_dates]
+
+
+
+    def get_dates_list(self):
+        return self.get_historylog_dictionary().keys()
+    
+
+
+    def get_first_date(self):
+        return sorted(self.get_dates_except_ignored_list())[0]
+
+
+    
+    def get_last_date(self):
+        return sorted(self.get_dates_except_ignored_list())[-1]
+        
+
 
 
 
@@ -128,16 +149,48 @@ class SiteContainer(QtCore.QObject):
 
     # Historylog stuff
 
+    def get_number_of_historylog_files(self):
+        # Always do this in this manner to avoid unexpected trouble with non utf-8 characters.
+        return len([name for name in os.listdir(self.historylogs_directory) if (os.path.isfile(os.path.join(self.historylogs_directory, name)) and self.valid_historylog_filename(name))])
+        
+
+    def get_historylog_dictionary(self):
+        if not self.historylog_dictionary:
+            self.historylog_dictionary = self.read_all_historylogs()
+        return self.historylog_dictionary
+
+
     def get_historylog(self, date):
+        if not self.historylog_dictionary:
+            self.historylog_dictionary = self.read_all_historylogs()
         try:
             return self.historylog_dictionary[date]
         except KeyError:
             return None
 
+        
+    def read_historylog(self, date):
+        
+        #return 'read historylog'
+        
+        try:
+            #file_path = os.path.join(self.historylogs_directory, self.historylog_filename(date))
+            with codecs.open(os.path.join(self.historylogs_directory, self.historylog_filename(date)), 'r', encoding='utf-8') as f:
+                str = f.read()
+            return str
+        
+        except Exception as e:
+            
+            #print e
+            return ''
+        
 
     def read_all_historylogs(self):
         string_dictionary = {}
-        for filename in os.listdir(self.historylogs_directory):
+        filenames = os.listdir(self.historylogs_directory)
+        number_of_files_to_be_read = len(filenames)
+        counter = 0
+        for filename in filenames:
             try:
                 date = self.historylog_date(filename)
                 if 'A0001_' in filename and not (date in self.ignored_dates_list):
@@ -146,12 +199,21 @@ class SiteContainer(QtCore.QObject):
                         # The history log files usually only contains ASCII characters it seems. Some erroneous files
                         # does differ on this though. The utf-8 decoding prohibit errors due to this.
             except ValueError as e:                
-                pass
-                #print e
+                #print '****************'
+                print e
+            counter += 1
             
-            self.tick.emit()
+            self.historylog_file_progress.emit(int(round(100.0*counter/number_of_files_to_be_read)))
             
         return string_dictionary
+    
+    def valid_historylog_filename(self, filename):
+        try:
+            date = self.historylog_date(filename)
+            return True
+        except ValueError as e:
+            #print '******'
+            return False
 
 
     def historylog_date(self, historylog_filename):
@@ -161,6 +223,18 @@ class SiteContainer(QtCore.QObject):
         day = int(dstr[2:4])
         return QtCore.QDate(year, month, day)
 
+
+    def historylog_filename(self, date):
+        year_str = str(date.year())[-2:]
+        month_str = str(date.month())
+        if len(month_str) == 1:
+            month_str = '0' + month_str
+        day_str = str(date.day())
+        if len(day_str) == 1:
+            day_str = '0' + day_str
+        filename = 'A0001_' + month_str + day_str + year_str + '.txt'
+        #print 'Filename: ' + filename
+        return filename
 
 
     # Ignored dates stuff

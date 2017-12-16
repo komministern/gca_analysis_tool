@@ -7,7 +7,7 @@
 
 
 import sys
-import time
+#import time
 from PySide import QtGui
 from view.view import MyView
 from presenter.presenter import MyPresenter
@@ -40,11 +40,11 @@ if __name__ == '__main__':
 
     #print 'APP STARTED'
 
-    if presenter.trial_has_ended:
-        presenter.message(u'Trial has ended.\n\nCopyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>')
+    #if presenter.trial_has_ended:
+    #    presenter.message(u'Trial has ended.\n\nCopyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>')
     #elif presenter.progress.wasCanceled():
     #    pass
-    else:
+    #else:
         
-        sys.exit(app.exec_())
+    sys.exit(app.exec_())
 
