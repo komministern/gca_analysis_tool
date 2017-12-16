@@ -88,6 +88,8 @@ class MyPresenter(QtCore.QObject):
 
         self.view.progressBar.setValue(progress)
         
+        QtGui.qApp.processEvents()
+        
         if progress >= 100:
             self.view.progressBar.setValue(0)
 
