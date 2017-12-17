@@ -14,8 +14,7 @@ import subprocess
 from PySide import QtCore, QtGui
 from sitecontainer import SiteContainer
 import platform
-
-#import expanduser
+import expanduser
 
 
 class Database(QtCore.QObject):
@@ -27,7 +26,7 @@ class Database(QtCore.QObject):
         super(Database, self).__init__()
 
         if platform.system() == 'Windows':
-            import expanduser
+            #import expanduser
             self.home_directory = expanduser.expand_user()
             
         else:
@@ -87,18 +86,18 @@ class Database(QtCore.QObject):
             
             self.site_dictionary[site_name].historylog_file_progress.connect(self.tick)
             
-            print 'Read ' + site_name + ' to memory.'
-        else:
-            print site_name + ' was already read to memory. Did not read.' 
+            #print 'Read ' + site_name + ' to memory.'
+        #else:
+            #print site_name + ' was already read to memory. Did not read.' 
 
 
 
     def remove_site_from_memory(self, site_name):
         if site_name in self.site_dictionary.keys():
             del self.site_dictionary[site_name]
-            print 'Removed ' + site_name + ' from memory.'
-        else:
-            print 'Tried to remove ' + site_name + ' from memory, but failed.'
+            #print 'Removed ' + site_name + ' from memory.'
+        #else:
+            #print 'Tried to remove ' + site_name + ' from memory, but failed.'
         
 
 
@@ -114,7 +113,7 @@ class Database(QtCore.QObject):
 
         os.rename(source_site_directory, dest_site_directory)
         
-        print 'Renamed ' + old_site_name + ' to ' + new_site_name + ' on disc.'
+        #print 'Renamed ' + old_site_name + ' to ' + new_site_name + ' on disc.'
 
         self.read_site_to_memory(new_site_name)
         
@@ -124,7 +123,7 @@ class Database(QtCore.QObject):
 
         self.copy_historylogs_from_capturesite_file(capturesite_file_name, new_site_name)
         self.read_site_to_memory(new_site_name)
-        print 'Created the ' + new_site_name + ' site.'
+        #print 'Created the ' + new_site_name + ' site.'
 
 
 
@@ -153,7 +152,7 @@ class Database(QtCore.QObject):
 
         shutil.copytree(source_historylog_directory, dest_historylog_directory)
 
-        print 'Copied historylog files from ' + from_site_name + ' to ' + to_site_name + '.'
+        #print 'Copied historylog files from ' + from_site_name + ' to ' + to_site_name + '.'
 
 
 
@@ -161,12 +160,16 @@ class Database(QtCore.QObject):
         
         site_directory = os.path.join(self.sites_directory, site_name)
         
+        self.io_progress.emit(50)
+        
         if os.path.isdir(site_directory):
             shutil.rmtree(os.path.join(self.sites_directory, site_name))
-            print 'Deleted ' + site_name + ' from disk.'
+            #print 'Deleted ' + site_name + ' from disk.'
         
-        else:
-            print site_name + ' did not exist. Not deleted from disc.'
+        #else:
+            #print site_name + ' did not exist. Not deleted from disc.'
+
+        self.io_progress.emit(100)
 
 
 

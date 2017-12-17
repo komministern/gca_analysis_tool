@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Thu Dec 14 10:15:40 2017
+# Created: Sun Dec 17 13:45:43 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -141,10 +141,10 @@ class Ui_MainWindow(object):
         self.gridLayout_10.addWidget(self.groupBox_7, 1, 0, 1, 1)
         self.tabWidget_TextFields.addTab(self.tab_2, "")
         self.gridLayout_7.addWidget(self.tabWidget_TextFields, 1, 1, 4, 1)
-        self.tabWidget = QtGui.QTabWidget(self.centralwidget)
-        self.tabWidget.setMinimumSize(QtCore.QSize(330, 130))
-        self.tabWidget.setMaximumSize(QtCore.QSize(330, 130))
-        self.tabWidget.setObjectName("tabWidget")
+        self.tabWidget_Search = QtGui.QTabWidget(self.centralwidget)
+        self.tabWidget_Search.setMinimumSize(QtCore.QSize(330, 130))
+        self.tabWidget_Search.setMaximumSize(QtCore.QSize(330, 130))
+        self.tabWidget_Search.setObjectName("tabWidget_Search")
         self.tab_3 = QtGui.QWidget()
         self.tab_3.setObjectName("tab_3")
         self.gridLayout_5 = QtGui.QGridLayout(self.tab_3)
@@ -183,7 +183,7 @@ class Ui_MainWindow(object):
         self.pushButton_ResetStringSearch.setToolTip("")
         self.pushButton_ResetStringSearch.setObjectName("pushButton_ResetStringSearch")
         self.gridLayout_5.addWidget(self.pushButton_ResetStringSearch, 1, 2, 1, 1)
-        self.tabWidget.addTab(self.tab_3, "")
+        self.tabWidget_Search.addTab(self.tab_3, "")
         self.tab_4 = QtGui.QWidget()
         self.tab_4.setObjectName("tab_4")
         self.gridLayout_3 = QtGui.QGridLayout(self.tab_4)
@@ -208,8 +208,8 @@ class Ui_MainWindow(object):
         self.pushButton_DeleteFilter.setMaximumSize(QtCore.QSize(16777215, 30))
         self.pushButton_DeleteFilter.setObjectName("pushButton_DeleteFilter")
         self.gridLayout_3.addWidget(self.pushButton_DeleteFilter, 1, 2, 1, 1)
-        self.tabWidget.addTab(self.tab_4, "")
-        self.gridLayout_7.addWidget(self.tabWidget, 2, 0, 1, 1)
+        self.tabWidget_Search.addTab(self.tab_4, "")
+        self.gridLayout_7.addWidget(self.tabWidget_Search, 2, 0, 1, 1)
         self.progressBar = QtGui.QProgressBar(self.centralwidget)
         self.progressBar.setMaximumSize(QtCore.QSize(331, 16777215))
         self.progressBar.setProperty("value", 0)
@@ -229,7 +229,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.tabWidget_TextFields.setCurrentIndex(0)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget_Search.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -264,7 +264,7 @@ class Ui_MainWindow(object):
         self.pushButton_NextSearch.setText(QtGui.QApplication.translate("MainWindow", "Next", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_ResetStringSearch.setStatusTip(QtGui.QApplication.translate("MainWindow", "Clear search string", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_ResetStringSearch.setText(QtGui.QApplication.translate("MainWindow", "Clear", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QtGui.QApplication.translate("MainWindow", "String Search", None, QtGui.QApplication.UnicodeUTF8))
+        self.tabWidget_Search.setTabText(self.tabWidget_Search.indexOf(self.tab_3), QtGui.QApplication.translate("MainWindow", "String Search", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_ChooseFilter.setStatusTip(QtGui.QApplication.translate("MainWindow", "Choose history log filter", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_NewFilter.setStatusTip(QtGui.QApplication.translate("MainWindow", "Create a new filter", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_NewFilter.setText(QtGui.QApplication.translate("MainWindow", "New", None, QtGui.QApplication.UnicodeUTF8))
@@ -272,7 +272,8 @@ class Ui_MainWindow(object):
         self.pushButton_EditFilter.setText(QtGui.QApplication.translate("MainWindow", "Edit", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_DeleteFilter.setStatusTip(QtGui.QApplication.translate("MainWindow", "Delete currently chosen filter", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_DeleteFilter.setText(QtGui.QApplication.translate("MainWindow", "Delete", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QtGui.QApplication.translate("MainWindow", "Filter", None, QtGui.QApplication.UnicodeUTF8))
+        self.tabWidget_Search.setTabText(self.tabWidget_Search.indexOf(self.tab_4), QtGui.QApplication.translate("MainWindow", "Filter", None, QtGui.QApplication.UnicodeUTF8))
+        self.progressBar.setStatusTip(QtGui.QApplication.translate("MainWindow", "Indicates progress of file I/O operations, which can be lengthy at times", None, QtGui.QApplication.UnicodeUTF8))
 
 from mycalendarwidget import MyCalendarWidget
 from mystringsearchplaintextedit import MyStringSearchPlainTextEdit

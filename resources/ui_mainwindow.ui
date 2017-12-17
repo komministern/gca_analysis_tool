@@ -394,7 +394,7 @@
      </widget>
     </item>
     <item row="2" column="0">
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="tabWidget_Search">
       <property name="minimumSize">
        <size>
         <width>330</width>
@@ -649,6 +649,9 @@
         <width>331</width>
         <height>16777215</height>
        </size>
+      </property>
+      <property name="statusTip">
+       <string>Indicates progress of file I/O operations, which can be lengthy at times</string>
       </property>
       <property name="value">
        <number>0</number>

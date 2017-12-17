@@ -28,7 +28,7 @@ if __name__ == '__main__':
     #view.show()
 
     #from presenter.presenter import MyPresenter
-    presenter = MyPresenter(model, view)
+    presenter = MyPresenter(model, view, app)
     
     view.show()
     

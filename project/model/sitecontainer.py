@@ -200,7 +200,8 @@ class SiteContainer(QtCore.QObject):
                         # does differ on this though. The utf-8 decoding prohibit errors due to this.
             except ValueError as e:                
                 #print '****************'
-                print e
+                #print e
+                pass
             counter += 1
             
             self.historylog_file_progress.emit(int(round(100.0*counter/number_of_files_to_be_read)))
@@ -256,7 +257,8 @@ class SiteContainer(QtCore.QObject):
                 if 'A0001_' in filename:
                     a_list.append(self.historylog_date(filename))
         except Exception as e:
-            print e
+            #print e
+            pass
         return a_list
         
 

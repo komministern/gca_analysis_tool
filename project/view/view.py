@@ -41,6 +41,12 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
         
         self.setupMenu()
 
+
+    #def mousePressEvent(self, event):
+    #    print 'clicked'
+        
+
+
     def close(self):
         self.quit.emit()
 

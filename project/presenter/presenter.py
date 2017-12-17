@@ -20,7 +20,7 @@ from view.myfilterdialog import MyFilterDialog
 
 class MyPresenter(QtCore.QObject):
 
-    def __init__(self, model, view, **kwds):
+    def __init__(self, model, view, app, **kwds):
         super(MyPresenter, self).__init__(**kwds)
 
         #self.test = False
@@ -28,6 +28,7 @@ class MyPresenter(QtCore.QObject):
         # Store view and model.
         self._model = model
         self._view = view
+        self.app = app
 
 
         # Setup all signals.
@@ -64,21 +65,16 @@ class MyPresenter(QtCore.QObject):
         self.view.comboBox_Coloring.addItems([u'Normal/Degraded/Faulted', u'New Fault/Active Fault', 
                                             u'Temporary Faults (< 1 min per day)', u'Transmitter On', u'Shelter Door Open'])
 
-        
         self.current_filter = self.model.filter_list[0]
         self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
         
         self.view.pushButton_EditFilter.setEnabled(False)
         self.view.pushButton_DeleteFilter.setEnabled(False)
-        
 
         site_items = [u''] + self.model.get_site_names()
         self.view.comboBox_ActiveSite.addItems(site_items)
         
         self.active_site_name = site_items[0]
-        
-        #self.active_site_name = u''
-        #self.active_site_name = u''
 
         self.update_menu()
 
@@ -92,6 +88,53 @@ class MyPresenter(QtCore.QObject):
         
         if progress >= 100:
             self.view.progressBar.setValue(0)
+
+
+
+
+    # This is not a satisfactory solution. But it works i guess.
+    # Call these methods prior to and after I/O actions known to take a lot
+    # of time. This prevents any input from the GUI during the file operations,
+    # at the same time as the progress bar update takes care of processEvents to
+    # keep GUI from locking up.
+    
+    def lock_gui(self):
+        self.view.comboBox_ActiveSite.setEnabled(False)
+        self.view.comboBox_Coloring.setEnabled(False)
+        self.view.calendarWidget.setEnabled(False)
+        
+        self.saved_ignore_status = self.view.ignoreAction.isEnabled()
+        self.view.ignoreAction.setEnabled(False)
+        
+        self.saved_deignore_status = self.view.ignoreAction.isEnabled()
+        self.view.deIgnoreAction.setEnabled(False)
+        
+        self.view.importAction.setEnabled(False)
+        
+        self.view.tabWidget_Search.setEnabled(False)
+        self.view.tabWidget_TextFields.setEnabled(False)
+        
+        self.view.pushButton_FirstEntry.setEnabled(False)
+        self.view.pushButton_LastEntry.setEnabled(False)
+        self.view.pushButton_Today.setEnabled(False)
+        
+    def enable_gui(self):
+        self.view.comboBox_ActiveSite.setEnabled(True)
+        self.view.comboBox_Coloring.setEnabled(True)
+        self.view.calendarWidget.setEnabled(True)
+        
+        self.view.ignoreAction.setEnabled(self.saved_ignore_status)
+        self.view.deIgnoreAction.setEnabled(self.saved_deignore_status)
+        
+        self.view.importAction.setEnabled(True)
+        
+        self.view.tabWidget_Search.setEnabled(True)
+        self.view.tabWidget_TextFields.setEnabled(True)
+        
+        self.view.pushButton_FirstEntry.setEnabled(True)
+        self.view.pushButton_LastEntry.setEnabled(True)
+        self.view.pushButton_Today.setEnabled(True)
+
 
 
 
@@ -249,6 +292,8 @@ class MyPresenter(QtCore.QObject):
 
     def set_active_site(self, index):
         
+        self.lock_gui()
+        
         site_items = [u''] + self.model.get_site_names()
         self.active_site_name = site_items[index]
 
@@ -260,18 +305,20 @@ class MyPresenter(QtCore.QObject):
         
         self.update_comment()
         
+        self.enable_gui()
+        
         self.update_menu()
         
 
     def set_coloring_scheme(self, index):
         self.coloring_scheme = index
-        self.activate_progressbar(2)
+        #self.activate_progressbar(2)
         self.presentation_dict[self.active_site_name] = self.colored_dates(self.active_site_name)
         
-        self.view.progressBar.setValue(1)
+        #self.view.progressBar.setValue(1)
         self.update_calendar()
-        self.view.progressBar.setValue(2)
-        self.deactivate_progressbar()
+        #self.view.progressBar.setValue(2)
+        #self.deactivate_progressbar()
 
     def set_last_date(self):
         if self.active_site_name:
@@ -346,7 +393,7 @@ class MyPresenter(QtCore.QObject):
             
         else:
                 
-            text = self.view.tabWidget.tabText(0)
+            text = self.view.tabWidget_Search.tabText(0)
             if text[-1] == u'*':
                 self.view.tabWidget.setTabText(0, text[0:-1])
 
@@ -440,7 +487,6 @@ class MyPresenter(QtCore.QObject):
 
     # ------------ String search stuff
 
-
     def commit_string_search(self):
         
         self.highlight = self.view.plainTextEdit_StringSearch.toPlainText()
@@ -449,34 +495,25 @@ class MyPresenter(QtCore.QObject):
         
         self.view.calendarWidget.updateCells()
         self.update_text()
-            
-            #self.test = 2
-            
+
             # Lets set highlight in the plainTextEdit text here!!!
             
             #print self.view.lineEdit_StringSearch.textCursor()
         cursor = self.view.plainTextEdit_StringSearch.textCursor()
             #self.view.lineEdit_StringSearch.end(False)
 
-            #self.test = 3
-
         format = QtGui.QTextCharFormat()
         format.setBackground(QtGui.QBrush(self.blue))
 
-            # Select the matched text and apply the desired format
+        # Select the matched text and apply the desired format
         cursor.setPosition(0)
-            
-            #self.test = 4
         
         cursor.movePosition(QtGui.QTextCursor.End, QtGui.QTextCursor.KeepAnchor, 1)
-            
-            #self.test = 5
             
         self.ignore = True
             
         cursor.mergeCharFormat(format)
             
-            #self.test = 6
 
 
 
@@ -572,6 +609,8 @@ class MyPresenter(QtCore.QObject):
 
     def import_capturesite(self):
 
+        self.lock_gui()
+
         capturesite_filename, _ = QtGui.QFileDialog.getOpenFileName(self.view, u'Choose capturesite file to import', self.model.home_directory, u'Capturesite (*tar.gz *TAR.Z)')
 
         if capturesite_filename[-2:] == '.Z':
@@ -588,10 +627,6 @@ class MyPresenter(QtCore.QObject):
             temp_site_name = self.temp_site_name
 
             try:
-            
-                #self.activate_progressbar(2)
-                
-                #self.view.progressBar.setValue(1)
             
                 # Create a temporary site _TEMP
                 # The self.mode.create_site decompresses and copies all historylog files to temp_site_name
@@ -693,12 +728,14 @@ class MyPresenter(QtCore.QObject):
 
             except Exception as e:
                 
-                print e
+                #print e
                 
                 self.model.remove_site_from_disc(temp_site_name)
                 self.model.remove_site_from_memory(temp_site_name)
 
-
+        self.enable_gui()
+        
+        self.update_menu()
 
 
 
@@ -1048,7 +1085,7 @@ class MyPresenter(QtCore.QObject):
 #''')
 
         self.message(u'''
-GCA Analysis Tool, v1.60 (trial version)
+GCA Analysis Tool, v1.70 (trial version)
 
 Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 
