@@ -14,6 +14,7 @@ from coloringcontainer import ColoringContainer
 import textstuff as txt
 from filtercontainer import Filter
 from view.myfilterdialog import MyFilterDialog
+from eventfilter import EventBlocker
 
 
 
@@ -58,7 +59,19 @@ class MyPresenter(QtCore.QObject):
         self.view.progressBar.setMaximum(100)
 
         self.connect_signals()
-
+        
+        #self.mousedetector = MouseDetector()
+        #self.mouseinhibitor = MouseInhibitor()
+        self.eventblocker = EventBlocker()
+        
+        self.app.installEventFilter(self.eventblocker)
+        
+        #self.app.installEventFilter(self.mousedetector)
+        #self.app.installEventFilter(self.mouseinhibitor)
+        
+        self.timer = QtCore.QTimer(self)
+        #self.timer.timeout.connect(self.process_events)
+        #self.timer.start(0)
 
     def start_app(self):
 
@@ -87,9 +100,22 @@ class MyPresenter(QtCore.QObject):
         QtGui.qApp.processEvents()
         
         if progress >= 100:
+            
+            if not self.timer.isActive():
+                # Some delay, just for the feeling
+                self.timer.singleShot(100, self.zero_progressbar)
+            
+
+    def zero_progressbar(self):
+        #print self.view.progressBar.value()
+        if self.view.progressBar.value() == 100:
             self.view.progressBar.setValue(0)
 
 
+#    def process_events(self):
+#        #QtGui.qApp.processEvents()
+#        QtGui.QApplication.processEvents()
+        
 
 
     # This is not a satisfactory solution. But it works i guess.
@@ -98,45 +124,19 @@ class MyPresenter(QtCore.QObject):
     # at the same time as the progress bar update takes care of processEvents to
     # keep GUI from locking up.
     
-    def lock_gui(self):
-        self.view.comboBox_ActiveSite.setEnabled(False)
-        self.view.comboBox_Coloring.setEnabled(False)
-        self.view.calendarWidget.setEnabled(False)
+    def inhibit_mouseclicks(self):
+        #self.app.removeEventFilter(self.mousedetector)
+        #self.app.installEventFilter(self.mouseinhibitor)
         
-        self.saved_ignore_status = self.view.ignoreAction.isEnabled()
-        self.view.ignoreAction.setEnabled(False)
+        self.eventblocker.block_all_mouse_click_events()
         
-        self.saved_deignore_status = self.view.ignoreAction.isEnabled()
-        self.view.deIgnoreAction.setEnabled(False)
+    def allow_mouseclicks(self):
+        #self.app.removeEventFilter(self.mouseinhibitor)
+        #self.app.installEventFilter(self.mousedetector)
         
-        self.view.importAction.setEnabled(False)
+        self.eventblocker.unblock_all_events()
         
-        self.view.tabWidget_Search.setEnabled(False)
-        self.view.tabWidget_TextFields.setEnabled(False)
-        
-        self.view.pushButton_FirstEntry.setEnabled(False)
-        self.view.pushButton_LastEntry.setEnabled(False)
-        self.view.pushButton_Today.setEnabled(False)
-        
-    def enable_gui(self):
-        self.view.comboBox_ActiveSite.setEnabled(True)
-        self.view.comboBox_Coloring.setEnabled(True)
-        self.view.calendarWidget.setEnabled(True)
-        
-        self.view.ignoreAction.setEnabled(self.saved_ignore_status)
-        self.view.deIgnoreAction.setEnabled(self.saved_deignore_status)
-        
-        self.view.importAction.setEnabled(True)
-        
-        self.view.tabWidget_Search.setEnabled(True)
-        self.view.tabWidget_TextFields.setEnabled(True)
-        
-        self.view.pushButton_FirstEntry.setEnabled(True)
-        self.view.pushButton_LastEntry.setEnabled(True)
-        self.view.pushButton_Today.setEnabled(True)
-
-
-
+    
 
 
     # --------- Coloring the dates
@@ -292,7 +292,11 @@ class MyPresenter(QtCore.QObject):
 
     def set_active_site(self, index):
         
-        self.lock_gui()
+        #self.lock_gui()
+        
+        #print 'setting active site'
+        
+        self.inhibit_mouseclicks()
         
         site_items = [u''] + self.model.get_site_names()
         self.active_site_name = site_items[index]
@@ -305,9 +309,13 @@ class MyPresenter(QtCore.QObject):
         
         self.update_comment()
         
-        self.enable_gui()
+        #self.allow_mouseclicks()
+        
+        #self.enable_gui()
         
         self.update_menu()
+        
+        self.allow_mouseclicks()
         
 
     def set_coloring_scheme(self, index):
@@ -359,9 +367,9 @@ class MyPresenter(QtCore.QObject):
             #palette.setColor(QtGui.QPalette.Base,QtCore.Qt.blue)
             #self.view.lineEdit_StringSearch.setPalette(palette)
 
-            text = self.view.tabWidget.tabText(0)
+            text = self.view.tabWidget_Search.tabText(0)
             if text[-1] != u'*':
-                self.view.tabWidget.setTabText(0, text + u'*')
+                self.view.tabWidget_Search.setTabText(0, text + u'*')
 
             cursor = self.view.textBrowser_HistoryLog.textCursor()
             
@@ -395,7 +403,7 @@ class MyPresenter(QtCore.QObject):
                 
             text = self.view.tabWidget_Search.tabText(0)
             if text[-1] == u'*':
-                self.view.tabWidget.setTabText(0, text[0:-1])
+                self.view.tabWidget_Search.setTabText(0, text[0:-1])
 
         self.update_comment()   # Here?????????????????????????
 
@@ -465,17 +473,17 @@ class MyPresenter(QtCore.QObject):
     def choose_filter(self, index):
         
         if index == 0:
-            text = self.view.tabWidget.tabText(1)
+            text = self.view.tabWidget_Search.tabText(1)
             if text[-1] == u'*':
-                self.view.tabWidget.setTabText(1, text[0:-1])
+                self.view.tabWidget_Search.setTabText(1, text[0:-1])
                 
             self.view.pushButton_EditFilter.setEnabled(False)
             self.view.pushButton_DeleteFilter.setEnabled(False)
         else:
             
-            text = self.view.tabWidget.tabText(1)
+            text = self.view.tabWidget_Search.tabText(1)
             if text[-1] != u'*':
-                self.view.tabWidget.setTabText(1, text + u'*')
+                self.view.tabWidget_Search.setTabText(1, text + u'*')
                 
             self.view.pushButton_EditFilter.setEnabled(True)
             self.view.pushButton_DeleteFilter.setEnabled(True)
@@ -609,9 +617,11 @@ class MyPresenter(QtCore.QObject):
 
     def import_capturesite(self):
 
-        self.lock_gui()
+        #self.lock_gui()
 
         capturesite_filename, _ = QtGui.QFileDialog.getOpenFileName(self.view, u'Choose capturesite file to import', self.model.home_directory, u'Capturesite (*tar.gz *TAR.Z)')
+
+        #self.inhibit_mouseclicks()
 
         if capturesite_filename[-2:] == '.Z':
             
@@ -627,7 +637,9 @@ class MyPresenter(QtCore.QObject):
             temp_site_name = self.temp_site_name
 
             try:
-            
+                
+                self.inhibit_mouseclicks()      # ------------------
+                
                 # Create a temporary site _TEMP
                 # The self.mode.create_site decompresses and copies all historylog files to temp_site_name
                 # and (!) reads all these in to memory
@@ -660,7 +672,14 @@ class MyPresenter(QtCore.QObject):
                             possible_candidates.append(site_name)
 
                 
+
+                
                 if len(possible_candidates) == 0:
+                    
+                    # No candidates. 
+                    # Create a new site.
+                    
+                    self.allow_mouseclicks()        # ------------------
                     
                     self.create_new_site(temp_site_name)
                     
@@ -674,22 +693,67 @@ class MyPresenter(QtCore.QObject):
                     
                     if new_number_of_historylog_files > existing_number_of_historylog_files:
                         
-                        #print 'Site to be updated is: ' + site_name
+                        # One candidate, the capturesite file contains more historylogs than the present database.
+                        # Update the database.
+                        
+                        self.allow_mouseclicks()        # ------------------
+                        
                         clicked = self.message_with_cancel_choice(u'The capturesite file seems to be affiliated with the already existing ' + site_to_be_updated + ' site.', 
                                                             'Update ' + site_to_be_updated + '?', QtGui.QMessageBox.Ok)
                         if clicked == QtGui.QMessageBox.Ok:
+                            
+                            self.inhibit_mouseclicks()
+                            
                             self.update_site(site_to_be_updated, temp_site_name)
+    
+                            
+                            
+                            
+                            #self.presentation_dict[new_site_name] = self.colored_dates(new_site_name)
+                        
+                        # Remove all items from comboBox
+                        #self.view.comboBox_ActiveSite.clear()
+
+                        # Repopulate comboBox
+                        
+                            site_items = [u''] + self.model.get_site_names()
+                        #self.view.comboBox_ActiveSite.addItems(site_items)
+
+                            old_index = self.view.comboBox_ActiveSite.currentIndex()
+                            new_index = site_items.index(site_to_be_updated)
+
+                            # This call will change the index in the comboBox, and also
+                            # update all the views ONLY IF old_index differs from new_index!
+                            self.view.comboBox_ActiveSite.setCurrentIndex(new_index)
+                            
+                            # So...
+                            if old_index == new_index:
+                                self.set_active_site(new_index)
+                            
+                            
+                            
+                            #self.set_active_site(new_index)
+                        
+                        
+                        
+                    
                         
                         self.model.remove_site_from_disc(temp_site_name)
                         self.model.remove_site_from_memory(temp_site_name)
 
                     elif new_number_of_historylog_files == existing_number_of_historylog_files:
 
-                        #print 'Equal number of log files. Abort.'
+                        # One candidate, the capturesite file contains just as many historylogs than the present database.
+                        # Abort.
+
+                        self.allow_mouseclicks()        # ------------------
+                        
                         self.message(u'The capturesite file seems to be affiliated with the already existing ' + 
                                      site_to_be_updated + u' site. However, the number of entries in ' + 
                                      u'the capturesite file is the same as in your database. No new information will ' +
                                      u'be added. Aborting import.')
+                        
+                        self.inhibit_mouseclicks()        # ------------------
                         
                         self.model.remove_site_from_disc(temp_site_name)
                         self.model.remove_site_from_memory(temp_site_name)
@@ -697,10 +761,16 @@ class MyPresenter(QtCore.QObject):
                     
                     else:
                         
-                        #print 'Lesser number of log files than existing site. Abort.'
+                        # One candidate, the capturesite file contains a lesser number of historylogs than the present database.
+                        # Abort.
+                        
+                        self.allow_mouseclicks()        # ------------------
+                        
                         self.message(u'The capturesite file seems to be affiliated with the already existing ' + 
                                      site_to_be_updated + u' site, but it contains fewer history log entries and thus ' +
                                      u'probably predates it. Aborting import.')
+                        
+                        self.inhibit_mouseclicks()        # ------------------
                                      
                         self.model.remove_site_from_disc(temp_site_name)
                         self.model.remove_site_from_memory(temp_site_name)
@@ -716,8 +786,12 @@ class MyPresenter(QtCore.QObject):
                         str += (each + ', ')
                     str = str[:-2] + ')'
                     
+                    self.allow_mouseclicks()        # ------------------
+                    
                     self.message(u'There seems to be several sites that this capturesite file affiliates with ' + str + '.' + 
                                     u'Aborting import.')
+                
+                    self.inhibit_mouseclicks()        # ------------------
                 
                     self.model.remove_site_from_disc(temp_site_name)
                     self.model.remove_site_from_memory(temp_site_name)
@@ -733,21 +807,27 @@ class MyPresenter(QtCore.QObject):
                 self.model.remove_site_from_disc(temp_site_name)
                 self.model.remove_site_from_memory(temp_site_name)
 
-        self.enable_gui()
+
+        #self.enable_gui()
         
         self.update_menu()
 
+        self.allow_mouseclicks()
 
 
 
     # Update an existing site
     def update_site(self, site_name, temp_site_name):
         
+        self.inhibit_mouseclicks()  # ------------------
+        
         self.model.copy_historylogs_from_site_to_site(temp_site_name, site_name)
         
         self.model.remove_site_from_memory(site_name)
         self.model.read_site_to_memory(site_name)
         
+        self.allow_mouseclicks()    # ------------------
+
 
 
     # Create a new site from scratch
@@ -772,11 +852,12 @@ class MyPresenter(QtCore.QObject):
                 else:
                     
                     try:
+                        self.inhibit_mouseclicks()  # ------------------
                     
                         self.model.rename_site(temp_site_name, new_site_name)
 
                         self.presentation_dict[new_site_name] = self.colored_dates(new_site_name)
-
+                        
                         # Remove all items from comboBox
                         self.view.comboBox_ActiveSite.clear()
 
@@ -787,17 +868,28 @@ class MyPresenter(QtCore.QObject):
                         new_index = site_items.index(new_site_name)
                         self.view.comboBox_ActiveSite.setCurrentIndex(new_index)    # This also triggers the set_active_site method and makes the new site active!!!!
                         
+                        self.allow_mouseclicks()  # ------------------
+                        
                     except Exception, e:
+                        
+                        self.allow_mouseclicks()  # ------------------
                         
                         self.message(u'An unexpected error occured during import. Aborting.')
 
             else:
-
+                
+                self.allow_mouseclicks()  # ------------------
+                
                 self.message(u'Site name may only contain letters, numbers, -_ and space. Aborting.')
 
         # This should keep everything clean. (Should put this in the __init__ as well though, the disc bit.)
+        
+        self.inhibit_mouseclicks()  # ------------------
+        
         self.model.remove_site_from_disc(temp_site_name)
         self.model.remove_site_from_memory(temp_site_name)
+        
+        self.allow_mouseclicks()  # ------------------
 
 
     # Messaging the user stuff
@@ -1085,9 +1177,9 @@ class MyPresenter(QtCore.QObject):
 #''')
 
         self.message(u'''
-GCA Analysis Tool, v1.70 (trial version)
+GCA Analysis Tool, v1.75 (trial version)
 
-Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
+Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
 
 This is a trial version of the GCA Analysis Tool. The trial version is fully functional, but will only display dates prior to July 2, 2018. It may be copied freely.
 

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Sun Dec 17 13:45:43 2017
+# Created: Sun Dec 17 19:23:25 2017
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PySide import QtCore, QtGui
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1168, 738)
+        MainWindow.resize(1168, 728)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -246,7 +246,7 @@ class Ui_MainWindow(object):
         self.groupBox_5.setTitle(QtGui.QApplication.translate("MainWindow", "Coloring Scheme", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_Coloring.setStatusTip(QtGui.QApplication.translate("MainWindow", "Choose different coloring rules for the calendar", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget_TextFields.setTabText(self.tabWidget_TextFields.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "History Log", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_7.setTitle(QtGui.QApplication.translate("MainWindow", "Comment", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_7.setTitle(QtGui.QApplication.translate("MainWindow", "Notes", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_DeleteComment.setStatusTip(QtGui.QApplication.translate("MainWindow", "Delete this comment from database", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_DeleteComment.setText(QtGui.QApplication.translate("MainWindow", "Delete", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_PreviousComment.setStatusTip(QtGui.QApplication.translate("MainWindow", "Jump to previous comment", None, QtGui.QApplication.UnicodeUTF8))
@@ -255,7 +255,7 @@ class Ui_MainWindow(object):
         self.pushButton_NextComment.setText(QtGui.QApplication.translate("MainWindow", "Next", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_SaveComment.setStatusTip(QtGui.QApplication.translate("MainWindow", "Save this comment to database", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_SaveComment.setText(QtGui.QApplication.translate("MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget_TextFields.setTabText(self.tabWidget_TextFields.indexOf(self.tab_2), QtGui.QApplication.translate("MainWindow", "Comment", None, QtGui.QApplication.UnicodeUTF8))
+        self.tabWidget_TextFields.setTabText(self.tabWidget_TextFields.indexOf(self.tab_2), QtGui.QApplication.translate("MainWindow", "Notes", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_CommitStringSearch.setStatusTip(QtGui.QApplication.translate("MainWindow", "Commit search", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_CommitStringSearch.setText(QtGui.QApplication.translate("MainWindow", "Search", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_PreviousSearch.setStatusTip(QtGui.QApplication.translate("MainWindow", "Focus calendar on the previous date in which history log contains search string", None, QtGui.QApplication.UnicodeUTF8))

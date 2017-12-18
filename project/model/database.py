@@ -11,6 +11,7 @@ import os
 import shutil
 import tarfile
 import subprocess
+import multiprocessing
 from PySide import QtCore, QtGui
 from sitecontainer import SiteContainer
 import platform
@@ -20,13 +21,14 @@ import expanduser
 class Database(QtCore.QObject):
 
     io_progress = QtCore.Signal(int)
+    test_signal = QtCore.Signal()
 
     def __init__(self):
 
         super(Database, self).__init__()
 
         if platform.system() == 'Windows':
-            #import expanduser
+
             self.home_directory = expanduser.expand_user()
             
         else:
@@ -50,6 +52,11 @@ class Database(QtCore.QObject):
         
         self.read_all_sites_to_memory()
         
+        self.test_signal.connect(self.test)
+    
+    def test(self):
+        print 'TJOHO'
+    
 
     def tick(self, progress):
         self.io_progress.emit(progress)
@@ -145,12 +152,24 @@ class Database(QtCore.QObject):
         source_site_directory = os.path.join(self.sites_directory, from_site_name)
         source_historylog_directory = os.path.join(source_site_directory, u'historylogs')
         
+        self.io_progress.emit(25)
+        
         dest_site_directory = os.path.join(self.sites_directory, to_site_name)
         dest_historylog_directory = os.path.join(dest_site_directory, u'historylogs')
         
+        self.io_progress.emit(50)
+        
         shutil.rmtree(dest_historylog_directory)
 
+        self.io_progress.emit(75)
+
+
+
         shutil.copytree(source_historylog_directory, dest_historylog_directory)
+
+
+
+        self.io_progress.emit(100)
 
         #print 'Copied historylog files from ' + from_site_name + ' to ' + to_site_name + '.'
 
@@ -164,10 +183,6 @@ class Database(QtCore.QObject):
         
         if os.path.isdir(site_directory):
             shutil.rmtree(os.path.join(self.sites_directory, site_name))
-            #print 'Deleted ' + site_name + ' from disk.'
-        
-        #else:
-            #print site_name + ' did not exist. Not deleted from disc.'
 
         self.io_progress.emit(100)
 
@@ -205,25 +220,38 @@ class Database(QtCore.QObject):
 
 
     def copy_historylogs_from_older_capturesite_file(self, capturesite_filename, site_name):
-        # This method reads all historylog files from a tar file (the .Z decompression has previously been done by 7z)
-        # UGLY CODE!!!!
+        
         this_site_directory = os.path.join(self.sites_directory, site_name)
         this_historylog_directory = os.path.join(this_site_directory, u'historylogs')
 
         prg_path = self.get_path_to_7z()
         dest_path = this_site_directory
 
-        self.io_progress.emit(25)
+        self.io_progress.emit(5)
 
-        self.extractZfiles(prg_path, capturesite_filename, dest_path)
-        
-        self.io_progress.emit(50)
+        # This operation could take some time, and therefore locking up the GUI.
+        # So, let us do this in a different thread instead.
+        q = multiprocessing.Queue()
+        p = multiprocessing.Process(target=z_extract_files, args=(q, prg_path, capturesite_filename, dest_path))
+        p.start()
+        q.get()
+        p.join()
+
+        self.io_progress.emit(20)
         
         with tarfile.open( os.path.join(dest_path, 'CAPTURESITE_TAR') ) as tar:
             history_members = [member for member in tar.getmembers() if '.txt' in member.name and member.name.startswith('/local/gca_history/')]
+            
+            nbr_of_members = len(history_members)
+            counter = 0
+            
             for member in history_members:
                 member.name = os.path.basename(member.name)
                 tar.extract(member, this_historylog_directory)
+                
+                counter += 1
+                
+                self.io_progress.emit(20 + int(round(80.0*counter/nbr_of_members)))
 
         os.remove( os.path.join(dest_path, 'CAPTURESITE_TAR') )
 
@@ -248,21 +276,22 @@ class Database(QtCore.QObject):
         this_site_directory = os.path.join(self.sites_directory, site_name)
         this_historylog_directory = os.path.join(this_site_directory, u'historylogs')
         
-        self.io_progress.emit(25)
+        self.io_progress.emit(5)
         
         with tarfile.open(capturesite_filename) as tar:
             history_members = [member for member in tar.getmembers() if '.txt' in member.name and member.name.startswith('/local/history/')]
             
-            self.io_progress.emit(50)
+            self.io_progress.emit(20)
             
             number_of_files_to_be_extracted = len(history_members)
             counter = 0
+            
             for member in history_members:
                 member.name = os.path.basename(member.name)
                 tar.extract(member, this_historylog_directory)
                 
-                counter += 0
-                self.io_progress.emit(50 + int(round(50.0*counter/number_of_files_to_be_extracted)))
+                counter += 1
+                self.io_progress.emit(20 + int(round(80.0*counter/number_of_files_to_be_extracted)))
                 
 
 
@@ -392,4 +421,31 @@ class Database(QtCore.QObject):
 
     def quit(self):
         QtGui.QApplication.quit()
+    
+
+
+
+
+
+def z_extract_files(q, prg_path, archive_path, dest_path):
+    
+    fs_enc = sys.getfilesystemencoding()
+        
+    dest_switch = '-o' + dest_path
+    
+    #print 'starting 7z'
+    
+    #system = subprocess.Popen([prg_path.encode(fs_enc), u'e'.encode(fs_enc), dest_switch.encode(fs_enc), archive_path.encode(fs_enc)], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+    system = subprocess.call([prg_path.encode(fs_enc), u'e'.encode(fs_enc), dest_switch.encode(fs_enc), archive_path.encode(fs_enc)], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+    
+    #print 'done with 7z'
+    
+    #print s
+    
+    #print type(s)
+    #s.emit()
+    
+    q.put('done')
+    
+    #return system
     
