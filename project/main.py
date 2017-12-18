@@ -8,6 +8,7 @@
 
 import sys
 #import time
+import multiprocessing
 from PySide import QtGui
 from view.view import MyView
 from presenter.presenter import MyPresenter
@@ -15,6 +16,8 @@ from model.database import Database
 
 
 if __name__ == '__main__':
+    
+    multiprocessing.freeze_support()
     
     app = QtGui.QApplication(sys.argv)
 
