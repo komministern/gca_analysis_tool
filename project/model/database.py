@@ -49,9 +49,8 @@ class Database(QtCore.QObject):
         self.check_or_fix_database_directory_structure()
         
         self.read_filters_to_memory()
-        
         self.read_all_sites_to_memory()
-        
+
         self.test_signal.connect(self.test)
     
     def test(self):
@@ -152,24 +151,42 @@ class Database(QtCore.QObject):
         source_site_directory = os.path.join(self.sites_directory, from_site_name)
         source_historylog_directory = os.path.join(source_site_directory, u'historylogs')
         
-        self.io_progress.emit(25)
-        
         dest_site_directory = os.path.join(self.sites_directory, to_site_name)
         dest_historylog_directory = os.path.join(dest_site_directory, u'historylogs')
         
-        self.io_progress.emit(50)
-        
+        self.io_progress.emit(5)
+
+        files_to_copy = [f for f in os.listdir(source_historylog_directory) if os.path.isfile(os.path.join(source_historylog_directory, f))]
+        nbr_of_files_to_copy = len(files_to_copy)
+        print nbr_of_files_to_copy
+
+        self.io_progress.emit(20)
+
+        #try:
+            # Remove the destination directory
         shutil.rmtree(dest_historylog_directory)
+        os.mkdir(dest_historylog_directory)
 
-        self.io_progress.emit(75)
+        counter = 0
+
+        for f in files_to_copy:
+            full_file_name = os.path.join(source_historylog_directory, f)
+            #print full_file_name + ' to ' + dest_historylog_directory
+            shutil.copy(full_file_name, dest_historylog_directory)
+            counter += 1
+            self.io_progress.emit(20 + int(round(80.0*counter/nbr_of_files_to_copy)))
+
+        #except Exception as e:
+        #    print e
+
+        # REDO!!!!!!!!!!!!!!!!
+
+
+        #shutil.copytree(source_historylog_directory, dest_historylog_directory)
 
 
 
-        shutil.copytree(source_historylog_directory, dest_historylog_directory)
-
-
-
-        self.io_progress.emit(100)
+        #self.io_progress.emit(100)
 
         #print 'Copied historylog files from ' + from_site_name + ' to ' + to_site_name + '.'
 
@@ -260,14 +277,14 @@ class Database(QtCore.QObject):
         
         
 
-    def extractZfiles(self, prg_path, archive_path, dest_path):
+#    def extractZfiles(self, prg_path, archive_path, dest_path):
         
-        fs_enc = sys.getfilesystemencoding()
+#        fs_enc = sys.getfilesystemencoding()
         
-        dest_switch = '-o' + dest_path
+#        dest_switch = '-o' + dest_path
         
-        system = subprocess.Popen([prg_path.encode(fs_enc), u'e'.encode(fs_enc), dest_switch.encode(fs_enc), archive_path.encode(fs_enc)], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-        return(system.communicate())
+#        system = subprocess.Popen([prg_path.encode(fs_enc), u'e'.encode(fs_enc), dest_switch.encode(fs_enc), archive_path.encode(fs_enc)], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+#        return(system.communicate())
 
 
 
