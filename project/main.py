@@ -9,6 +9,7 @@
 import sys
 #import time
 import multiprocessing
+import logging
 from PySide import QtGui
 from view.view import MyView
 from presenter.presenter import MyPresenter
@@ -16,9 +17,17 @@ from model.database import Database
 
 
 if __name__ == '__main__':
-    
+
     multiprocessing.freeze_support()
-    
+
+    #logger = logging.getLogger(__name__)
+
+    # load the logging configuration
+    #logging.config.fileConfig('logging.ini', disable_existing_loggers=False)
+    # Make sure that the already created module loggers does not get stopped!!!
+    # Should i get the working directory for this????
+    # Do I have to copy the logging.ini file to the dist directory after freezing the app with PyInstaller????
+
     app = QtGui.QApplication(sys.argv)
 
     #print 'CREATING MODEL, VIEW AND PRESENTER'
