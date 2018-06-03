@@ -10,7 +10,9 @@ from PySide import QtCore   #, QtGui
 import os
 import shutil
 import codecs
+import logging
 
+logger = logging.getLogger(__name__)
 
 class SiteContainer(QtCore.QObject):
     

@@ -1164,9 +1164,9 @@ class MyPresenter(QtCore.QObject):
 #        QtGui.QMessageBox.about(self.view, u'About', u'''
 #GCA Analysis Tool, v1.29 Trial
 #
-#Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
+#Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 #
-#This is a trial version of the GCA Analysis Tool. It is fully functional, but will only display dates prior to July 2, 2018.
+#This is a trial version of the GCA Analysis Tool. It is fully functional, but will only display dates prior to January 1, 2019.
 #
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
@@ -1177,11 +1177,11 @@ class MyPresenter(QtCore.QObject):
 #''')
 
         self.message(u'''
-GCA Analysis Tool, v1.76 (trial version)
+GCA Analysis Tool, v1.78 (trial version)
 
-Copyright © 2016, 2017 Oscar Franzén <oscarfranzen@protonmail.com>
+Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 
-This is a trial version of the GCA Analysis Tool. The trial version is fully functional, but will only display dates prior to July 2, 2018. It may be copied freely.
+This is a trial version of the GCA Analysis Tool. The trial version is fully functional, but will only display dates prior to January 1, 2019. It may be copied freely.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 

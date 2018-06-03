@@ -8,6 +8,7 @@
 
 import sys
 import os
+import logging
 import shutil
 import tarfile
 import subprocess
@@ -17,6 +18,7 @@ from sitecontainer import SiteContainer
 import platform
 import expanduser
 
+logger = logging.getLogger(__name__)
 
 class Database(QtCore.QObject):
 

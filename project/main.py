@@ -15,6 +15,8 @@ from view.view import MyView
 from presenter.presenter import MyPresenter
 from model.database import Database
 
+#logger = logging.getLogger(__name__)    # Ok here?
+#logging.config.fileConfig('logging.ini', disable_existing_loggers=False)
 
 if __name__ == '__main__':
 
@@ -29,28 +31,10 @@ if __name__ == '__main__':
     # Do I have to copy the logging.ini file to the dist directory after freezing the app with PyInstaller????
 
     app = QtGui.QApplication(sys.argv)
-
-    #print 'CREATING MODEL, VIEW AND PRESENTER'
-
-    #from model.database import Database
     model = Database()
-    
-    #from view.view import MyView
     view = MyView() 
-    #view.show()
-
-    #from presenter.presenter import MyPresenter
     presenter = MyPresenter(model, view, app)
-    
     view.show()
-    
-    #print 'NOW STARTING APP'
-    
-    #time.sleep(5)
-    
-    #presenter.start_app(test=False)
-
-    #print 'APP STARTED'
 
     #if presenter.trial_has_ended:
     #    presenter.message(u'Trial has ended.\n\nCopyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>')
@@ -59,4 +43,3 @@ if __name__ == '__main__':
     #else:
         
     sys.exit(app.exec_())
-
