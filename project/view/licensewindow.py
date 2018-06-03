@@ -9,7 +9,7 @@
 
 #import os
 #import string
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui
 #from coloringcontainer import ColoringContainer
 #import textstuff as txt
 

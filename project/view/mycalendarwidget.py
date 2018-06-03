@@ -6,17 +6,17 @@
 #    This file is part of GCA Analysis Tool.
 
 
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
-class MyCalendarWidget(QtGui.QCalendarWidget):
+class MyCalendarWidget(QtWidgets.QCalendarWidget):
     def __init__(self, parent=None):
-        QtGui.QCalendarWidget.__init__(self, parent)
+        QtWidgets.QCalendarWidget.__init__(self, parent)
         
         # This finally did the trick!!! Now the columns in the calendar widget
         # automatically fills the widget, despite the font size.
-        self.tableView = self.findChild(QtGui.QTableView)
-        self.tableView.horizontalHeader().setResizeMode(QtGui.QHeaderView.Fixed)
+        self.tableView = self.findChild(QtWidgets.QTableView)
+        self.tableView.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         for i in range(8):
             self.tableView.horizontalHeader().resizeSection(i, 38)
         

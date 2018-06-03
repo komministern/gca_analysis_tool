@@ -6,7 +6,7 @@
 #    This file is part of GCA Analysis Tool.
 
 
-from PySide import QtCore   #, QtGui
+from PySide2 import QtCore   #, QtGui
 import os
 import shutil
 import codecs
@@ -84,13 +84,14 @@ class SiteContainer(QtCore.QObject):
 
 
     def save_comment(self, date, text):
-        u_day = unicode(date.day())
+        #u_day = unicode(date.day())
+        u_day = str(date.day())
         if len(u_day) < 2:
             u_day = '0' + u_day
-        u_month = unicode(date.month())
+        u_month = str(date.month())
         if len(u_month) < 2:
             u_month = '0' + u_month
-        u_year = unicode(date.year())
+        u_year = str(date.year())
         filename = u_year + u_month + u_day + u'.txt'
         destination_path = os.path.join(self.comments_directory, filename)
         with codecs.open(destination_path, mode='w', encoding='utf-8') as f:
@@ -121,13 +122,13 @@ class SiteContainer(QtCore.QObject):
 
     def delete_comment(self, date):
 
-        u_day = unicode(date.day())
+        u_day = str(date.day())
         if len(u_day) < 2:
             u_day = u'0' + u_day
-        u_month = unicode(date.month())
+        u_month = str(date.month())
         if len(u_month) < 2:
             u_month = u'0' + u_month
-        u_year = unicode(date.year())[:4]
+        u_year = str(date.year()[:4])
 
         filename = u_year + u_month + u_day + u'.txt'
         path = os.path.join(self.comments_directory, filename)
@@ -265,13 +266,13 @@ class SiteContainer(QtCore.QObject):
         
 
     def add_ignored_date(self, date):
-        u_day = unicode(date.day())
+        u_day = str(date.day())
         if len(u_day) < 2:
             u_day = u'0' + u_day
-        u_month = unicode(date.month())
+        u_month = str(date.month())
         if len(u_month) < 2:
             u_month = u'0' + u_month
-        u_year = unicode(date.year())[2:4]
+        u_year = str(date.year())[2:4]
         if len(u_year) < 2:
             u_year = '0' + u_year
         file_name = u'A0001_' + u_month + u_day + u_year + u'.txt'

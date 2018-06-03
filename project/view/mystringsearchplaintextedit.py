@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#    Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
+#    Copyright ï¿½ 2016, 2017, 2018 Oscar Franzï¿½n <oscarfranzen@protonmail.com>
 #
 #    This file is part of GCA Analysis Tool.
 
 
-from PySide import QtCore, QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 
-class MyStringSearchPlainTextEdit(QtGui.QPlainTextEdit):
+class MyStringSearchPlainTextEdit(QtWidgets.QPlainTextEdit):
 
     textEdited = QtCore.Signal()
     returnPressed = QtCore.Signal()

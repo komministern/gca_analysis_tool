@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#    Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
+#    Copyright ï¿½ 2016, 2017, 2018 Oscar Franzï¿½n <oscarfranzen@protonmail.com>
 #
 #    This file is part of GCA Analysis Tool.
 
 
-from PySide import QtGui, QtCore
+from PySide2 import QtGui, QtCore, QtWidgets
 #from ui_filterdialog import Ui_Dialog
 #from presenter.filtercontainer import Filter
 
-class MyPlainTextEdit(QtGui.QPlainTextEdit):
+class MyPlainTextEdit(QtWidgets.QPlainTextEdit):
 
     doubleClicked = QtCore.Signal()
     
@@ -47,7 +47,7 @@ class MyPlainTextEdit(QtGui.QPlainTextEdit):
             temp_string = list_of_strings[i]
             try:
                 new_list_of_strings.append(' - '.join([temp_string, dict_of_strings[temp_string]]))
-            except Exception, e:
+            except Exception as e:
                 new_list_of_strings.append(temp_string)
         
         string = '\n'.join(new_list_of_strings)

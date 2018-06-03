@@ -8,12 +8,13 @@
 
 #import math
 import os
-from PySide import QtGui, QtCore
-from ui_mainwindow import Ui_MainWindow
+from PySide2 import QtGui, QtCore, QtWidgets
+#from ui_mainwindow import Ui_MainWindow
+from view.ui_mainwindow import Ui_MainWindow
 #from licensewindow import MyLicenseWindow
 
 
-class MyView(QtGui.QMainWindow, Ui_MainWindow):
+class MyView(QtWidgets.QMainWindow, Ui_MainWindow):
 
     quit = QtCore.Signal()
 
@@ -56,12 +57,12 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
 
     def setupMenu(self):
         
-        self.importAction = QtGui.QAction('Import...', self)
+        self.importAction = QtWidgets.QAction('Import...', self)
         self.importAction.setStatusTip('Import history log from a capturesite file')
 
-        self.ignoreAction = QtGui.QAction('Add active date', self)
+        self.ignoreAction = QtWidgets.QAction('Add active date', self)
         self.ignoreAction.setStatusTip('Place active date in the ignore list')
-        self.deIgnoreAction = QtGui.QAction('Remove all dates', self)
+        self.deIgnoreAction = QtWidgets.QAction('Remove all dates', self)
         self.deIgnoreAction.setStatusTip('Clear all dates in ignore list')
 
 #        self.aboutAction = QtGui.QAction('&About GCA Analysis Tool', self)
@@ -86,7 +87,7 @@ class MyView(QtGui.QMainWindow, Ui_MainWindow):
 
 #        statistics_menu = menubar.addMenu('&Statistics')
 
-        self.aboutAction = QtGui.QAction('this program...', self)
+        self.aboutAction = QtWidgets.QAction('this program...', self)
         #menubar.addAction(self.aboutAction)
 #        menubar.addAction('Test')
         about_menu = menubar.addMenu('About')

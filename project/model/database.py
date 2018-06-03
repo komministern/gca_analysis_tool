@@ -13,10 +13,10 @@ import shutil
 import tarfile
 import subprocess
 import multiprocessing
-from PySide import QtCore, QtGui
-from sitecontainer import SiteContainer
+from PySide2 import QtCore, QtGui, QtWidgets
+from model.sitecontainer import SiteContainer
 import platform
-import expanduser
+import model.expanduser as expanduser
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ class Database(QtCore.QObject):
         self.test_signal.connect(self.test)
     
     def test(self):
-        print 'TJOHO'
+        print('TJOHO')
     
 
     def tick(self, progress):
@@ -160,7 +160,7 @@ class Database(QtCore.QObject):
 
         files_to_copy = [f for f in os.listdir(source_historylog_directory) if os.path.isfile(os.path.join(source_historylog_directory, f))]
         nbr_of_files_to_copy = len(files_to_copy)
-        print nbr_of_files_to_copy
+        print(nbr_of_files_to_copy)
 
         self.io_progress.emit(20)
 
@@ -439,7 +439,7 @@ class Database(QtCore.QObject):
 
 
     def quit(self):
-        QtGui.QApplication.quit()
+        QtWidgets.QApplication.quit()
     
 
 

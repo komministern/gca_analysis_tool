@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#    Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
+#    Copyright ï¿½ 2016, 2017, 2018 Oscar Franzï¿½n <oscarfranzen@protonmail.com>
 #
 #    This file is part of GCA Analysis Tool.
 
 
 
-from PySide import QtGui, QtCore
-from ui_filterdialog import Ui_Dialog
+from PySide2 import QtGui, QtCore, QtWidgets
+from view.ui_filterdialog import Ui_Dialog
 from presenter.filtercontainer import Filter
 
-class MyFilterDialog(QtGui.QDialog, Ui_Dialog):
+class MyFilterDialog(QtWidgets.QDialog, Ui_Dialog):
 
 #    quit = QtCore.Signal()
 

@@ -10,7 +10,7 @@ import sys
 #import time
 import multiprocessing
 import logging
-from PySide import QtGui
+from PySide2 import QtGui, QtWidgets
 from view.view import MyView
 from presenter.presenter import MyPresenter
 from model.database import Database
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     # Should i get the working directory for this????
     # Do I have to copy the logging.ini file to the dist directory after freezing the app with PyInstaller????
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     model = Database()
     view = MyView() 
     presenter = MyPresenter(model, view, app)

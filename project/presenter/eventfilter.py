@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#    Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
+#    Copyright ï¿½ 2016, 2017, 2018 Oscar Franzï¿½n <oscarfranzen@protonmail.com>
 #
 #    This file is part of GCA Analysis Tool.
 
-from PySide import QtGui, QtCore
+from PySide2 import QtGui, QtCore
 
 
 class EventBlocker(QtCore.QObject):

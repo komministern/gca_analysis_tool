@@ -9,12 +9,12 @@
 import os
 import string
 import time
-from PySide import QtCore, QtGui
-from coloringcontainer import ColoringContainer
-import textstuff as txt
-from filtercontainer import Filter
+from PySide2 import QtCore, QtGui, QtWidgets
+from presenter.coloringcontainer import ColoringContainer
+import presenter.textstuff as txt
+from presenter.filtercontainer import Filter
 from view.myfilterdialog import MyFilterDialog
-from eventfilter import EventBlocker
+from presenter.eventfilter import EventBlocker
 
 
 
@@ -619,7 +619,7 @@ class MyPresenter(QtCore.QObject):
 
         #self.lock_gui()
 
-        capturesite_filename, _ = QtGui.QFileDialog.getOpenFileName(self.view, u'Choose capturesite file to import', self.model.home_directory, u'Capturesite (*tar.gz *TAR.Z)')
+        capturesite_filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, u'Choose capturesite file to import', self.model.home_directory, u'Capturesite (*tar.gz *TAR.Z)')
 
         #self.inhibit_mouseclicks()
 
@@ -870,7 +870,7 @@ class MyPresenter(QtCore.QObject):
                         
                         self.allow_mouseclicks()  # ------------------
                         
-                    except Exception, e:
+                    except Exception as e:
                         
                         self.allow_mouseclicks()  # ------------------
                         
@@ -895,14 +895,14 @@ class MyPresenter(QtCore.QObject):
     # Messaging the user stuff
 
     def message(self, text, title_text=''):
-        msgBox = QtGui.QMessageBox(parent=self.view)
+        msgBox = QtWidgets.QMessageBox(parent=self.view)
         msgBox.setText(text)
         if title_text:
             msgBox.setWindowTitle(title_text)
         msgBox.exec_()
         
     def message_with_cancel_choice(self, text, informative_text, default_button):
-        msgBox = QtGui.QMessageBox()
+        msgBox = QtWidgets.QMessageBox()
         msgBox.setText(text)
         msgBox.setInformativeText(informative_text)
         msgBox.setStandardButtons(QtGui.QMessageBox.Cancel | QtGui.QMessageBox.Ok)
@@ -1177,7 +1177,7 @@ class MyPresenter(QtCore.QObject):
 #''')
 
         self.message(u'''
-GCA Analysis Tool, v1.78 (trial version)
+GCA Analysis Tool, v2.00 (trial version)
 
 Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 
@@ -1186,9 +1186,9 @@ This is a trial version of the GCA Analysis Tool. The trial version is fully fun
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Software used:
-Python 2.7.14, PSF License
-PySide 1.2.4, LGPL version 2.1
-Qt 4.8.6, LGPL version 3
+Python 3.6.5, PSF License
+PySide2, LGPL version 2.1
+Qt 5.9, LGPL version 3
 ''', u'About GCA Analysis Tool')
 
 
