@@ -6,7 +6,7 @@
 #    This file is part of GCA Analysis Tool.
 
 
-import os
+import os 
 import string
 import time
 from PySide2 import QtCore, QtGui, QtWidgets
