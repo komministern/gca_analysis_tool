@@ -396,8 +396,8 @@ class MyPresenter(QtCore.QObject):
 
             # This is a dirty fix for a bizarre problem. If this is omitted, only part of the text will be displayed after a
             # search!!! Weird.
-            self.view.textBrowser_HistoryLog.setLineWrapMode(QtGui.QTextEdit.NoWrap)
-            self.view.textBrowser_HistoryLog.setLineWrapMode(QtGui.QTextEdit.WidgetWidth)
+            self.view.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
+            self.view.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.WidgetWidth)
             
         else:
                 
