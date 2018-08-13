@@ -77,11 +77,11 @@ class MyView(QtWidgets.QMainWindow, Ui_MainWindow):
         
         #menubar.setFont(self.myfont)
 
-        capturesite_menu = menubar.addMenu('Capturesite')
+        capturesite_menu = menubar.addMenu('File')
         #print capturesite_menu.font()
         capturesite_menu.addAction(self.importAction)
 
-        database_menu = menubar.addMenu('Ignored dates')
+        database_menu = menubar.addMenu('Misc')
         database_menu.addAction(self.ignoreAction)
         database_menu.addAction(self.deIgnoreAction)
 

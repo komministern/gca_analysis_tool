@@ -128,7 +128,7 @@ class SiteContainer(QtCore.QObject):
         u_month = str(date.month())
         if len(u_month) < 2:
             u_month = u'0' + u_month
-        u_year = str(date.year()[:4])
+        u_year = str(date.year())[:4]
 
         filename = u_year + u_month + u_day + u'.txt'
         path = os.path.join(self.comments_directory, filename)
