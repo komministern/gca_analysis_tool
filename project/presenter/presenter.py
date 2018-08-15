@@ -17,6 +17,7 @@ from presenter.calendarpresenter import CalendarPresenter
 from presenter.searchpresenter import SearchPresenter
 from presenter.menupresenter import MenuPresenter
 from presenter.ignorepresenter import IgnorePresenter
+from presenter.analysispresenter import AnalysisPresenter
 
 
 class MyPresenter(QtCore.QObject):
@@ -38,6 +39,7 @@ class MyPresenter(QtCore.QObject):
         self.site_presenter = SitePresenter(model, view, self)
         self.menu_presenter = MenuPresenter(model, view, self)
         self.ignore_presenter = IgnorePresenter(model, view, self)
+        self.analysis_presenter = AnalysisPresenter(model, view, self)
 
         # Colors
         self.green = QtGui.QColor.fromRgbF(0.248478, 1.000000, 0.431632, 1.000000)
@@ -74,6 +76,8 @@ class MyPresenter(QtCore.QObject):
         self.view.comboBox_Coloring.currentIndexChanged.connect(self.calendar_presenter.set_coloring_scheme)
 
         self.view.importAction.triggered.connect(self.site_presenter.import_capturesite)
+
+        self.view.analysisAction.triggered.connect(self.analysis_presenter.show_analysis_dialog)
         
         self.view.ignoreAction.triggered.connect(self.ignore_presenter.ignore_date)
         self.view.deIgnoreAction.triggered.connect(self.ignore_presenter.deignore_all_dates)

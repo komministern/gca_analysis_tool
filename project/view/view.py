@@ -65,6 +65,8 @@ class MyView(QtWidgets.QMainWindow, Ui_MainWindow):
         self.deIgnoreAction = QtWidgets.QAction('Remove all dates', self)
         self.deIgnoreAction.setStatusTip('Clear all dates in ignore list')
 
+        self.analysisAction = QtWidgets.QAction('Analyze scope', self)
+
 #        self.aboutAction = QtGui.QAction('&About GCA Analysis Tool', self)
 #        self.aboutAction.setStatusTip('About...')
 
@@ -81,7 +83,8 @@ class MyView(QtWidgets.QMainWindow, Ui_MainWindow):
         #print capturesite_menu.font()
         capturesite_menu.addAction(self.importAction)
 
-        database_menu = menubar.addMenu('Misc')
+        database_menu = menubar.addMenu('Analysis')
+        database_menu.addAction(self.analysisAction)
         database_menu.addAction(self.ignoreAction)
         database_menu.addAction(self.deIgnoreAction)
 

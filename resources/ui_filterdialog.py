@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_filterdialog.ui'
 #
-# Created: Sun Jun  3 18:52:14 2018
+# Created: Wed Aug 15 21:46:08 2018
 #      by: pyside2-uic  running on PySide2 5.9.0a1
 #
 # WARNING! All changes made in this file will be lost!
