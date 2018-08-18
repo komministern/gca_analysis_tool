@@ -35,4 +35,6 @@ class AnalysisPresenter(QtCore.QObject):
     def show_analysis_dialog(self):
         self.dialog = MyAnalysisDialog(self.view)
         if self.dialog.exec_():
+            print('From:  ' + self.dialog.from_date.toString())
+            print('Until: ' + self.dialog.until_date.toString())
             self.analyze()
