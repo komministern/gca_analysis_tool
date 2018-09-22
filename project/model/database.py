@@ -15,8 +15,8 @@ import subprocess
 import multiprocessing
 from PySide2 import QtCore, QtGui, QtWidgets
 from model.sitecontainer import SiteContainer
-import platform
-import model.expanduser as expanduser
+#import platform
+#import model.expanduser as expanduser
 
 logger = logging.getLogger(__name__)
 
@@ -29,14 +29,20 @@ class Database(QtCore.QObject):
 
         super(Database, self).__init__()
 
-        if platform.system() == 'Windows':
+        #if platform.system() == 'Windows':
 
-            self.home_directory = expanduser.expand_user()
+        #    self.home_directory = expanduser.expand_user()
             
-        else:
+        #else:
         
-            self.home_directory = os.path.expanduser(u'~')
-            
+        #    self.home_directory = os.path.expanduser(u'~')
+        
+
+        #print(os.path.expanduser(u'~'))
+        #print(expanduser.expand_user())
+
+        self.home_directory = os.path.expanduser(u'~')
+
         self.top_directory = os.path.join(self.home_directory, u'GCA Analyzer')
         self.sites_directory = os.path.join(self.top_directory, u'sites')
         self.filters_directory = os.path.join(self.top_directory, u'filters')
@@ -55,6 +61,7 @@ class Database(QtCore.QObject):
 
         self.test_signal.connect(self.test)
     
+
     def test(self):
         print('TJOHO')
     
@@ -86,26 +93,17 @@ class Database(QtCore.QObject):
 
     def read_site_to_memory(self, site_name):
         if not site_name in self.site_dictionary.keys():
-            
             site_directory = os.path.join(self.sites_directory, site_name)
             self.site_dictionary[site_name] = SiteContainer(site_directory)
             
-            #print type(self.site_dictionary[site_name].historylog_file_progress)
-            
             self.site_dictionary[site_name].historylog_file_progress.connect(self.tick)
-            
-            #print 'Read ' + site_name + ' to memory.'
-        #else:
-            #print site_name + ' was already read to memory. Did not read.' 
 
 
 
     def remove_site_from_memory(self, site_name):
         if site_name in self.site_dictionary.keys():
             del self.site_dictionary[site_name]
-            #print 'Removed ' + site_name + ' from memory.'
-        #else:
-            #print 'Tried to remove ' + site_name + ' from memory, but failed.'
+
         
 
 
@@ -131,12 +129,11 @@ class Database(QtCore.QObject):
 
         self.copy_historylogs_from_capturesite_file(capturesite_file_name, new_site_name)
         self.read_site_to_memory(new_site_name)
-        #print 'Created the ' + new_site_name + ' site.'
 
 
 
     def update_site(self, site_name, temp_site_name):
-        
+
         this_site_directory = os.path.join(self.sites_directory, site_name)
         this_historylog_directory = os.path.join(this_site_directory, u'historylogs')
 
@@ -150,6 +147,7 @@ class Database(QtCore.QObject):
 
 
     def copy_historylogs_from_site_to_site(self, from_site_name, to_site_name):
+
         source_site_directory = os.path.join(self.sites_directory, from_site_name)
         source_historylog_directory = os.path.join(source_site_directory, u'historylogs')
         
@@ -160,7 +158,7 @@ class Database(QtCore.QObject):
 
         files_to_copy = [f for f in os.listdir(source_historylog_directory) if os.path.isfile(os.path.join(source_historylog_directory, f))]
         nbr_of_files_to_copy = len(files_to_copy)
-        print(nbr_of_files_to_copy)
+
 
         self.io_progress.emit(20)
 
@@ -177,20 +175,6 @@ class Database(QtCore.QObject):
             shutil.copy(full_file_name, dest_historylog_directory)
             counter += 1
             self.io_progress.emit(20 + int(round(80.0*counter/nbr_of_files_to_copy)))
-
-        #except Exception as e:
-        #    print e
-
-        # REDO!!!!!!!!!!!!!!!!
-
-
-        #shutil.copytree(source_historylog_directory, dest_historylog_directory)
-
-
-
-        #self.io_progress.emit(100)
-
-        #print 'Copied historylog files from ' + from_site_name + ' to ' + to_site_name + '.'
 
 
 
@@ -209,22 +193,26 @@ class Database(QtCore.QObject):
 
     def exist_7z(self):
         if not os.path.exists(self.path_to_7z_filename):
+            return False
+        else:
             # Assumed standard path
-            self.set_path_to_7z(os.path.join('C:', os.sep, 'Program Files', '7-Zip', '7z.exe'))
-        return os.path.exists(self.get_path_to_7z())
+            #self.set_path_to_7z(os.path.join('C:', os.sep, 'Program Files', '7-Zip', '7z.exe'))
+            return os.path.exists(self.get_path_to_7z())
 
 
 
     def set_path_to_7z(self, path):
         f = open(self.path_to_7z_filename, 'w')
-        f.write(path.encode('utf8'))
+        f.write(path)
+        #f.write(path.encode('utf8'))
         f.close()
 
 
 
     def get_path_to_7z(self):
         f = open(self.path_to_7z_filename, 'r')
-        path = f.readline().decode('utf8')
+        path = f.readline()
+        #path = f.readline().decode('utf8')
         f.close()
         return path
 
@@ -292,6 +280,7 @@ class Database(QtCore.QObject):
 
     def copy_historylogs_from_newer_capturesite_file(self, capturesite_filename, site_name):
         # This method reads all historylog files from a tar.gz file (the tar module handles the zipping)
+
         this_site_directory = os.path.join(self.sites_directory, site_name)
         this_historylog_directory = os.path.join(this_site_directory, u'historylogs')
         
@@ -448,23 +437,10 @@ class Database(QtCore.QObject):
 
 def z_extract_files(q, prg_path, archive_path, dest_path):
     
-    fs_enc = sys.getfilesystemencoding()
+    #fs_enc = sys.getfilesystemencoding()
         
     dest_switch = '-o' + dest_path
-    
-    #print 'starting 7z'
-    
-    #system = subprocess.Popen([prg_path.encode(fs_enc), u'e'.encode(fs_enc), dest_switch.encode(fs_enc), archive_path.encode(fs_enc)], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-    system = subprocess.call([prg_path.encode(fs_enc), u'e'.encode(fs_enc), dest_switch.encode(fs_enc), archive_path.encode(fs_enc)], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-    
-    #print 'done with 7z'
-    
-    #print s
-    
-    #print type(s)
-    #s.emit()
-    
+    #system = subprocess.call([prg_path.encode(fs_enc), u'e'.encode(fs_enc), dest_switch.encode(fs_enc), archive_path.encode(fs_enc)], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)  
+    system = subprocess.run([prg_path, u'e', dest_switch, archive_path])
+
     q.put('done')
-    
-    #return system
-    

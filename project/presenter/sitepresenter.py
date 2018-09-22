@@ -81,21 +81,24 @@ class SitePresenter(QtCore.QObject):
             if not self.model.exist_7z():
                 self.presenter.message(u'To decompress this Capturesite file, the application 7z needs to be installed. Either this is not the case, or it is installed in a non default location. Please enter the location of the file 7z.exe.')
 
-                path_to_7z, _ = QtGui.QFileDialog.getOpenFileName(self.view, u'Path to 7z.exe', self.model.home_directory, u'7z console application (7z.exe)')
+                path_to_7z, _ = QtWidgets.QFileDialog.getOpenFileName(self.view, u'Path to 7z.exe', self.model.home_directory, u'7z console application (7z.exe)')
                 self.model.set_path_to_7z(path_to_7z)
 
         
         if (capturesite_filename[-2:] != '.Z') or ((capturesite_filename[-2:] == '.Z') and self.model.exist_7z()):
 
+
+            
             temp_site_name = self.temp_site_name
 
             try:
                 
-                self.inhibit_mouseclicks()      # ------------------
+                self.presenter.inhibit_mouseclicks()      # ------------------
                 
                 # Create a temporary site _TEMP
                 # The self.mode.create_site decompresses and copies all historylog files to temp_site_name
                 # and (!) reads all these in to memory
+                
                 
                 self.model.create_new_site_from_capturesite_file(capturesite_filename, temp_site_name)
                 
@@ -110,12 +113,17 @@ class SitePresenter(QtCore.QObject):
                 
                 temp_dates = sorted(self.model.get_historylog_dictionary(temp_site_name).keys())
                 
+                
+
                 compare_dates = temp_dates[:3]
                 compare_logs = [self.model.get_historylog_dictionary(temp_site_name)[date] for date in compare_dates]
                 
+                
+
                 possible_candidates = []
                 
                 for site_name in self.model.get_site_names():
+                    
                     
                     if site_name != temp_site_name:
                         
@@ -125,19 +133,20 @@ class SitePresenter(QtCore.QObject):
                             possible_candidates.append(site_name)
 
                 
-
+                
                 
                 if len(possible_candidates) == 0:
                     
                     # No candidates. 
                     # Create a new site.
                     
-                    self.allow_mouseclicks()        # ------------------
+                    self.presenter.allow_mouseclicks()        # ------------------
                     
                     self.create_new_site(temp_site_name)
                     
                 
                 elif len(possible_candidates) == 1:
+                    
                     
                     site_to_be_updated = possible_candidates[0]
                     
@@ -149,11 +158,11 @@ class SitePresenter(QtCore.QObject):
                         # One candidate, the capturesite file contains more historylogs than the present database.
                         # Update the database.
                         
-                        self.allow_mouseclicks()        # ------------------
+                        self.presenter.allow_mouseclicks()        # ------------------
                         
-                        clicked = self.message_with_cancel_choice(u'The capturesite file seems to be affiliated with the already existing ' + site_to_be_updated + ' site.', 
-                                                            'Update ' + site_to_be_updated + '?', QtGui.QMessageBox.Ok)
-                        if clicked == QtGui.QMessageBox.Ok:
+                        clicked = self.presenter.message_with_cancel_choice(u'The capturesite file seems to be affiliated with the already existing ' + site_to_be_updated + ' site.', 
+                                                            'Update ' + site_to_be_updated + '?', QtWidgets.QMessageBox.Ok)
+                        if clicked == QtWidgets.QMessageBox.Ok:
                             
                             self.presenter.inhibit_mouseclicks()
                             
@@ -187,10 +196,6 @@ class SitePresenter(QtCore.QObject):
                             
                             #self.set_active_site(new_index)
                         
-                        
-                        
-                    
-                        
                         self.model.remove_site_from_disc(temp_site_name)
                         self.model.remove_site_from_memory(temp_site_name)
 
@@ -199,7 +204,7 @@ class SitePresenter(QtCore.QObject):
                         # One candidate, the capturesite file contains just as many historylogs than the present database.
                         # Abort.
 
-                        self.allow_mouseclicks()        # ------------------
+                        self.presenter.allow_mouseclicks()        # ------------------
                         
                         self.presenter.message(u'The capturesite file seems to be affiliated with the already existing ' + 
                                      site_to_be_updated + u' site. However, the number of entries in ' + 
@@ -285,7 +290,7 @@ class SitePresenter(QtCore.QObject):
 
     # Create a new site from scratch
     def create_new_site(self, temp_site_name):
-        new_site_name, ok = QtGui.QInputDialog.getText(self.view, u'Enter a name for the new site', u'This capturesite file does not seem to be associated with any of the existing sites. Please name the new site:') 
+        new_site_name, ok = QtWidgets.QInputDialog.getText(self.view, u'Enter a name for the new site', u'This capturesite file does not seem to be associated with any of the existing sites. Please name the new site:') 
 
         if ok:
 

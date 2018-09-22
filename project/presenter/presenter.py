@@ -57,6 +57,16 @@ class MyPresenter(QtCore.QObject):
         self.connect_signals()
 
 
+        #Block stuff
+
+        self.view.comboBox_Coloring.model().item(1).setEnabled(False)
+        self.view.comboBox_Coloring.model().item(2).setEnabled(False)
+        self.view.comboBox_Coloring.model().item(3).setEnabled(False)
+        #self.view.comboBox_Coloring.model().item(4).setEnabled(False)
+
+        #self.view.calendarWidget.setMaximumDate(QtCore.QDate(2018, 12, 31))
+
+
 
     def connect_signals(self):
         self.view.quit.connect(self.model.quit)
@@ -192,11 +202,11 @@ class MyPresenter(QtCore.QObject):
 
     def about(self):
         self.message(u'''
-GCA Analysis Tool, v2.00 (trial version)
+GCA Analysis Tool, v2.30 (free version)
 
 Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 
-This is a trial version of the GCA Analysis Tool. The trial version is fully functional, but will only display dates prior to January 1, 2019. It may be copied freely.
+This is a free version of the GCA Analysis Tool. It is fully functional, but lacks all features but the most basic ones. It may be copied and used freely.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 

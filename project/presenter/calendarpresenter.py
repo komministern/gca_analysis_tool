@@ -28,8 +28,11 @@ class CalendarPresenter(QtCore.QObject):
 
         self.coloring_scheme = 0
 
-        self.view.comboBox_Coloring.addItems([u'Normal/Degraded/Faulted', u'New Fault/Active Fault', 
-                                            u'Temporary Faults (< 1 min per day)', u'Transmitter On', u'Shelter Door Open'])
+        self.view.comboBox_Coloring.addItems([u'Normal/Degraded/Faulted', u'New/Active Faults', 
+                                            u'Temporary Faults', u'Transmitter On', u'Shelter Door Open'])
+
+        # These are blocked in presenter.py
+
 
     # -------- Calendar stuff
 

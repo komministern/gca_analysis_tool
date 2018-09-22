@@ -29,12 +29,13 @@ class AnalysisPresenter(QtCore.QObject):
 
 
     def analyze(self):
-        print('ANALYZING!!!!')
+        #print('ANALYZING!!!!')
+        self.presenter.message('This option is only available in a licensed version of this program. Furthermore, the analysis and its presentation can be tailored after the licensees wishes. Contact me.')
 
 
     def show_analysis_dialog(self):
         self.dialog = MyAnalysisDialog(self.view)
         if self.dialog.exec_():
-            print('From:  ' + self.dialog.from_date.toString())
-            print('Until: ' + self.dialog.until_date.toString())
+            #print('From:  ' + self.dialog.from_date.toString())
+            #print('Until: ' + self.dialog.until_date.toString())
             self.analyze()

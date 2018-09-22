@@ -38,7 +38,7 @@ class MyView(QtWidgets.QMainWindow, Ui_MainWindow):
         font.setPixelSize(self.pixelsize_calendar)
         self.calendarWidget.setFont(font)
         
-        self.calendarWidget.setMaximumDate(QtCore.QDate(2018, 12, 31))
+        
         
         self.setupMenu()
 
@@ -65,7 +65,7 @@ class MyView(QtWidgets.QMainWindow, Ui_MainWindow):
         self.deIgnoreAction = QtWidgets.QAction('Remove all dates', self)
         self.deIgnoreAction.setStatusTip('Clear all dates in ignore list')
 
-        self.analysisAction = QtWidgets.QAction('Analyze scope', self)
+        self.analysisAction = QtWidgets.QAction('Scope...', self)
 
 #        self.aboutAction = QtGui.QAction('&About GCA Analysis Tool', self)
 #        self.aboutAction.setStatusTip('About...')
@@ -85,8 +85,8 @@ class MyView(QtWidgets.QMainWindow, Ui_MainWindow):
 
         database_menu = menubar.addMenu('Analysis')
         database_menu.addAction(self.analysisAction)
-        database_menu.addAction(self.ignoreAction)
-        database_menu.addAction(self.deIgnoreAction)
+        #database_menu.addAction(self.ignoreAction)
+        #database_menu.addAction(self.deIgnoreAction)
 
 #        statistics_menu = menubar.addMenu('&Statistics')
 
