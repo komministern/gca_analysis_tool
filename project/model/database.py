@@ -59,11 +59,11 @@ class Database(QtCore.QObject):
         self.read_filters_to_memory()
         self.read_all_sites_to_memory()
 
-        self.test_signal.connect(self.test)
+        #self.test_signal.connect(self.test)
     
 
-    def test(self):
-        print('TJOHO')
+    #def test(self):
+    #    print('TJOHO')
     
 
     def tick(self, progress):
