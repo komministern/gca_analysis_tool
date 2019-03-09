@@ -13,18 +13,21 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
     def __init__(self, parent=None):
         QtWidgets.QCalendarWidget.__init__(self, parent)
         
+        #print(parent)
+
         # This finally did the trick!!! Now the columns in the calendar widget
         # automatically fills the widget, despite the font size.
-        self.tableView = self.findChild(QtWidgets.QTableView)
-        self.tableView.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
-        for i in range(8):
-            self.tableView.horizontalHeader().resizeSection(i, 38)
+        #self.tableView = self.findChild(QtWidgets.QTableView)
+        #self.tableView.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
+        #for i in range(8):
+        #    self.tableView.horizontalHeader().resizeSection(i, 38)
         
         self.setFirstDayOfWeek(QtCore.Qt.DayOfWeek.Monday)
         #self.setHorizontalHeaderFormat(QtGui.QCalendarWidget.SingleLetterDayNames)
 
         self.setCircledDates([])
         self.setTriangleDates([])
+        #self.setIgnoredDates([])
 
         self.upper_left_red_dates = []
         self.upper_left_green_dates = []
@@ -39,12 +42,16 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
         self.red = QtGui.QColor.fromRgbF(1.000000, 0.343099, 0.419516, 1.000000)
         self.yellow = QtGui.QColor.fromRgbF(1.000000, 0.997757, 0.346044, 1.000000)
 
+        
 
     def setCircledDates(self, list_of_dates):
         self.circled_dates = list_of_dates
 
     def setTriangleDates(self, list_of_dates):
         self.triangle_dates = list_of_dates
+
+    #def setIgnoredDates(self, list_of_dates):
+    #    self.ignored_dates = list_of_dates
 
     def setUpperLeftRedDates(self, list_of_dates):
         self.upper_left_red_dates = list_of_dates
@@ -99,10 +106,17 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
 
     def paintCell(self, painter, rect, date):
 
+        circle_thickness = rect.height() / 40.0 #30.0
+
+        #radius = rect.height() / 2.6
+        radius = rect.height() / 2.0 - 4.0 * circle_thickness
+
+        rect_thickness = rect.height() / 15.0
+
         self.upper_left_painted = False
         self.lower_right_painted = False
 
-        painter.fillRect(rect, QtGui.QColor('white')) 
+        painter.fillRect(rect, QtGui.QColor('white'))
         
         if date in self.upper_left_red_dates:
             self.paintUpperLeft(painter, rect, self.red, 1.0)
@@ -132,8 +146,15 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
         painter.drawText(rect, QtCore.Qt.AlignCenter, str(date.day()))
 
         if date in self.circled_dates:
-            center = rect.center()
-            painter.drawEllipse(center, 12, 12)
+            saved_pen = painter.pen()
+            modified_pen = painter.pen()
+            modified_pen.setWidth(circle_thickness)
+            painter.setPen(modified_pen)
+            center = rect.center() - QtCore.QPoint(1.0, 0.0)
+            #painter.drawEllipse(center - QtCore.QPoint(circle_thickness, circle_thickness), radius, radius)
+            #painter.drawEllipse(center - QtCore.QPoint(circle_thickness, 0.0), radius, radius)
+            painter.drawEllipse(center, radius, radius)
+            painter.setPen(saved_pen)
 
         if date in self.triangle_dates:
             upper_right = rect.topRight()
@@ -145,13 +166,19 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
             path.lineTo(bounding_rect.topRight())
             painter.fillPath(path, QtGui.QBrush(QtGui.QColor('blue')))
 
+        #if date in self.ignored_dates:
+        #    upper_left = rect.topLeft()
+        #    lower_right = rect.bottomRight()
+        #    painter.drawline(center, upper_left, lower_right)
+        #    print('IGNORED DATE!!!!!')
+
         if date == self.selectedDate():
-            newUpperLeft = QtCore.QPoint(rect.topLeft().x() + 1, rect.topLeft().y() + 1)
-            newBottomRight = QtCore.QPoint(rect.bottomRight().x() - 2, rect.bottomRight().y() - 2)
+            newUpperLeft = QtCore.QPoint(rect.topLeft().x() + rect_thickness/2.0, rect.topLeft().y() + rect_thickness/2.0)
+            newBottomRight = QtCore.QPoint(rect.bottomRight().x() - rect_thickness, rect.bottomRight().y() - rect_thickness)
             new_rect = QtCore.QRect(newUpperLeft, newBottomRight)
             saved_pen = painter.pen()
             modified_pen = painter.pen()
-            modified_pen.setWidth(2) #3
+            modified_pen.setWidth(rect_thickness) #3
             modified_pen.setColor(QtGui.QColor('blue'))
             painter.setPen(modified_pen)
             painter.drawRect(new_rect)

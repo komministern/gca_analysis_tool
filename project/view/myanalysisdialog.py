@@ -32,7 +32,7 @@ class MyAnalysisDialog(QtWidgets.QDialog, Ui_Dialog):
 
     
     def go(self):
-        print('GO!!!!!!!!!!!!!!')
+        #print('GO!!!!!!!!!!!!!!')
         self.accept()
 
     def new_date_selection(self):
@@ -48,8 +48,8 @@ class MyAnalysisDialog(QtWidgets.QDialog, Ui_Dialog):
         else:
             self.until_date = self.calendarWidget.selectedDate()
 
-        self.lineEdit_From.setText(self.from_date.toString())
-        self.lineEdit_Until.setText(self.until_date.toString())
+        self.lineEdit_From.setText(self.from_date.toString(QtCore.Qt.DefaultLocaleShortDate))
+        self.lineEdit_Until.setText(self.until_date.toString(QtCore.Qt.DefaultLocaleShortDate))
         self.calendarWidget.from_date = self.from_date
         self.calendarWidget.until_date = self.until_date
 

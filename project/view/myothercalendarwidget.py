@@ -14,10 +14,10 @@ class MyOtherCalendarWidget(QtWidgets.QCalendarWidget):
         
         # This finally did the trick!!! Now the columns in the calendar widget
         # automatically fills the widget, despite the font size.
-        self.tableView = self.findChild(QtWidgets.QTableView)
-        self.tableView.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
-        for i in range(8):
-            self.tableView.horizontalHeader().resizeSection(i, 38)
+        #self.tableView = self.findChild(QtWidgets.QTableView)
+        #self.tableView.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
+        #for i in range(8):
+        #    self.tableView.horizontalHeader().resizeSection(i, 38)
         
         self.setFirstDayOfWeek(QtCore.Qt.DayOfWeek.Monday)
         #self.setHorizontalHeaderFormat(QtGui.QCalendarWidget.SingleLetterDayNames)

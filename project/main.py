@@ -10,7 +10,8 @@ import sys
 #import time
 import multiprocessing
 import logging
-from PySide2 import QtGui, QtWidgets
+import PySide2
+from PySide2 import QtCore, QtGui, QtWidgets
 from view.view import MyView
 from presenter.presenter import MyPresenter
 from model.database import Database
@@ -30,16 +31,29 @@ if __name__ == '__main__':
     # Should i get the working directory for this????
     # Do I have to copy the logging.ini file to the dist directory after freezing the app with PyInstaller????
 
+    # Make this choosable in menu perhaps?
+    english = QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedKingdom)
+    QtCore.QLocale.setDefault(english)
+
     app = QtWidgets.QApplication(sys.argv)
     model = Database()
     view = MyView() 
     presenter = MyPresenter(model, view, app)
+
+    ## Make this choosable in menu perhaps?
+    #english = QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedKingdom)
+    #QtCore.QLocale.setDefault(english)
+
     view.show()
 
-    #if presenter.trial_has_ended:
-    #    presenter.message(u'Trial has ended.\n\nCopyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>')
-    #elif presenter.progress.wasCanceled():
-    #    pass
-    #else:
+    comboBox_Coloring_width = view.comboBox_Coloring.size().width()
+    comboBox_Coloring_height = view.comboBox_Coloring.size().height()
+
+    view.comboBox_ActiveSite.setFixedWidth(comboBox_Coloring_width * 2.0 / 3.0)
+
+    
+    #print(PySide2.__version__)
+    #print(PySide2.QtCore.__version__)
+
         
     sys.exit(app.exec_())

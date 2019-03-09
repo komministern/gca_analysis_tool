@@ -46,6 +46,12 @@ class FilterPresenter(QtCore.QObject):
 
     def show_filter_dialog(self, initial_filter, name_editable = True):
         self.dialog = MyFilterDialog(initial_filter, name_editable, self.view)
+        
+        self.dialog.show()
+        height = self.dialog.pushButton_AddContent.height()
+        self.dialog.pushButton_AddContent.setFixedWidth(height * 1.5)
+        self.dialog.pushButton_RemoveContent.setFixedWidth(height * 1.5)
+
         if self.dialog.exec_():
             filter = self.dialog.get_final_filter()
             self.save_filter(filter)

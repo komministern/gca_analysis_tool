@@ -75,12 +75,12 @@ class CalendarPresenter(QtCore.QObject):
 
     def set_last_date(self):
         if self.presenter.active_site_name:
-            self.set_selected_date(self.model.get_last_entry_date(self.active_site_name))
+            self.set_selected_date(self.model.get_last_entry_date(self.presenter.active_site_name))
             self.update_calendar()
 
     def set_first_date(self):
         if self.presenter.active_site_name:
-            self.set_selected_date(self.model.get_first_entry_date(self.active_site_name))
+            self.set_selected_date(self.model.get_first_entry_date(self.presenter.active_site_name))
             self.update_calendar()
 
     def set_active_date(self):

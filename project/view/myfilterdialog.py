@@ -122,12 +122,12 @@ class MyFilterDialog(QtWidgets.QDialog, Ui_Dialog):
 
 
     def message(self, text):
-        msgBox = QtGui.QMessageBox(parent=self)
+        msgBox = QtWidgets.QMessageBox(parent=self)
         msgBox.setText(text)
         msgBox.exec_()
         
     def message_with_cancel_choice(self, text, informative_text, default_button):
-        msgBox = QtGui.QMessageBox(parent=self)
+        msgBox = QtWidgets.QMessageBox(parent=self)
         msgBox.setText(text)
         msgBox.setInformativeText(informative_text)
         msgBox.setStandardButtons(QtGui.QMessageBox.Cancel | QtGui.QMessageBox.Ok)

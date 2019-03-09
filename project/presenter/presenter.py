@@ -5,6 +5,8 @@
 #
 #    This file is part of GCA Analysis Tool.
 
+import PySide2
+import platform
 from PySide2 import QtCore, QtGui, QtWidgets
 
 from presenter.eventfilter import EventBlocker
@@ -59,12 +61,12 @@ class MyPresenter(QtCore.QObject):
 
         #Block stuff
 
-        self.view.comboBox_Coloring.model().item(1).setEnabled(False)
-        self.view.comboBox_Coloring.model().item(2).setEnabled(False)
-        self.view.comboBox_Coloring.model().item(3).setEnabled(False)
+        #self.view.comboBox_Coloring.model().item(1).setEnabled(False)
+        #self.view.comboBox_Coloring.model().item(2).setEnabled(False)
+        #self.view.comboBox_Coloring.model().item(3).setEnabled(False)
         #self.view.comboBox_Coloring.model().item(4).setEnabled(False)
 
-        #self.view.calendarWidget.setMaximumDate(QtCore.QDate(2018, 12, 31))
+        self.view.calendarWidget.setMaximumDate(QtCore.QDate(2019, 12, 31))
 
 
 
@@ -94,9 +96,9 @@ class MyPresenter(QtCore.QObject):
         
         self.view.aboutAction.triggered.connect(self.about)
 
-        self.view.pushButton_FirstEntry.clicked.connect(self.calendar_presenter.set_first_date)
-        self.view.pushButton_LastEntry.clicked.connect(self.calendar_presenter.set_last_date)
-        self.view.pushButton_Today.clicked.connect(self.calendar_presenter.set_active_date)
+        self.view.pushButton_FirstDate.clicked.connect(self.calendar_presenter.set_first_date)
+        self.view.pushButton_LastDate.clicked.connect(self.calendar_presenter.set_last_date)
+        self.view.pushButton_ActiveDate.clicked.connect(self.calendar_presenter.set_active_date)
 
         self.view.pushButton_NextSearch.clicked.connect(self.search_presenter.set_next_search_date)
         self.view.pushButton_PreviousSearch.clicked.connect(self.search_presenter.set_previous_search_date)
@@ -179,6 +181,7 @@ class MyPresenter(QtCore.QObject):
         #self.app.removeEventFilter(self.mousedetector)
         #self.app.installEventFilter(self.mouseinhibitor)
         self.eventblocker.block_all_mouse_click_events()
+
         
     def allow_mouseclicks(self):
         #self.app.removeEventFilter(self.mouseinhibitor)
@@ -202,17 +205,17 @@ class MyPresenter(QtCore.QObject):
 
     def about(self):
         self.message(u'''
-GCA Analysis Tool, v2.30 (free version)
+GCA Analysis Tool, v2.50 (free version)
 
 Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
 
-This is a free version of the GCA Analysis Tool. It is fully functional, but lacks all features but the most basic ones. It may be copied and used freely.
+This is a free version of the GCA Analysis Tool. It is fully functional until 2019-12-31, but lacks all features but the most basic ones. It may be copied and used freely.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Software used:
-Python 3.6.5, PSF License
-PySide2, LGPL version 2.1
-Qt 5.9, LGPL version 3
+Python ''' + platform.python_version() + ''', PSF License
+PySide2 ''' + PySide2.__version__ + ''', LGPL version 2.1
+Qt ''' + PySide2.QtCore.__version__ + ''', LGPL version 3
 ''', u'About GCA Analysis Tool')
 
