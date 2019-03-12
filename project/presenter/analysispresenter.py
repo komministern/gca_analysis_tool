@@ -8,12 +8,15 @@
 #import os
 #import string
 #import time
+import copy
 from PySide2 import QtCore, QtGui, QtWidgets
 #from presenter.coloringcontainer import ColoringContainer
 #import presenter.textstuff as txt
 #from presenter.filtercontainer import Filter
 from view.myanalysisdialog import MyAnalysisDialog
 #from presenter.eventfilter import EventBlocker
+
+from presenter.datacollection import DataCollection
 
 
 
@@ -28,9 +31,15 @@ class AnalysisPresenter(QtCore.QObject):
 
 
 
-    def analyze(self):
-        #print('ANALYZING!!!!')
+    def analyze(self, start_date, end_date):
+        
+        active_site_name = self.presenter.active_site_name
+        historylog_dictionary = self.model.get_historylog_dictionary(active_site_name)
+
+        self.data = DataCollection(historylog_dictionary, start_date, end_date)
+
         self.presenter.message('This is still to be implemented, if I can find the time and incentive.')
+
 
 
     def show_analysis_dialog(self):
@@ -38,4 +47,4 @@ class AnalysisPresenter(QtCore.QObject):
         if self.dialog.exec_():
             #print('From:  ' + self.dialog.from_date.toString())
             #print('Until: ' + self.dialog.until_date.toString())
-            self.analyze()
+            self.analyze(self.dialog.from_date, self.dialog.until_date)
