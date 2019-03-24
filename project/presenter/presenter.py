@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#    Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
+#    Copyright © 2016, 2017, 2018, 2019 Oscar Franzén <oscarfranzen@protonmail.com>
 #
 #    This file is part of GCA Analysis Tool.
 
@@ -87,7 +87,7 @@ class MyPresenter(QtCore.QObject):
         
         self.view.comboBox_Coloring.currentIndexChanged.connect(self.calendar_presenter.set_coloring_scheme)
 
-        self.view.importAction.triggered.connect(self.site_presenter.import_capturesite)
+        self.view.importAction.triggered.connect(self.site_presenter.import_capturesite_)
 
         self.view.analysisAction.triggered.connect(self.analysis_presenter.show_analysis_dialog)
         

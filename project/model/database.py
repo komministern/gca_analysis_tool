@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#    Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
+#    Copyright © 2016, 2017, 2018, 2019 Oscar Franzén <oscarfranzen@protonmail.com>
 #
 #    This file is part of GCA Analysis Tool.
 
@@ -13,33 +13,21 @@ import shutil
 import tarfile
 import subprocess
 import multiprocessing
+import pickle
 from PySide2 import QtCore, QtGui, QtWidgets
 from model.sitecontainer import SiteContainer
-#import platform
-#import model.expanduser as expanduser
+from presenter.filtercontainer import Filter
 
 logger = logging.getLogger(__name__)
 
 class Database(QtCore.QObject):
 
-    io_progress = QtCore.Signal(int)
-    test_signal = QtCore.Signal()
 
-    def __init__(self):
+    def __init__(self, model):
 
         super(Database, self).__init__()
 
-        #if platform.system() == 'Windows':
-
-        #    self.home_directory = expanduser.expand_user()
-            
-        #else:
-        
-        #    self.home_directory = os.path.expanduser(u'~')
-        
-
-        #print(os.path.expanduser(u'~'))
-        #print(expanduser.expand_user())
+        self.model = model
 
         self.home_directory = os.path.expanduser(u'~')
 
@@ -59,16 +47,9 @@ class Database(QtCore.QObject):
         self.read_filters_to_memory()
         self.read_all_sites_to_memory()
 
-        #self.test_signal.connect(self.test)
-    
-
-    #def test(self):
-    #    print('TJOHO')
-    
 
     def tick(self, progress):
-        self.io_progress.emit(progress)
-
+        self.model.io_progress.emit(progress)
 
 
     # Check filestructure
@@ -86,9 +67,8 @@ class Database(QtCore.QObject):
     # Site stuff
 
     def get_site_names(self):
-        sites = sorted(QtCore.QDir(self.sites_directory).entryList(QtCore.QDir.Dirs | QtCore.QDir.NoDotAndDotDot))  # This gives utf-8!!!!
+        sites = [site_name for site_name in sorted(QtCore.QDir(self.sites_directory).entryList(QtCore.QDir.Dirs | QtCore.QDir.NoDotAndDotDot)) if site_name != self.temp_site_name]  # This gives utf-8!!!!
         return sites
-
 
 
     def read_site_to_memory(self, site_name):
@@ -99,14 +79,11 @@ class Database(QtCore.QObject):
             self.site_dictionary[site_name].historylog_file_progress.connect(self.tick)
 
 
-
     def remove_site_from_memory(self, site_name):
         if site_name in self.site_dictionary.keys():
             del self.site_dictionary[site_name]
 
         
-
-
     def read_all_sites_to_memory(self):
         for site_name in self.get_site_names():
             self.read_site_to_memory(site_name)
@@ -116,54 +93,40 @@ class Database(QtCore.QObject):
     def rename_site(self, old_site_name, new_site_name):
         source_site_directory = os.path.join(self.sites_directory, old_site_name)
         dest_site_directory = os.path.join(self.sites_directory, new_site_name)
-
         os.rename(source_site_directory, dest_site_directory)
-        
-        #print 'Renamed ' + old_site_name + ' to ' + new_site_name + ' on disc.'
-
         self.read_site_to_memory(new_site_name)
         
         
 
     def create_new_site_from_capturesite_file(self, capturesite_file_name, new_site_name):
-
         self.copy_historylogs_from_capturesite_file(capturesite_file_name, new_site_name)
         self.read_site_to_memory(new_site_name)
 
 
 
     def update_site(self, site_name, temp_site_name):
-
         this_site_directory = os.path.join(self.sites_directory, site_name)
         this_historylog_directory = os.path.join(this_site_directory, u'historylogs')
-
         shutil.rmtree(this_historylog_directory)
-
         self.copy_historylogs_from_site_to_site(temp_site_name, site_name)
-        
         self.remove_site_from_memory(site_name)
         self.read_site_to_memory(site_name)
 
 
 
     def copy_historylogs_from_site_to_site(self, from_site_name, to_site_name):
-
         source_site_directory = os.path.join(self.sites_directory, from_site_name)
         source_historylog_directory = os.path.join(source_site_directory, u'historylogs')
-        
+    
         dest_site_directory = os.path.join(self.sites_directory, to_site_name)
         dest_historylog_directory = os.path.join(dest_site_directory, u'historylogs')
-        
-        self.io_progress.emit(5)
+        self.tick(5)
 
         files_to_copy = [f for f in os.listdir(source_historylog_directory) if os.path.isfile(os.path.join(source_historylog_directory, f))]
         nbr_of_files_to_copy = len(files_to_copy)
 
+        self.tick(20)
 
-        self.io_progress.emit(20)
-
-        #try:
-            # Remove the destination directory
         shutil.rmtree(dest_historylog_directory)
         os.mkdir(dest_historylog_directory)
 
@@ -171,10 +134,9 @@ class Database(QtCore.QObject):
 
         for f in files_to_copy:
             full_file_name = os.path.join(source_historylog_directory, f)
-            #print full_file_name + ' to ' + dest_historylog_directory
             shutil.copy(full_file_name, dest_historylog_directory)
             counter += 1
-            self.io_progress.emit(20 + int(round(80.0*counter/nbr_of_files_to_copy)))
+            self.tick(20 + int(round(80.0*counter/nbr_of_files_to_copy)))
 
 
 
@@ -182,12 +144,12 @@ class Database(QtCore.QObject):
         
         site_directory = os.path.join(self.sites_directory, site_name)
         
-        self.io_progress.emit(50)
+        self.tick(50)
         
         if os.path.isdir(site_directory):
             shutil.rmtree(os.path.join(self.sites_directory, site_name))
 
-        self.io_progress.emit(100)
+        self.tick(100)
 
 
 
@@ -204,7 +166,6 @@ class Database(QtCore.QObject):
     def set_path_to_7z(self, path):
         f = open(self.path_to_7z_filename, 'w')
         f.write(path)
-        #f.write(path.encode('utf8'))
         f.close()
 
 
@@ -212,7 +173,6 @@ class Database(QtCore.QObject):
     def get_path_to_7z(self):
         f = open(self.path_to_7z_filename, 'r')
         path = f.readline()
-        #path = f.readline().decode('utf8')
         f.close()
         return path
 
@@ -234,7 +194,7 @@ class Database(QtCore.QObject):
         prg_path = self.get_path_to_7z()
         dest_path = this_site_directory
 
-        self.io_progress.emit(5)
+        self.tick(5)
 
         # This operation could take some time, and therefore locking up the GUI.
         # So, let us do this in a different thread instead.
@@ -244,7 +204,7 @@ class Database(QtCore.QObject):
         q.get()
         p.join()
 
-        self.io_progress.emit(20)
+        self.tick(20)
         
         with tarfile.open( os.path.join(dest_path, 'CAPTURESITE_TAR') ) as tar:
             history_members = [member for member in tar.getmembers() if '.txt' in member.name and member.name.startswith('/local/gca_history/')]
@@ -262,19 +222,7 @@ class Database(QtCore.QObject):
 
         os.remove( os.path.join(dest_path, 'CAPTURESITE_TAR') )
 
-        self.io_progress.emit(100)
-        
-        
-        
-
-#    def extractZfiles(self, prg_path, archive_path, dest_path):
-        
-#        fs_enc = sys.getfilesystemencoding()
-        
-#        dest_switch = '-o' + dest_path
-        
-#        system = subprocess.Popen([prg_path.encode(fs_enc), u'e'.encode(fs_enc), dest_switch.encode(fs_enc), archive_path.encode(fs_enc)], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-#        return(system.communicate())
+        self.tick(100)
 
 
 
@@ -284,12 +232,12 @@ class Database(QtCore.QObject):
         this_site_directory = os.path.join(self.sites_directory, site_name)
         this_historylog_directory = os.path.join(this_site_directory, u'historylogs')
         
-        self.io_progress.emit(5)
+        self.tick(5)
         
         with tarfile.open(capturesite_filename) as tar:
             history_members = [member for member in tar.getmembers() if '.txt' in member.name and member.name.startswith('/local/history/')]
             
-            self.io_progress.emit(20)
+            self.tick(20)
             
             number_of_files_to_be_extracted = len(history_members)
             counter = 0
@@ -299,7 +247,7 @@ class Database(QtCore.QObject):
                 tar.extract(member, this_historylog_directory)
                 
                 counter += 1
-                self.io_progress.emit(20 + int(round(80.0*counter/number_of_files_to_be_extracted)))
+                self.tick(20 + int(round(80.0*counter/number_of_files_to_be_extracted)))
                 
 
 
@@ -326,13 +274,8 @@ class Database(QtCore.QObject):
 
 
     def get_historylog_from_disc(self, site_name, date):
-        #print site_name
-        #print date
-        
-        #return 'test'
         return self.site_dictionary[site_name].read_historylog(date)
-        #print inb
-        #return inb
+
 
 
     # Comment stuff
@@ -367,8 +310,7 @@ class Database(QtCore.QObject):
 
     def read_filters_to_memory(self, filter_file_name = u'filters'):
         filter_path = os.path.join(self.filters_directory, filter_file_name)
-        import pickle
-        from presenter.filtercontainer import Filter
+        
         try:
             serialized_filters = pickle.load(open(filter_path, 'rb'))
             self.filter_list = [Filter()]
@@ -383,14 +325,14 @@ class Database(QtCore.QObject):
         for each in self.filter_list:
             if each.name != u'':
                 serialized_filters.append(self.serialize_filter(each))
-        import pickle
+        
         pickle.dump(serialized_filters, open(filter_path, 'wb'))
 
     def serialize_filter(self, filter):
         return [filter.content, filter.state, filter.name]
     
     def de_serialize_filter(self, alist):
-        from presenter.filtercontainer import Filter
+        
         filter = Filter()
         filter.content = alist[0]
         filter.state = alist[1]
@@ -427,20 +369,18 @@ class Database(QtCore.QObject):
 
 
 
-    def quit(self):
-        QtWidgets.QApplication.quit()
     
-
 
 
 
 
 def z_extract_files(q, prg_path, archive_path, dest_path):
     
-    #fs_enc = sys.getfilesystemencoding()
-        
+    #fs_enc = sys.getfilesystemencoding()    
     dest_switch = '-o' + dest_path
     #system = subprocess.call([prg_path.encode(fs_enc), u'e'.encode(fs_enc), dest_switch.encode(fs_enc), archive_path.encode(fs_enc)], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)  
     system = subprocess.run([prg_path, u'e', dest_switch, archive_path])
 
     q.put('done')
+
+

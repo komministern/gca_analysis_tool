@@ -1,0 +1,46 @@
+1;Sensor ECU Temperature;Ancillary Equipment
+2;Radar UPS Power Supply
+3;Antenna Interlocks
+4;AC-DC Power Supplies
+5;DC-DC Power Supplies
+6;Synchronizer Board
+7;Azimuth Interface Boards LRU Power Supplies
+8;Elevation Interface Board LRU Power Supplies
+9;Azimuth Antenna Interface Boards
+10;Elevation Antenna Interface Boards
+11;Sensor Electronic Equipment Blowers
+12;Azimuth Antenna Blowers
+13;Elevation Antenna Blowers
+14;Heat Exchanger Blowers
+15;Azimuth Array Temperature;Heat Exchanger Blowers
+16;Elevation Array Temperature
+17;Azimuth TR Modules 1 through 23;Elevation Array Temperature
+18;Azimuth TR Modules 24 through 46
+19;Azimuth TR Modules 47 through 69
+20;Elevation TR Modules 1 through 23
+21;Elevation TR Modules 24 through 46
+22;Elevation TR Modules 47 through 69
+23;Elevation TR Modules 70 through 92
+24;Elevation TR Modules 93 through 115
+27;Main Bus Controller Board
+28;Signal Processor Interface Board;Main Bus Controller Board
+30;DSP Processor Board 1
+31;DSP Processor Board 2
+32;High Speed Memory Board
+33;Digital Receiver Board
+34;Display Interface Function;Digital Receiver Board
+35;Signal Processor Board;Display Interface Function
+36;Signal Processor Board
+37;Antenna Drive Motor
+38;Antenna Controller
+39;Frequency Generator Channel A;Antenna Controller
+40;Frequency Generator Channel B
+41;RF Converter;RF Head
+42;Receiver Control Board
+43;Azimuth-Elevation Reference Sensor
+44;Azimuth Reference Sensor
+45;Brake Assembly
+48;RODC Subsystem;SolaCom BIT monitor;Software Reports
+49;RODC Function;Wind And Altimeter Display System
+50;SNMP Interface;SSR Interface
+51;SNMP Interface;RODC Function;< End of High Level Fault List >

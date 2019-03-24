@@ -1,27 +1,110 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+#    Copyright © 2016, 2017, 2018, 2019 Oscar Franzén <oscarfranzen@protonmail.com>
+#
+#    This file is part of GCA Analysis Tool.
 
 from PySide2 import QtCore
 
 import copy
 
-import presenter.datacollection_helper_functions as dchf
+import model.datacollector_helper_functions as dchf
 
-class DataCollection(QtCore.QObject):
+class Datacollector(QtCore.QObject):
 
 
+    def __init__(self, model):
 
-    def __init__(self, historylog_dict, start_date, end_date):
+        super(Datacollector, self).__init__()
 
-        super(DataCollection, self).__init__()
+        self.model = model
 
-        self.dates = sorted([date for date in historylog_dict.keys() if (date >= start_date) and (date <= end_date)])
 
-        self.historylog_dict = copy.deepcopy({date:historylog_dict[date] for date in self.dates})
+    def analyze(self, site_name, start_date, end_date):
+
+        self.dates = sorted([date for date in self.model.get_historylog_dictionary(site_name).keys() if (date >= start_date) and (date <= end_date)])
+        self.historylog_dict = copy.deepcopy({date:self.model.get_historylog_dictionary(site_name)[date] for date in self.dates})
 
         self.temperatures = {date:self.get_temperatures(date) for date in self.dates}
         self.autotest_levels = {date:self.get_autotest_levels(date) for date in self.dates}
         self.mti_deviations = {date:self.get_mti_deviations(date) for date in self.dates}
         self.minutes_report = {date:self.get_minutes_report(date) for date in self.dates}
+        self.faults = {date:self.get_faults(date) for date in self.dates}
+
+        #self.update_fault_index_file()
+
+        print('Done.')
+
+
+
+    def update_fault_index_file(self):
+
+        import os
+        cwd = os.getcwd()
+        resource_dir = os.path.join(cwd, 'resources')
+        index_file_path = os.path.join(resource_dir, 'fault_index.txt')
+
+        try:
+            with open(index_file_path) as f:
+                indexed_faults = f.readlines()
+            known_fault_dict = {}
+            print('----------------------------------------------------------')
+            print('previously saved faults:')
+            for line in indexed_faults:
+                strings = line.split(';')
+                number = int( strings[0] )
+                fault_texts = [s.strip() for s in strings[1:]]
+                known_fault_dict[number] = fault_texts
+                
+                string_to_print = str(number)
+                for each in fault_texts:
+                    string_to_print = string_to_print + ', ' + each
+                print(string_to_print)
+
+            print('')
+        except Exception:
+            print('----------------------------------------------------------')
+            print('no previously saved faults')
+            known_fault_dict = {}
+            print('')
+
+        for date in self.faults:
+            for time, fault in self.faults[date].items():
+
+                if not fault['number'] in known_fault_dict.keys():
+                    print('----------------------------------------------------------')
+                    print('added fault: ' + str(fault['number']) + '   ' + fault['text'])
+                    known_fault_dict[fault['number']] = [fault['text']]
+                else:
+                    if not fault['text'] in known_fault_dict[ fault['number'] ]:
+                        print('---------------------------------------------------------')
+                        print('conflict in fault name')
+                        print(date)
+                        print(time)
+                        print('fault number: ' + str(fault['number']))
+                        print('new fault text: ' + fault['text'])
+                        for each in known_fault_dict[fault['number']]:
+                            print('old fault text: ' + each)
+                        print('adding new fault text anyway')
+                        print('')
+                        known_fault_dict[ fault['number'] ].append( fault['text'] )
+
+
+        with open(index_file_path, 'w') as f:
+            numbers = sorted(known_fault_dict.keys())
+            for number in numbers:
+                f.write(str(number))
+                for each in known_fault_dict[number]:
+                    f.write(';' + each.strip())
+                f.write('\n')
+
+        numbers = sorted(known_fault_dict.keys())
+        for number in numbers:
+            for each in known_fault_dict[number]:
+                print(str(number) + '   ' + each)
+
+        # read all faults into a database
 
 
 
@@ -96,16 +179,28 @@ class DataCollection(QtCore.QObject):
             minutes_report_day['ssr'] = ssr_minutes_report
             return minutes_report_day
         
-        except UnboundLocalError:
+        except UnboundLocalError as e:
             # This happens when one of the variables above is referenced before assignment. That
             # is, on days when the relevant information does not exist in the historylog. (Typically
             # on the same day as the CaptureSite is done.)
+
+            print('------------------------------------------------------')
+            print(date)
+            print(e)
+
             return {}
 
 
 
 
-        
+    def get_faults(self, date):
+        fault_entries = [line for line in self.historylog(date).splitlines() if dchf.fault_details_entry(line)]
+        fault_entries_day = {}
+
+        for fault_entry in fault_entries:
+            fault_entries_day[dchf.time(fault_entry)] = dchf.fault_details(fault_entry)
+
+        return fault_entries_day
             
 
     def get_temperatures(self, date):
@@ -150,9 +245,15 @@ class DataCollection(QtCore.QObject):
                 radar_mode = dchf.radar_mode(entry)
 
             elif dchf.mti_deviation_status_entry(entry):
-                state = (runway, direction, radar_mode, weather, tilt)
-
-                mti_deviation_dictionary_day[dchf.time(entry)] = ( state, dchf.mti_deviations(entry) )
+                try:
+                    state = (runway, direction, radar_mode, weather, tilt)
+                    mti_deviation_dictionary_day[dchf.time(entry)] = ( state, dchf.mti_deviations(entry) )
+                except UnboundLocalError as e:
+                    # This happens sometimes for some reason. (Luleå 130520 for example.) The daily historylog entry
+                    # should always start with a state update. But sometimes, very seldom, this does not happen. 
+                    print('--------------------------------------------------------------')
+                    print(date)
+                    print(e)
 
         return mti_deviation_dictionary_day
 

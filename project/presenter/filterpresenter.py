@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-#    Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
+#    Copyright © 2016, 2017, 2018, 2019 Oscar Franzén <oscarfranzen@protonmail.com>
 #
 #    This file is part of GCA Analysis Tool.
 
 
-#import os 
+#import os
 #import string
 #import time
 from PySide2 import QtCore, QtGui, QtWidgets
@@ -26,8 +26,11 @@ class FilterPresenter(QtCore.QObject):
         self.view = view
         self.presenter = presenter
 
-        self.current_filter = self.model.filter_list[0]
-        self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
+        #self.current_filter = self.model.filter_list[0]
+        self.current_filter = self.model.get_filter_by_index(0)
+
+        #self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
+        self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.get_filter_list()])
         
         self.view.pushButton_EditFilter.setEnabled(False)
         self.view.pushButton_DeleteFilter.setEnabled(False)
@@ -58,22 +61,24 @@ class FilterPresenter(QtCore.QObject):
 
 
     def save_filter(self, filter):
-        if filter.name in set([each.name for each in self.model.filter_list]):
-            for index in range(len(self.model.filter_list)):
-                if self.model.filter_list[index].name == filter.name:
+        if filter.name in set([each.name for each in self.model.get_filter_list()]):
+            for index in range(len(self.model.get_filter_list())):
+                if self.model.get_filter_by_index(index).name == filter.name:
                     break
-            del self.model.filter_list[index]
-            
-        self.model.filter_list.append(filter)
+            self.model.remove_filter_by_index(index)
+            #del self.model.get_filter_by_index(index)
+
+        #self.model.filter_list.append(filter)
+        self.model.add_filter(filter)
         
-        self.model.filter_list.sort(key = lambda x: x.name)
-        self.model.update_filters()
+        #self.model.filter_list.sort(key = lambda x: x.name)
+        #self.model.update_filters()
         
         self.view.comboBox_ChooseFilter.clear()
-        self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
+        self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.get_filter_list()])
 
-        for index in range(len(self.model.filter_list)):
-            if self.model.filter_list[index].name == filter.name:
+        for index in range(len(self.model.get_filter_list())):
+            if self.model.get_filter_by_index(index).name == filter.name:
                 break
  
         self.view.comboBox_ChooseFilter.setCurrentIndex(index)
@@ -90,10 +95,14 @@ class FilterPresenter(QtCore.QObject):
     def delete_filter(self):
         clicked = self.presenter.message_with_cancel_choice(u'Delete ' + self.current_filter.name + '?', u'This will completely remove the filter.', QtWidgets.QMessageBox.Cancel)
         if clicked == QtWidgets.QMessageBox.Ok:
-            self.model.filter_list.remove(self.current_filter)
-            self.model.update_filters()
+
+            self.model.remove_filter_by_index(self.model.get_filter_list().index(self.current_filter))
+
+            #self.model.filter_list.remove(self.current_filter)
+            #self.model.update_filters()
+
             self.view.comboBox_ChooseFilter.clear()
-            self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
+            self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.get_filter_list()])
         
             self.choose_filter(0)
         
@@ -108,13 +117,14 @@ class FilterPresenter(QtCore.QObject):
             self.view.pushButton_EditFilter.setEnabled(False)
             self.view.pushButton_DeleteFilter.setEnabled(False)
         else:
-            
+
             text = self.view.tabWidget_Search.tabText(1)
             if text[-1] != u'*':
                 self.view.tabWidget_Search.setTabText(1, text + u'*')
                 
             self.view.pushButton_EditFilter.setEnabled(True)
             self.view.pushButton_DeleteFilter.setEnabled(True)
-            
-        self.current_filter = self.model.filter_list[index]
+
+        #self.current_filter = self.model.filter_list[index]
+        self.current_filter = self.model.get_filter_by_index(index)
         self.presenter.update_text()

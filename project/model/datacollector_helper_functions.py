@@ -1,7 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#    Copyright © 2016, 2017, 2018, 2019 Oscar Franzén <oscarfranzen@protonmail.com>
+#
+#    This file is part of GCA Analysis Tool.
+
 
 from PySide2 import QtCore
-
-
 
 
 def temperature_autotest_status_entry(line):
@@ -46,7 +51,11 @@ def antenna_drive_minutes_report_entry(line):
 def ssr_on_minutes_report_entry(line):
     return ('(08)' == line[:4])
 
+def fault_details_entry(line):
+    return ('(14)' == line[:4])
 
+def further_fault_details_entry(line):
+    return ('(15)' == line[:4])
 
 
 def time(line):
@@ -176,15 +185,32 @@ def mti_deviations(line):
 
     str_values = line[65:].split('/')
 
-    mti_deviations_dict['Az'] = float(str_values[0])
-    mti_deviations_dict['El'] = float(str_values[1])
-    mti_deviations_dict['Rng'] = float(str_values[2])
+    mti_deviations_dict['az'] = float(str_values[0])
+    mti_deviations_dict['el'] = float(str_values[1])
+    mti_deviations_dict['rng'] = float(str_values[2])
 
     return mti_deviations_dict
 
 
+def fault_details(line):
+    fault_details_dict = {}
 
+    fault_number = int( line[23:28].strip() )
+    fault_text = line[41:]
 
+    condition_codes = line[29:32].split('-')
+    #print(condition_codes)
+    condition_texts = ('Normal', 'Warning', 'Failed')
+
+    old_condition = condition_texts[ int( condition_codes[0] ) - 1 ]
+    new_condition = condition_texts[ int( condition_codes[1] ) - 1 ]
+
+    fault_details_dict['number'] = fault_number
+    fault_details_dict['text'] = fault_text
+    fault_details_dict['old condition'] = old_condition
+    fault_details_dict['new condition'] = new_condition
+
+    return fault_details_dict
 
 #def radar_mode_minutes_report(line):
 #    return line[]

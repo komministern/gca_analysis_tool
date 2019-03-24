@@ -1,6 +1,7 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#    Copyright © 2016, 2017, 2018 Oscar Franzén <oscarfranzen@protonmail.com>
+#    Copyright © 2016, 2017, 2018, 2019 Oscar Franzén <oscarfranzen@protonmail.com>
 #
 #    This file is part of GCA Analysis Tool.
 
@@ -16,10 +17,6 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from view.myanalysisdialog import MyAnalysisDialog
 #from presenter.eventfilter import EventBlocker
 
-from presenter.datacollection import DataCollection
-
-
-
 
 class AnalysisPresenter(QtCore.QObject):
 
@@ -32,13 +29,14 @@ class AnalysisPresenter(QtCore.QObject):
 
 
     def analyze(self, start_date, end_date):
-        
         active_site_name = self.presenter.active_site_name
-        historylog_dictionary = self.model.get_historylog_dictionary(active_site_name)
+        self.model.analyze(active_site_name, start_date, end_date)
 
-        self.data = DataCollection(historylog_dictionary, start_date, end_date)
+        #active_site_name = self.presenter.active_site_name
+        #historylog_dictionary = self.model.get_historylog_dictionary(active_site_name)
+        #self.data = DataCollection(historylog_dictionary, start_date, end_date)
 
-        self.presenter.message('This is still to be implemented, if I can find the time and incentive.')
+        #self.presenter.message('This is still to be implemented, if I can find the time and incentive.')
 
 
 
