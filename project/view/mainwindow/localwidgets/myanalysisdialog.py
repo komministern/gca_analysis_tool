@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-#    Copyright � 2016, 2017, 2018 Oscar Franz�n <oscarfranzen@protonmail.com>
+#    Copyright � 2016, 2017, 2018, 2019 Oscar Franz�n <oscarfranzen@protonmail.com>
 #
 #    This file is part of GCA Analysis Tool.
 
 
 
 from PySide2 import QtGui, QtCore, QtWidgets
-from view.ui_analysisdialog import Ui_Dialog
+from view.ui.ui_analysisdialog import Ui_Dialog
 #from presenter.filtercontainer import Filter
 
 class MyAnalysisDialog(QtWidgets.QDialog, Ui_Dialog):

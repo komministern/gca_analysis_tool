@@ -11,10 +11,9 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 #from presenter.coloringcontainer import ColoringContainer
 #import presenter.textstuff as txt
-from presenter.filtercontainer import Filter
-from view.myfilterdialog import MyFilterDialog
+from presenter.mainwindow.localresources.filtercontainer import Filter
+from view.mainwindow.localwidgets.myfilterdialog import MyFilterDialog
 #from presenter.eventfilter import EventBlocker
-
 
 
 
@@ -30,10 +29,10 @@ class FilterPresenter(QtCore.QObject):
         self.current_filter = self.model.get_filter_by_index(0)
 
         #self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.filter_list])
-        self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.get_filter_list()])
+        self.view.mainwindow.comboBox_ChooseFilter.addItems([each.name for each in self.model.get_filter_list()])
         
-        self.view.pushButton_EditFilter.setEnabled(False)
-        self.view.pushButton_DeleteFilter.setEnabled(False)
+        self.view.mainwindow.pushButton_EditFilter.setEnabled(False)
+        self.view.mainwindow.pushButton_DeleteFilter.setEnabled(False)
 
     # ----------- Filter stuff
 
@@ -48,7 +47,8 @@ class FilterPresenter(QtCore.QObject):
 
 
     def show_filter_dialog(self, initial_filter, name_editable = True):
-        self.dialog = MyFilterDialog(initial_filter, name_editable, self.view)
+        self.dialog = MyFilterDialog(initial_filter, name_editable, self.view.mainwindow)
+        self.dialog.setModal(True)
         
         self.dialog.show()
         height = self.dialog.pushButton_AddContent.height()
@@ -74,14 +74,14 @@ class FilterPresenter(QtCore.QObject):
         #self.model.filter_list.sort(key = lambda x: x.name)
         #self.model.update_filters()
         
-        self.view.comboBox_ChooseFilter.clear()
-        self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.get_filter_list()])
+        self.view.mainwindow.comboBox_ChooseFilter.clear()
+        self.view.mainwindow.comboBox_ChooseFilter.addItems([each.name for each in self.model.get_filter_list()])
 
         for index in range(len(self.model.get_filter_list())):
             if self.model.get_filter_by_index(index).name == filter.name:
                 break
  
-        self.view.comboBox_ChooseFilter.setCurrentIndex(index)
+        self.view.mainwindow.comboBox_ChooseFilter.setCurrentIndex(index)
 
 
     def new_filter(self):
@@ -89,20 +89,20 @@ class FilterPresenter(QtCore.QObject):
 
 
     def edit_filter(self):
-        self.show_filter_dialog(self.current_filter, name_editable = False)
+        self.show_filter_dialog(self.current_filter, name_editable = True)
         
 
     def delete_filter(self):
-        clicked = self.presenter.message_with_cancel_choice(u'Delete ' + self.current_filter.name + '?', u'This will completely remove the filter.', QtWidgets.QMessageBox.Cancel)
+        clicked = self.presenter.mainwindow.message_with_cancel_choice(u'Delete ' + self.current_filter.name + '?', u'This will completely remove the filter.', QtWidgets.QMessageBox.Cancel)
         if clicked == QtWidgets.QMessageBox.Ok:
 
-            self.model.remove_filter_by_index(self.model.get_filter_list().index(self.current_filter))
+            self.model.remove_filter_by_index(self.model.get_filter_list().index(self.current_filter))  # In mainwindowpresenter!?!
 
             #self.model.filter_list.remove(self.current_filter)
             #self.model.update_filters()
 
-            self.view.comboBox_ChooseFilter.clear()
-            self.view.comboBox_ChooseFilter.addItems([each.name for each in self.model.get_filter_list()])
+            self.view.mainwindow.comboBox_ChooseFilter.clear()
+            self.view.mainwindow.comboBox_ChooseFilter.addItems([each.name for each in self.model.get_filter_list()])
         
             self.choose_filter(0)
         
@@ -110,21 +110,21 @@ class FilterPresenter(QtCore.QObject):
     def choose_filter(self, index):
         
         if index == 0:
-            text = self.view.tabWidget_Search.tabText(1)
+            text = self.view.mainwindow.tabWidget_Search.tabText(1)
             if text[-1] == u'*':
-                self.view.tabWidget_Search.setTabText(1, text[0:-1])
+                self.view.mainwindow.tabWidget_Search.setTabText(1, text[0:-1])
                 
-            self.view.pushButton_EditFilter.setEnabled(False)
-            self.view.pushButton_DeleteFilter.setEnabled(False)
+            self.view.mainwindow.pushButton_EditFilter.setEnabled(False)
+            self.view.mainwindow.pushButton_DeleteFilter.setEnabled(False)
         else:
 
-            text = self.view.tabWidget_Search.tabText(1)
+            text = self.view.mainwindow.tabWidget_Search.tabText(1)
             if text[-1] != u'*':
-                self.view.tabWidget_Search.setTabText(1, text + u'*')
+                self.view.mainwindow.tabWidget_Search.setTabText(1, text + u'*')
                 
-            self.view.pushButton_EditFilter.setEnabled(True)
-            self.view.pushButton_DeleteFilter.setEnabled(True)
+            self.view.mainwindow.pushButton_EditFilter.setEnabled(True)
+            self.view.mainwindow.pushButton_DeleteFilter.setEnabled(True)
 
         #self.current_filter = self.model.filter_list[index]
-        self.current_filter = self.model.get_filter_by_index(index)
-        self.presenter.update_text()
+        self.current_filter = self.model.get_filter_by_index(index)     # Hmmmm.... Should this be called from mainwindowpresenter instead!?!
+        self.presenter.mainwindow.update_text()

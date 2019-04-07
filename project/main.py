@@ -42,12 +42,12 @@ if __name__ == '__main__':
     presenter = MyPresenter(model, view, app)
 
 
-    view.show()
+    view.mainwindow.show()
 
-    comboBox_Coloring_width = view.comboBox_Coloring.size().width()
-    comboBox_Coloring_height = view.comboBox_Coloring.size().height()
+    comboBox_Coloring_width = view.mainwindow.comboBox_Coloring.size().width()
+    comboBox_Coloring_height = view.mainwindow.comboBox_Coloring.size().height()
 
-    view.comboBox_ActiveSite.setFixedWidth(comboBox_Coloring_width * 2.0 / 3.0)
+    view.mainwindow.comboBox_ActiveSite.setFixedWidth(comboBox_Coloring_width * 2.0 / 3.0)
 
     
     #print(PySide2.__version__)

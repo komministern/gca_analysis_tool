@@ -33,35 +33,35 @@ class TextPresenter(QtCore.QObject):
 
     def update_text(self):
 
-        date = self.view.calendarWidget.selectedDate()
-        if self.presenter.active_site_name == u'':
+        date = self.view.mainwindow.calendarWidget.selectedDate()
+        if self.presenter.mainwindow.active_site_name == u'':
             text = u''
         else:
-            text = self.model.get_historylog(self.presenter.active_site_name, date)
+            text = self.model.get_historylog(self.presenter.mainwindow.active_site_name, date)
                 
-        self.view.textBrowser_HistoryLog.setPlainText(self.presenter.format_text(text))
+        self.view.mainwindow.textBrowser_HistoryLog.setPlainText(self.presenter.mainwindow.format_text(text))
 
-        if self.presenter.highlight != u'' and text != u'No history log exists for this date.': 
+        if self.presenter.mainwindow.highlight != u'' and text != u'No history log exists for this date.': 
 
             #palette = QtGui.QPalette()
             #palette.setColor(QtGui.QPalette.Base,QtCore.Qt.blue)
             #self.view.lineEdit_StringSearch.setPalette(palette)
 
-            text = self.view.tabWidget_Search.tabText(0)
+            text = self.view.mainwindow.tabWidget_Search.tabText(0)
             if text[-1] != u'*':
-                self.view.tabWidget_Search.setTabText(0, text + u'*')
+                self.view.mainwindow.tabWidget_Search.setTabText(0, text + u'*')
 
-            cursor = self.view.textBrowser_HistoryLog.textCursor()
+            cursor = self.view.mainwindow.textBrowser_HistoryLog.textCursor()
             
             # Setup the desired format for matches
             format = QtGui.QTextCharFormat()
-            format.setBackground(QtGui.QBrush(self.presenter.blue))
+            format.setBackground(QtGui.QBrush(self.presenter.mainwindow.blue))
 
 
-            pattern = self.presenter.highlight
+            pattern = self.presenter.mainwindow.highlight
 
             pos = 0
-            index = self.view.textBrowser_HistoryLog.toPlainText().find(pattern)
+            index = self.view.mainwindow.textBrowser_HistoryLog.toPlainText().find(pattern)
 
             while (index != -1):
 
@@ -72,17 +72,17 @@ class TextPresenter(QtCore.QObject):
 
                 # Move to the next match
                 pos = index + len(pattern)
-                index = self.view.textBrowser_HistoryLog.toPlainText().find(pattern, pos)
+                index = self.view.mainwindow.textBrowser_HistoryLog.toPlainText().find(pattern, pos)
 
             # This is a dirty fix for a bizarre problem. If this is omitted, only part of the text will be displayed after a
             # search!!! Weird.
-            self.view.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
-            self.view.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.WidgetWidth)
+            self.view.mainwindow.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
+            self.view.mainwindow.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.WidgetWidth)
             
         else:
                 
-            text = self.view.tabWidget_Search.tabText(0)
+            text = self.view.mainwindow.tabWidget_Search.tabText(0)
             if text[-1] == u'*':
-                self.view.tabWidget_Search.setTabText(0, text[0:-1])
+                self.view.mainwindow.tabWidget_Search.setTabText(0, text[0:-1])
 
-        self.presenter.update_comment()   # Here?????????????????????????
+        self.presenter.mainwindow.update_comment()   # Here?????????????????????????

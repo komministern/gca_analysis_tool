@@ -7,114 +7,19 @@
 
 
 #import math
-import os
+#import os
 from PySide2 import QtGui, QtCore, QtWidgets
+from view.mainwindow.mymainwindow import MyMainWindow
 #from ui_mainwindow import Ui_MainWindow
-from view.ui_mainwindow import Ui_MainWindow
+#from view.ui_mainwindow import Ui_MainWindow
 #from view.ui_menu import setupMenu
 #from licensewindow import MyLicenseWindow
 
 
-class MyView(QtWidgets.QMainWindow, Ui_MainWindow):
-
-    quit = QtCore.Signal()
+class MyView(QtCore.QObject):
 
     def __init__(self, **kwds):
         super(MyView, self).__init__(**kwds)
+
+        self.mainwindow = MyMainWindow()
                 
-        self.setupUi(self)
-
-        self.setWindowIcon(QtGui.QIcon('gca.ico'))
-        
-        #width_of_textedit = self.plainTextEdit_StringSearch.geometry().width()
-        #self.pixelsize_standard = int(round(width_of_textedit / 24.0) * 0.9)
-        #self.pixelsize_calendar = int(width_of_textedit / 24.0 * 0.81)
-        #self.pixelsize_calendar = int(round(width_of_textedit / 24.0 * 0.78))
-
-        #font = self.font()
-        #font.setPixelSize(self.pixelsize_standard)
-        #self.setFont(font)
-
-        #font = self.calendarWidget.font()
-        #font.setPixelSize(self.pixelsize_calendar)
-        #self.calendarWidget.setFont(font)
-        
-        #view.comboBox_ActiveSite.setFixedWidth(comboBox_Coloring_width * 2.0 / 3.0)
-        #print(self.comboBox_ActiveSite.sizePolicy())
-        #self.comboBox_ActiveSite.sizePolicy().setWidthForHeight(True)
-        #print(self.comboBox_ActiveSite.sizePolicy().hasWidthForHeight())
-
-        
-        
-        self.setupMenu()
-
-        
-
-    #def mousePressEvent(self, event):
-    #    print 'clicked'
-        
-
-
-    #def close(self):
-    #    self.quit.emit()
-
-    def closeEvent(self, event):
-        event.ignore()
-        self.quit.emit() 
-
-    def setupMenu(self):
-        
-        self.importAction = QtWidgets.QAction('Import...', self)
-        self.importAction.setStatusTip('Import history log from a capturesite file')
-
-        self.ignoreAction = QtWidgets.QAction('Add active date', self)
-        self.ignoreAction.setStatusTip('Place active date in the ignore list')
-
-        self.deIgnoreAction = QtWidgets.QAction('Remove all dates', self)
-        self.deIgnoreAction.setStatusTip('Clear all dates in ignore list')
-
-        self.analysisAction = QtWidgets.QAction('Analyze...', self)
-        self.analysisAction.setStatusTip('Analyze history log between two dates')
-
-#        self.aboutAction = QtGui.QAction('&About GCA Analysis Tool', self)
-#        self.aboutAction.setStatusTip('About...')
-
-        menubar = self.menuBar()
-        
-        #font = menubar.font()
-        #font.setPixelSize(self.pixelsize_standard)     # This does not work!!!
-        #font.setPointSize(9)
-        #menubar.setFont(font)
-        
-        #menubar.setFont(self.myfont)
-
-        file_menu = menubar.addMenu('File')
-        file_menu.addAction(self.importAction)
-
-        tools_menu = menubar.addMenu('Tools')
-        tools_menu.addAction(self.analysisAction)
-
-        ignore_menu = QtWidgets.QMenu('Ignore list')
-        ignore_menu.addAction(self.ignoreAction)
-        ignore_menu.addAction(self.deIgnoreAction)
-
-        tools_menu.addMenu(ignore_menu)
-
-        #database_menu.addAction(self.ignoreAction)
-        #database_menu.addAction(self.deIgnoreAction)
-
-#        statistics_menu = menubar.addMenu('&Statistics')
-
-        self.aboutAction = QtWidgets.QAction('this program...', self)
-        #menubar.addAction(self.aboutAction)
-#        menubar.addAction('Test')
-        about_menu = menubar.addMenu('About')
-        about_menu.addAction(self.aboutAction)
-
-
-
-#menu.addAction(QtGui.QAction('50%', menu, checkable=True))
-
-#        database_menu = menubar.addMenu('&Ignorelist')
-#        database_menu.addAction(self.ignoreAction)
-#        database_menu.addAction(self.deIgnoreAction)

@@ -73,4 +73,4 @@ class Ui_Dialog(object):
         self.label_2.setText(QtWidgets.QApplication.translate("Dialog", "To:", None, -1))
         self.pushButton_Go.setText(QtWidgets.QApplication.translate("Dialog", "Analyze", None, -1))
 
-from .myothercalendarwidget import MyOtherCalendarWidget
+from view.mainwindow.localwidgets.myothercalendarwidget import MyOtherCalendarWidget

@@ -106,12 +106,24 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
 
     def paintCell(self, painter, rect, date):
 
-        circle_thickness = rect.height() / 40.0 #30.0
+        rectF = QtCore.QRectF(rect)
+
+        #print(rect)
+        #print(rectF)
+
+        #print(type(rect))
+        #print(type(rectF))
+
+
+        circle_thickness = rectF.height() / 40.0 #30.0
 
         #radius = rect.height() / 2.6
-        radius = rect.height() / 2.0 - 4.0 * circle_thickness
+        radius = rectF.height() / 2.0 - 4.0 * circle_thickness
 
-        rect_thickness = rect.height() / 15.0
+        rect_thickness = rectF.height() / 15.0
+
+        triangle_size = rectF.height() / 4.0
+
 
         self.upper_left_painted = False
         self.lower_right_painted = False
@@ -143,14 +155,14 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
             self.paintUpperLeft(painter, rect, QtGui.QColor('gray'), 1.0)
             self.paintLowerRight(painter, rect, QtGui.QColor('gray'), 1.0)
 
-        painter.drawText(rect, QtCore.Qt.AlignCenter, str(date.day()))
+        painter.drawText(rectF, QtCore.Qt.AlignCenter, str(date.day()))
 
         if date in self.circled_dates:
             saved_pen = painter.pen()
             modified_pen = painter.pen()
             modified_pen.setWidth(circle_thickness)
             painter.setPen(modified_pen)
-            center = rect.center() - QtCore.QPoint(1.0, 0.0)
+            center = rectF.center() #- QtCore.QPointF(1.0, 0.0)
             #painter.drawEllipse(center - QtCore.QPoint(circle_thickness, circle_thickness), radius, radius)
             #painter.drawEllipse(center - QtCore.QPoint(circle_thickness, 0.0), radius, radius)
             painter.drawEllipse(center, radius, radius)
@@ -158,7 +170,10 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
 
         if date in self.triangle_dates:
             upper_right = rect.topRight()
-            bounding_rect = QtCore.QRect(QtCore.QPoint(upper_right.x()-1-9,upper_right.y()+1), QtCore.QPoint(upper_right.x()-1,upper_right.y()+1+9))
+            #bounding_rect = QtCore.QRect(QtCore.QPoint(upper_right.x()-1-9,upper_right.y()+1), QtCore.QPoint(upper_right.x()-1,upper_right.y()+1+9))
+
+            bounding_rect = QtCore.QRectF(QtCore.QPointF(upper_right.x()-rect_thickness-triangle_size, upper_right.y()+rect_thickness), QtCore.QPointF(upper_right.x()-rect_thickness, upper_right.y()+rect_thickness+triangle_size))
+
             path = QtGui.QPainterPath()
             path.moveTo(bounding_rect.topRight())
             path.lineTo(bounding_rect.bottomRight())
@@ -173,9 +188,9 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
         #    print('IGNORED DATE!!!!!')
 
         if date == self.selectedDate():
-            newUpperLeft = QtCore.QPoint(rect.topLeft().x() + rect_thickness/2.0, rect.topLeft().y() + rect_thickness/2.0)
-            newBottomRight = QtCore.QPoint(rect.bottomRight().x() - rect_thickness, rect.bottomRight().y() - rect_thickness)
-            new_rect = QtCore.QRect(newUpperLeft, newBottomRight)
+            newUpperLeft = QtCore.QPointF(rect.topLeft().x() + rect_thickness/2.0, rect.topLeft().y() + rect_thickness/2.0)
+            newBottomRight = QtCore.QPointF(rect.bottomRight().x() - rect_thickness/2.0, rect.bottomRight().y() - rect_thickness/2.0)
+            new_rect = QtCore.QRectF(newUpperLeft, newBottomRight)
             saved_pen = painter.pen()
             modified_pen = painter.pen()
             modified_pen.setWidth(rect_thickness) #3

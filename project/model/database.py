@@ -16,7 +16,7 @@ import multiprocessing
 import pickle
 from PySide2 import QtCore, QtGui, QtWidgets
 from model.sitecontainer import SiteContainer
-from presenter.filtercontainer import Filter
+from presenter.mainwindow.localresources.filtercontainer import Filter  # Move this to presenter - hideous
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +48,7 @@ class Database(QtCore.QObject):
         self.read_all_sites_to_memory()
 
 
-    def tick(self, progress):
+    def set_progress(self, progress):
         self.model.io_progress.emit(progress)
 
 
@@ -76,7 +76,7 @@ class Database(QtCore.QObject):
             site_directory = os.path.join(self.sites_directory, site_name)
             self.site_dictionary[site_name] = SiteContainer(site_directory)
             
-            self.site_dictionary[site_name].historylog_file_progress.connect(self.tick)
+            self.site_dictionary[site_name].historylog_file_progress.connect(self.set_progress)
 
 
     def remove_site_from_memory(self, site_name):
@@ -120,12 +120,12 @@ class Database(QtCore.QObject):
     
         dest_site_directory = os.path.join(self.sites_directory, to_site_name)
         dest_historylog_directory = os.path.join(dest_site_directory, u'historylogs')
-        self.tick(5)
+        self.set_progress(5)
 
         files_to_copy = [f for f in os.listdir(source_historylog_directory) if os.path.isfile(os.path.join(source_historylog_directory, f))]
         nbr_of_files_to_copy = len(files_to_copy)
 
-        self.tick(20)
+        self.set_progress(20)
 
         shutil.rmtree(dest_historylog_directory)
         os.mkdir(dest_historylog_directory)
@@ -136,7 +136,7 @@ class Database(QtCore.QObject):
             full_file_name = os.path.join(source_historylog_directory, f)
             shutil.copy(full_file_name, dest_historylog_directory)
             counter += 1
-            self.tick(20 + int(round(80.0*counter/nbr_of_files_to_copy)))
+            self.set_progress(20 + int(round(80.0*counter/nbr_of_files_to_copy)))
 
 
 
@@ -144,12 +144,12 @@ class Database(QtCore.QObject):
         
         site_directory = os.path.join(self.sites_directory, site_name)
         
-        self.tick(50)
+        self.set_progress(50)
         
         if os.path.isdir(site_directory):
             shutil.rmtree(os.path.join(self.sites_directory, site_name))
 
-        self.tick(100)
+        self.set_progress(100)
 
 
 
@@ -194,7 +194,7 @@ class Database(QtCore.QObject):
         prg_path = self.get_path_to_7z()
         dest_path = this_site_directory
 
-        self.tick(5)
+        self.set_progress(5)
 
         # This operation could take some time, and therefore locking up the GUI.
         # So, let us do this in a different thread instead.
@@ -204,7 +204,7 @@ class Database(QtCore.QObject):
         q.get()
         p.join()
 
-        self.tick(20)
+        self.set_progress(20)
         
         with tarfile.open( os.path.join(dest_path, 'CAPTURESITE_TAR') ) as tar:
             history_members = [member for member in tar.getmembers() if '.txt' in member.name and member.name.startswith('/local/gca_history/')]
@@ -222,7 +222,7 @@ class Database(QtCore.QObject):
 
         os.remove( os.path.join(dest_path, 'CAPTURESITE_TAR') )
 
-        self.tick(100)
+        self.set_progress(100)
 
 
 
@@ -232,12 +232,12 @@ class Database(QtCore.QObject):
         this_site_directory = os.path.join(self.sites_directory, site_name)
         this_historylog_directory = os.path.join(this_site_directory, u'historylogs')
         
-        self.tick(5)
+        self.set_progress(5)
         
         with tarfile.open(capturesite_filename) as tar:
             history_members = [member for member in tar.getmembers() if '.txt' in member.name and member.name.startswith('/local/history/')]
             
-            self.tick(20)
+            self.set_progress(20)
             
             number_of_files_to_be_extracted = len(history_members)
             counter = 0
@@ -247,7 +247,7 @@ class Database(QtCore.QObject):
                 tar.extract(member, this_historylog_directory)
                 
                 counter += 1
-                self.tick(20 + int(round(80.0*counter/number_of_files_to_be_extracted)))
+                self.set_progress(20 + int(round(80.0*counter/number_of_files_to_be_extracted)))
                 
 
 

@@ -56,14 +56,31 @@ class MyModel(QtCore.QObject):
     def get_comment(self, site_name, date):
         return self.database.get_comment(site_name, date)
     
-    def get_ignored_dates(self, site_name):
-        return self.database.get_ignored_dates(site_name)
+    #def get_ignored_dates(self, site_name):
+    #    return self.database.get_ignored_dates(site_name)
     
     def get_first_entry_date(self, site_name):
         return self.database.get_first_entry_date(site_name)
     
     def get_last_entry_date(self, site_name):
         return self.database.get_last_entry_date(site_name)
+
+
+
+    def add_ignored_date(self, site_name, date):
+        self.database.add_ignored_date(site_name, date)
+        self.database.remove_site_from_memory(site_name)
+        self.database.read_site_to_memory(site_name)
+
+    def get_ignored_dates(self, site_name):
+        return self.database.get_ignored_dates(site_name)
+
+    def deignore_all_dates(self, site_name):
+        self.database.deignore_all_dates(site_name)
+        self.database.remove_site_from_memory(site_name)
+        self.database.read_site_to_memory(site_name)
+
+
 
 
     def create_new_site_from_temp_site(self, site_name):
@@ -126,6 +143,14 @@ class MyModel(QtCore.QObject):
 
     def analyze(self, site_name, start_date, end_date):
         self.datacollector.analyze(site_name, start_date, end_date)
+
+
+    def save_comment(self, site_name, date, text):
+        self.database.save_comment(site_name, date, text)
+
+    def delete_comment(self, site_name, date):
+        self.database.delete_comment(site_name, date)
+        
 
 
     def quit(self):
