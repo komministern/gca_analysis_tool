@@ -31,4 +31,4 @@ class MyPresenter(QtCore.QObject):
 
     def create_resultswindow(self):
         self.resultswindow = MyResultsWindowPresenter(self.model, self.view, self, self.app)
-        
+    

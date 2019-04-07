@@ -27,6 +27,7 @@ class IgnorePresenter(QtCore.QObject):
             if (self.model.get_historylog(self.presenter.mainwindow.active_site_name, date) != u'No history log exists for this date.') and (date not in self.ignored_dates(self.presenter.mainwindow.active_site_name)): 
                 try:
                     
+                    #self.presenter.add_ignored_date(self.presenter.mainwindow.active_site_name, date)
                     self.model.add_ignored_date(self.presenter.mainwindow.active_site_name, date)
 
                     site_items = [u''] + self.model.get_site_names()
@@ -51,6 +52,7 @@ class IgnorePresenter(QtCore.QObject):
         if not self.presenter.mainwindow.active_site_name == u'':
 
             try:
+                #self.presenter.remove_all_ignored_dates(self.presenter.mainwindow.active_site_name)
                 self.model.deignore_all_dates(self.presenter.mainwindow.active_site_name)
 
                 site_items = [u''] + self.model.get_site_names()

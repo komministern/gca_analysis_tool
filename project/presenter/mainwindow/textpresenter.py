@@ -6,17 +6,8 @@
 #    This file is part of GCA Analysis Tool.
 
 
-#import os 
-#import string
-#import time
+
 from PySide2 import QtCore, QtGui, QtWidgets
-#from presenter.coloringcontainer import ColoringContainer
-#import presenter.textstuff as txt
-#from presenter.filtercontainer import Filter
-#from view.myfilterdialog import MyFilterDialog
-#from presenter.eventfilter import EventBlocker
-
-
 
 
 class TextPresenter(QtCore.QObject):
@@ -27,11 +18,23 @@ class TextPresenter(QtCore.QObject):
         self.view = view
         self.presenter = presenter
 
+        self.view.mainwindow.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
+
 
     # ---------- Text stuff
 
+    def set_wrap_mode(self):
+        self.view.mainwindow.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.WidgetWidth)
+    
+    def set_nowrap_mode(self):
+        self.view.mainwindow.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
+
+    
+
 
     def update_text(self):
+
+        #print(self.view.mainwindow.textBrowser_HistoryLog.lineWrapMode())
 
         date = self.view.mainwindow.calendarWidget.selectedDate()
         if self.presenter.mainwindow.active_site_name == u'':
@@ -41,7 +44,7 @@ class TextPresenter(QtCore.QObject):
                 
         self.view.mainwindow.textBrowser_HistoryLog.setPlainText(self.presenter.mainwindow.format_text(text))
 
-        if self.presenter.mainwindow.highlight != u'' and text != u'No history log exists for this date.': 
+        if self.presenter.mainwindow.highlight != u'' and text != u'No history log exists for this date.' and text != 'This date is in the list of ignored dates. You must deignore it before you can view the contents of the historylog.': 
 
             #palette = QtGui.QPalette()
             #palette.setColor(QtGui.QPalette.Base,QtCore.Qt.blue)
@@ -76,8 +79,8 @@ class TextPresenter(QtCore.QObject):
 
             # This is a dirty fix for a bizarre problem. If this is omitted, only part of the text will be displayed after a
             # search!!! Weird.
-            self.view.mainwindow.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
-            self.view.mainwindow.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.WidgetWidth)
+            #self.view.mainwindow.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
+            #self.view.mainwindow.textBrowser_HistoryLog.setLineWrapMode(QtWidgets.QTextEdit.WidgetWidth)
             
         else:
                 

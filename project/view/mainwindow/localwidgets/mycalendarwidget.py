@@ -37,6 +37,7 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
         self.lower_right_green_dates = []
         self.lower_right_yellow_dates = []
         self.lower_right_white_dates = []
+        self.ignored_dates = []
 
         self.green = QtGui.QColor.fromRgbF(0.248478, 1.000000, 0.431632, 1.000000)
         self.red = QtGui.QColor.fromRgbF(1.000000, 0.343099, 0.419516, 1.000000)
@@ -77,6 +78,9 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
 
     def setLowerRightWhiteDates(self, list_of_dates):
         self.lower_right_white_dates = list_of_dates
+
+    def setIgnoredDates(self, list_of_dates):
+        self.ignored_dates = list_of_dates
 
 
 
@@ -168,6 +172,29 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
             painter.drawEllipse(center, radius, radius)
             painter.setPen(saved_pen)
 
+        
+
+        if date in self.ignored_dates:
+            
+            cross_thickness = circle_thickness
+
+            line1 = QtCore.QLine(rect.topLeft() + QtCore.QPoint(4*cross_thickness, 4*cross_thickness), rect.bottomRight() - QtCore.QPoint(4*cross_thickness, 4*cross_thickness))
+            line2 = QtCore.QLine(rect.topRight() + QtCore.QPoint(-4*cross_thickness, 4*cross_thickness), rect.bottomLeft() - QtCore.QPoint(-4*cross_thickness, 4*cross_thickness))
+
+            saved_pen = painter.pen()
+            modified_pen = painter.pen()
+            modified_pen.setWidth(cross_thickness)
+            modified_pen.setColor(QtGui.QColor('black'))
+
+            painter.setPen(modified_pen)
+
+            painter.drawLine(line1)
+            painter.drawLine(line2)
+            
+
+            painter.setPen(saved_pen)
+
+
         if date in self.triangle_dates:
             upper_right = rect.topRight()
             #bounding_rect = QtCore.QRect(QtCore.QPoint(upper_right.x()-1-9,upper_right.y()+1), QtCore.QPoint(upper_right.x()-1,upper_right.y()+1+9))
@@ -180,12 +207,6 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
             path.lineTo(bounding_rect.topLeft())
             path.lineTo(bounding_rect.topRight())
             painter.fillPath(path, QtGui.QBrush(QtGui.QColor('blue')))
-
-        #if date in self.ignored_dates:
-        #    upper_left = rect.topLeft()
-        #    lower_right = rect.bottomRight()
-        #    painter.drawline(center, upper_left, lower_right)
-        #    print('IGNORED DATE!!!!!')
 
         if date == self.selectedDate():
             newUpperLeft = QtCore.QPointF(rect.topLeft().x() + rect_thickness/2.0, rect.topLeft().y() + rect_thickness/2.0)

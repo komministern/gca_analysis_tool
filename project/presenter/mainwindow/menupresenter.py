@@ -17,6 +17,10 @@ class MenuPresenter(QtCore.QObject):
         self.view = view
         self.presenter = presenter
 
+        self.view.mainwindow.noWrapAction.setCheckable(True)
+        self.view.mainwindow.wrapAction.setCheckable(True)
+        self.view.mainwindow.noWrapAction.setChecked(True)
+
 
     def update_menu(self):
         

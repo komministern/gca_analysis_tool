@@ -19,11 +19,23 @@ class SearchPresenter(QtCore.QObject):
 
         self.highlight = ''
 
+        self.view.mainwindow.pushButton_CommitStringSearch.setEnabled(False)
+        #self.view.mainwindow.pushButton_ResetStringSearch.setEnabled(False)
+        self.view.mainwindow.pushButton_PreviousSearch.setEnabled(False)
+        self.view.mainwindow.pushButton_NextSearch.setEnabled(False)
+
     
         # ------------ String search stuff
 
     def commit_string_search(self):
         
+        #print('------------------')
+        #print(self.view.mainwindow.textBrowser_HistoryLog.lineWrapMode())
+
+        if self.view.mainwindow.plainTextEdit_StringSearch.toPlainText() != '':
+            self.view.mainwindow.pushButton_NextSearch.setEnabled(True)
+            self.view.mainwindow.pushButton_PreviousSearch.setEnabled(True)
+
         self.highlight = self.view.mainwindow.plainTextEdit_StringSearch.toPlainText()
 
         self.view.mainwindow.calendarWidget.setCircledDates(self.list_of_search_string_dates(self.view.mainwindow.plainTextEdit_StringSearch.toPlainText()))
@@ -32,10 +44,12 @@ class SearchPresenter(QtCore.QObject):
         self.presenter.mainwindow.update_text()
 
             # Lets set highlight in the plainTextEdit text here!!!
-            
+        #print(self.view.mainwindow.textBrowser_HistoryLog.lineWrapMode())
             #print self.view.lineEdit_StringSearch.textCursor()
         cursor = self.view.mainwindow.plainTextEdit_StringSearch.textCursor()
             #self.view.lineEdit_StringSearch.end(False)
+
+        #print(self.view.mainwindow.textBrowser_HistoryLog.lineWrapMode())
 
         format = QtGui.QTextCharFormat()
         format.setBackground(QtGui.QBrush(self.presenter.mainwindow.blue))
@@ -46,8 +60,12 @@ class SearchPresenter(QtCore.QObject):
         cursor.movePosition(QtGui.QTextCursor.End, QtGui.QTextCursor.KeepAnchor, 1)
             
         self.ignore = True
+
+        #print(self.view.mainwindow.textBrowser_HistoryLog.lineWrapMode())
             
         cursor.mergeCharFormat(format)
+
+        #print(self.view.mainwindow.textBrowser_HistoryLog.lineWrapMode())
             
 
 
@@ -112,8 +130,16 @@ class SearchPresenter(QtCore.QObject):
 
     def text_changed(self):
         
-        if not self.highlight == u'' and not self.ignore:
+        if self.view.mainwindow.plainTextEdit_StringSearch.toPlainText() != '':
+            self.view.mainwindow.pushButton_CommitStringSearch.setEnabled(True)
+        else:
+            self.view.mainwindow.pushButton_CommitStringSearch.setEnabled(False)
+
+        if self.highlight != u'' and not self.ignore:
             
+            self.view.mainwindow.pushButton_PreviousSearch.setEnabled(False)
+            self.view.mainwindow.pushButton_NextSearch.setEnabled(False)
+
             self.highlight = u''
             self.presenter.mainwindow.update_text()
 
@@ -136,5 +162,6 @@ class SearchPresenter(QtCore.QObject):
         self.ignore = False
 
     def return_pressed(self):
-        self.view.mainwindow.pushButton_CommitStringSearch.animateClick()
-        self.view.mainwindow.pushButton_CommitStringSearch.clicked.emit()
+        if self.view.mainwindow.plainTextEdit_StringSearch.toPlainText() != '':
+            self.view.mainwindow.pushButton_CommitStringSearch.animateClick()
+            self.view.mainwindow.pushButton_CommitStringSearch.clicked.emit()

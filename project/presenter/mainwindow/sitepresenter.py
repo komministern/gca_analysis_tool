@@ -26,6 +26,10 @@ class SitePresenter(QtCore.QObject):
         site_items = [u''] + self.model.get_site_names()
         self.view.mainwindow.comboBox_ActiveSite.addItems(site_items)
         self.active_site_name = site_items[0]
+
+        self.view.mainwindow.pushButton_FirstDate.setEnabled(False)
+        self.view.mainwindow.pushButton_LastDate.setEnabled(False)
+        self.view.mainwindow.pushButton_ActiveDate.setEnabled(False)
     
 
     def set_active_site(self, index):
@@ -46,6 +50,15 @@ class SitePresenter(QtCore.QObject):
         self.presenter.mainwindow.update_menu()
         
         self.presenter.mainwindow.allow_mouseclicks()
+
+        if self.active_site_name != '':
+            self.view.mainwindow.pushButton_FirstDate.setEnabled(True)
+            self.view.mainwindow.pushButton_LastDate.setEnabled(True)
+            self.view.mainwindow.pushButton_ActiveDate.setEnabled(True)
+        else:
+            self.view.mainwindow.pushButton_FirstDate.setEnabled(False)
+            self.view.mainwindow.pushButton_LastDate.setEnabled(False)
+            self.view.mainwindow.pushButton_ActiveDate.setEnabled(False)
   
 
     def create_new_site(self):

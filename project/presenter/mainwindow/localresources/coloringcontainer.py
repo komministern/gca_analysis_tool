@@ -21,3 +21,4 @@ class ColoringContainer(object):
         self.lower_right_green_dates = lower_right_green_dates
         self.lower_right_yellow_dates = lower_right_yellow_dates
         self.lower_right_white_dates = lower_right_white_dates
+

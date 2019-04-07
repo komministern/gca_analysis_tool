@@ -73,6 +73,8 @@ class MyMainWindowPresenter(QtCore.QObject):
 
         self.view.mainwindow.calendarWidget.setMaximumDate(QtCore.QDate(2019, 12, 31))
 
+        
+
 
 
     def connect_signals(self):
@@ -101,6 +103,9 @@ class MyMainWindowPresenter(QtCore.QObject):
         
         self.view.mainwindow.aboutAction.triggered.connect(self.about)
 
+        self.view.mainwindow.wrapAction.triggered.connect(self.text.set_wrap_mode)
+        self.view.mainwindow.noWrapAction.triggered.connect(self.text.set_nowrap_mode)
+
         self.view.mainwindow.pushButton_FirstDate.clicked.connect(self.calendar.set_first_date)
         self.view.mainwindow.pushButton_LastDate.clicked.connect(self.calendar.set_last_date)
         self.view.mainwindow.pushButton_ActiveDate.clicked.connect(self.calendar.set_active_date)
@@ -116,6 +121,8 @@ class MyMainWindowPresenter(QtCore.QObject):
 
         self.view.mainwindow.pushButton_NextComment.clicked.connect(self.comments.set_next_comment_date)
         self.view.mainwindow.pushButton_PreviousComment.clicked.connect(self.comments.set_previous_comment_date)
+
+
 
         self.model.io_progress.connect(self.update_progressbar)
 
@@ -142,6 +149,8 @@ class MyMainWindowPresenter(QtCore.QObject):
 
     def format_text(self, atext):
         return self.filter.format_text(atext)
+
+    
 
     @property
     def highlight(self):

@@ -257,7 +257,9 @@ class Database(QtCore.QObject):
     def get_historylog(self, site_name, date):
         site_container = self.site_dictionary[site_name]
         text = site_container.get_historylog(date)
-        if text == None:
+        if date in set(self.get_ignored_dates(site_name)):
+            text = 'This date is in the list of ignored dates. You must deignore it before you can view the contents of the historylog.'
+        elif text == None:
             text = u'No history log exists for this date.'
         return text
 
@@ -361,7 +363,10 @@ class Database(QtCore.QObject):
 
 
     def get_ignored_dates(self, site_name):
-        return self.site_dictionary[site_name].get_ignored_dates_list()
+        if site_name in self.site_dictionary.keys():
+            return self.site_dictionary[site_name].get_ignored_dates_list()
+        else:
+            return []
 
 
     def deignore_all_dates(self, site_name):

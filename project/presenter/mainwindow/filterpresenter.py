@@ -38,7 +38,7 @@ class FilterPresenter(QtCore.QObject):
 
 
     def format_text(self, text):
-        if text != u'No history log exists for this date.':
+        if text != u'No history log exists for this date.' and text != 'This date is in the list of ignored dates. You must deignore it before you can view the contents of the historylog.':
             if self.current_filter.state == 1 and self.current_filter.content:  # Show Only
                 return '\n'.join([s for s in text.splitlines() if s[0:4] in self.current_filter.content])
             elif self.current_filter.state == 0:        # Suppress

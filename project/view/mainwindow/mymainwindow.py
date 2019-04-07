@@ -76,6 +76,11 @@ class MyMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.analysisAction = QtWidgets.QAction('Analyze...', self)
         self.analysisAction.setStatusTip('Analyze history log between two dates')
 
+        self.wrapActionGroup = QtWidgets.QActionGroup(self)
+        self.wrapAction = QtWidgets.QAction('Wrap', self.wrapActionGroup)
+        self.noWrapAction = QtWidgets.QAction('No Wrap', self.wrapActionGroup)
+        
+
 #        self.aboutAction = QtGui.QAction('&About GCA Analysis Tool', self)
 #        self.aboutAction.setStatusTip('About...')
 
@@ -93,6 +98,13 @@ class MyMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         tools_menu = menubar.addMenu('Tools')
         tools_menu.addAction(self.analysisAction)
+
+        view_menu = menubar.addMenu('View')
+
+        text_menu = view_menu.addMenu('Text')
+        text_menu.addAction(self.noWrapAction)
+        text_menu.addAction(self.wrapAction)
+
 
         ignore_menu = QtWidgets.QMenu('Ignore list')
         ignore_menu.addAction(self.ignoreAction)

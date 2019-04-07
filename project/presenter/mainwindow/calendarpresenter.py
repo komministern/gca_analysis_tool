@@ -57,6 +57,8 @@ class CalendarPresenter(QtCore.QObject):
         self.view.mainwindow.calendarWidget.setLowerRightWhiteDates( self.presenter.mainwindow.presentation_dict[self.presenter.mainwindow.active_site_name].lower_right_white_dates )
         self.view.mainwindow.calendarWidget.setLowerRightYellowDates( self.presenter.mainwindow.presentation_dict[self.presenter.mainwindow.active_site_name].lower_right_yellow_dates )
 
+        self.view.mainwindow.calendarWidget.setIgnoredDates( self.model.get_ignored_dates(self.presenter.mainwindow.active_site_name) )
+
         self.view.mainwindow.calendarWidget.updateCells()
 
 
@@ -198,7 +200,6 @@ class CalendarPresenter(QtCore.QObject):
             
             lower_right_white_dates = white_dates
             lower_right_yellow_dates = []
-
 
         return ColoringContainer(upper_left_red_dates, upper_left_green_dates, 
                                 upper_left_yellow_dates, upper_left_white_dates,
