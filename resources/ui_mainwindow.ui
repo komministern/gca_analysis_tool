@@ -763,7 +763,7 @@
      <x>0</x>
      <y>0</y>
      <width>1069</width>
-     <height>26</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>
@@ -771,14 +771,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MyCalendarWidget</class>
-   <extends>QCalendarWidget</extends>
-   <header location="global">mycalendarwidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>MyStringSearchPlainTextEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header location="global">mystringsearchplaintextedit.h</header>
+   <header>view/mainwindow/localwidgets/mystringsearchplaintextedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MyCalendarWidget</class>
+   <extends>QCalendarWidget</extends>
+   <header>view/mainwindow/localwidgets/mycalendarwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

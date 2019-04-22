@@ -36,9 +36,15 @@ class AnalysisPresenter(QtCore.QObject):
     def analyze(self, start_date, end_date):
         active_site_name = self.presenter.mainwindow.active_site_name
 
-        self.model.analyze(active_site_name, start_date, end_date)
+        #self.model.analyze(active_site_name, start_date, end_date)
 
-        self.presenter.create_resultswindow()
+        collected_data = self.model.get_analysis(active_site_name, start_date, end_date)
+
+        collected_data = self.model.get_analysis(active_site_name, self.model.get_first_entry_date(active_site_name), self.model.get_last_entry_date(active_site_name))
+
+        self.presenter.create_resultswindowpresenter(collected_data)
+
+
 
         #self.result_window = MyResultsWindow(self.view)
         #self.result_window.show()

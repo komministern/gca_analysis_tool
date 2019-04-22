@@ -141,8 +141,8 @@ class MyModel(QtCore.QObject):
         return (nbr_of_historylog_files_in_temp_site == nbr_of_historylog_files_in_site)
 
 
-    def analyze(self, site_name, start_date, end_date):
-        self.datacollector.analyze(site_name, start_date, end_date)
+    def get_analysis(self, site_name, start_date, end_date):
+        return self.datacollector.get_analysis(site_name, start_date, end_date)
 
 
     def save_comment(self, site_name, date, text):

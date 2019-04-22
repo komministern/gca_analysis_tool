@@ -98,7 +98,7 @@
   <customwidget>
    <class>MyOtherCalendarWidget</class>
    <extends>QCalendarWidget</extends>
-   <header>myothercalendarwidget.h</header>
+   <header>view/mainwindow/localwidgets/myothercalendarwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -20,6 +20,26 @@ class Datacollector(QtCore.QObject):
 
         self.model = model
 
+    def get_analysis(self, site_name, start_date, end_date):
+
+        analysis = {}
+
+        self.dates = sorted([date for date in self.model.get_historylog_dictionary(site_name).keys() if (date >= start_date) and (date <= end_date)])
+        self.historylog_dict = {date:self.model.get_historylog_dictionary(site_name)[date] for date in self.dates}
+
+        analysis['system_name'] = site_name
+        analysis['dates'] = self.dates
+        analysis['temperatures'] = {date:self.get_temperatures(date) for date in self.dates}
+        analysis['autotest_levels'] = {date:self.get_autotest_levels(date) for date in self.dates}
+        analysis['mti_deviations'] = {date:self.get_mti_deviations(date) for date in self.dates}
+        analysis['minutes_report'] = {date:self.get_minutes_report(date) for date in self.dates}
+        analysis['faults'] = {date:self.get_faults(date) for date in self.dates}
+
+        return copy.deepcopy(analysis)     # Necessary?
+    
+    #def get_fault_codes(self, site_name):
+    #    self.dates = self.model.get_historylog_dictionary(site_name).keys()
+
 
     def analyze(self, site_name, start_date, end_date):
 
@@ -34,7 +54,7 @@ class Datacollector(QtCore.QObject):
 
         #self.update_fault_index_file()
 
-        print('Done.')
+        #print('Done.')
 
 
 
@@ -177,6 +197,7 @@ class Datacollector(QtCore.QObject):
             minutes_report_day['transmitter'] = transmitter_minutes_report
             minutes_report_day['antenna drive'] = antenna_drive_minutes_report
             minutes_report_day['ssr'] = ssr_minutes_report
+
             return minutes_report_day
         
         except UnboundLocalError as e:
@@ -201,7 +222,7 @@ class Datacollector(QtCore.QObject):
             fault_entries_day[dchf.time(fault_entry)] = dchf.fault_details(fault_entry)
 
         return fault_entries_day
-            
+
 
     def get_temperatures(self, date):
         temperature_entries = [line for line in self.historylog(date).splitlines() if dchf.temperature_autotest_status_entry(line)]

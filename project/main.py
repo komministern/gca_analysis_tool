@@ -42,7 +42,7 @@ if __name__ == '__main__':
     presenter = MyPresenter(model, view, app)
 
 
-    view.mainwindow.show()
+    #view.mainwindow.show()
 
     comboBox_Coloring_width = view.mainwindow.comboBox_Coloring.size().width()
     comboBox_Coloring_height = view.mainwindow.comboBox_Coloring.size().height()

@@ -34,6 +34,8 @@ class MyMainWindowPresenter(QtCore.QObject):
         self.presenter = presenter
         self.app = app
 
+        self.view.create_mainwindow()
+
         # Sub-presenters
         self.filter = FilterPresenter(model, view, presenter)
         self.text = TextPresenter(model, view, presenter)
