@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'ui_resultswindow.ui',
 # licensing of 'ui_resultswindow.ui' applies.
 #
-# Created: Mon Apr 22 14:47:51 2019
+# Created: Tue Apr 23 00:46:06 2019
 #      by: pyside2-uic  running on PySide2 5.12.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,7 +13,8 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1132, 773)
+        MainWindow.resize(643, 453)
+        MainWindow.setMinimumSize(QtCore.QSize(0, 0))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_8 = QtWidgets.QGridLayout(self.centralwidget)
@@ -24,6 +25,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
         self.groupBox.setSizePolicy(sizePolicy)
+        self.groupBox.setMinimumSize(QtCore.QSize(600, 200))
         self.groupBox.setObjectName("groupBox")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.groupBox)
         self.gridLayout_2.setObjectName("gridLayout_2")
@@ -62,7 +64,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.radioButton_X_Custom, 4, 0, 1, 1)
         self.gridLayout_8.addWidget(self.groupBox_2, 2, 0, 1, 1)
         self.groupBox_4 = QtWidgets.QGroupBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.groupBox_4.sizePolicy().hasHeightForWidth())
@@ -94,7 +96,7 @@ class Ui_MainWindow(object):
         self.gridLayout_7 = QtWidgets.QGridLayout(self.groupBox_Deviation_Parameters)
         self.gridLayout_7.setObjectName("gridLayout_7")
         self.groupBox_7 = QtWidgets.QGroupBox(self.groupBox_Deviation_Parameters)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.groupBox_7.sizePolicy().hasHeightForWidth())
@@ -110,7 +112,7 @@ class Ui_MainWindow(object):
         self.gridLayout_5.addWidget(self.radioButton_Combined, 1, 0, 1, 1)
         self.gridLayout_7.addWidget(self.groupBox_7, 1, 0, 1, 1)
         self.groupBox_8 = QtWidgets.QGroupBox(self.groupBox_Deviation_Parameters)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.groupBox_8.sizePolicy().hasHeightForWidth())
@@ -189,7 +191,7 @@ class Ui_MainWindow(object):
         self.gridLayout_8.addWidget(self.groupBox_3, 3, 0, 1, 2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1132, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 643, 20))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)

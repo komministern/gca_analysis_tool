@@ -34,6 +34,8 @@ class MyResultsWindowPresenter(QtCore.QObject):
 
         self.draw_date = QtCore.QDate.fromString("20160801", "yyyyMMdd")
 
+        self.present_date = self.draw_date
+
         self.data = data
 
         self.view.create_resultswindow(self.handle)
@@ -81,48 +83,80 @@ class MyResultsWindowPresenter(QtCore.QObject):
 
         self.view.resultswindows[self.handle].addToolBar(NavigationToolbar(self.view.resultswindows[self.handle].mplCanvasWidget, self.view.resultswindows[self.handle]))
 
+        self.update_scrollbar()
+
+    #def init_scrollbar(self):
+    #    self.day = self.draw_date
+    #    self.week = 
+    #    self.month =
+    #    self.year = 
+
+    #    self.update_scrollbar()
+
+
+
         #self.draw_graphs()
 
+    def update_scrollbar(self):
+        if self.x_axis_scope == 'Day':
+            self.view.resultswindows[self.handle].horizontalScrollBar.setMinimum(1)
+            self.view.resultswindows[self.handle].horizontalScrollBar.setMaximum( self.present_date.daysInYear() )
+            self.view.resultswindows[self.handle].horizontalScrollBar.setValue( self.present_date.dayOfYear() )
+
+        elif self.x_axis_scope == 'Week':
+            self.view.resultswindows[self.handle].horizontalScrollBar.setMinimum(1)
+            last_date_of_year = QtCore.QDate(self.present_date.year(), 12, 31)
+            last_week_of_year, _ = last_date_of_year.weekNumber()
+            self.view.resultswindows[self.handle].horizontalScrollBar.setMaximum( last_week_of_year )
+            present_week, _ = self.present_date.weekNumber()
+            self.view.resultswindows[self.handle].horizontalScrollBar.setValue( present_week )
+
+        elif self.x_axis_scope == 'Month':
+            self.view.resultswindows[self.handle].horizontalScrollBar.setMinimum(1)
+            self.view.resultswindows[self.handle].horizontalScrollBar.setMaximum(12)
+            self.view.resultswindows[self.handle].horizontalScrollBar.setValue( self.present_date.month() )
+
+        self.view.resultswindows[self.handle].horizontalScrollBar.setSingleStep(1)
+        self.view.resultswindows[self.handle].horizontalScrollBar.setPageStep(1)
+
+        #elif self.x_axis_scope == 'Year':
+        #    year_number = 1
+        #    first_year = date
+        #    last_year = date
+        #    number_of_years = 2
 
 
 
     def connect_signals(self):
         self.view.resultswindows[self.handle].quit.connect(self.quit)
-        self.view.resultswindows[self.handle].radioButton_X_Day.pressed.connect(self.set_x_axis_day)
-        self.view.resultswindows[self.handle].radioButton_X_Week.pressed.connect(self.set_x_axis_week)
-        self.view.resultswindows[self.handle].radioButton_X_Month.pressed.connect(self.set_x_axis_month)
-        self.view.resultswindows[self.handle].radioButton_X_Year.pressed.connect(self.set_x_axis_year)
-        self.view.resultswindows[self.handle].radioButton_X_Custom.pressed.connect(self.set_x_axis_custom)
+
+        self.view.resultswindows[self.handle].draw_graph.connect(self.draw_graphs)
+
+        self.view.resultswindows[self.handle].radioButton_X_Day.clicked.connect(self.set_x_axis_day)
+        self.view.resultswindows[self.handle].radioButton_X_Week.clicked.connect(self.set_x_axis_week)
+        self.view.resultswindows[self.handle].radioButton_X_Month.clicked.connect(self.set_x_axis_month)
+        self.view.resultswindows[self.handle].radioButton_X_Year.clicked.connect(self.set_x_axis_year)
+        self.view.resultswindows[self.handle].radioButton_X_Custom.clicked.connect(self.set_x_axis_custom)
 
         self.view.resultswindows[self.handle].comboBox_Y_Subplot_1.currentIndexChanged.connect(self.set_graph_1_y_axis_content)
         self.view.resultswindows[self.handle].comboBox_Y_Subplot_2.currentIndexChanged.connect(self.set_graph_2_y_axis_content)
         self.view.resultswindows[self.handle].comboBox_Y_Subplot_3.currentIndexChanged.connect(self.set_graph_3_y_axis_content)
 
-        self.view.resultswindows[self.handle].radioButton_Rwy_1.pressed.connect(self.set_rwy_1)
-        self.view.resultswindows[self.handle].radioButton_Rwy_2.pressed.connect(self.set_rwy_2)
-        self.view.resultswindows[self.handle].radioButton_Rwy_3.pressed.connect(self.set_rwy_3)
-        self.view.resultswindows[self.handle].radioButton_Rwy_4.pressed.connect(self.set_rwy_4)
-        self.view.resultswindows[self.handle].radioButton_Rwy_5.pressed.connect(self.set_rwy_5)
-        self.view.resultswindows[self.handle].radioButton_Rwy_6.pressed.connect(self.set_rwy_6)
+        self.view.resultswindows[self.handle].radioButton_Rwy_1.clicked.connect(self.set_rwy_1)
+        self.view.resultswindows[self.handle].radioButton_Rwy_2.clicked.connect(self.set_rwy_2)
+        self.view.resultswindows[self.handle].radioButton_Rwy_3.clicked.connect(self.set_rwy_3)
+        self.view.resultswindows[self.handle].radioButton_Rwy_4.clicked.connect(self.set_rwy_4)
+        self.view.resultswindows[self.handle].radioButton_Rwy_5.clicked.connect(self.set_rwy_5)
+        self.view.resultswindows[self.handle].radioButton_Rwy_6.clicked.connect(self.set_rwy_6)
 
-        self.view.resultswindows[self.handle].radioButton_Par.pressed.connect(self.set_par)
-        self.view.resultswindows[self.handle].radioButton_Combined.pressed.connect(self.set_combined)
+        self.view.resultswindows[self.handle].radioButton_Par.clicked.connect(self.set_par)
+        self.view.resultswindows[self.handle].radioButton_Combined.clicked.connect(self.set_combined)
 
-        self.view.resultswindows[self.handle].radioButton_Clear.pressed.connect(self.set_clear)
-        self.view.resultswindows[self.handle].radioButton_Rain.pressed.connect(self.set_rain)
-
-
-        #self.view.resultswindows[self.handle].radioButton_Temp.pressed.connect(self.set_y_axis_temp)
-        #self.view.resultswindows[self.handle].radioButton_Autotest.pressed.connect(self.set_y_axis_autotest)
-        #self.view.resultswindows[self.handle].radioButton_MTI.pressed.connect(self.set_y_axis_mti)
+        self.view.resultswindows[self.handle].radioButton_Clear.clicked.connect(self.set_clear)
+        self.view.resultswindows[self.handle].radioButton_Rain.clicked.connect(self.set_rain)
 
 
 
-    
-
-
-    #def draw_init_graph(self):
-    #    self.view.resultswindows[self.handle].mplCanvasWidget.axes.plot([0, 1, 2, 3], [1, 2, 0, 4], 'r')
 
 
     def set_rwy_1(self):
@@ -150,6 +184,7 @@ class MyResultsWindowPresenter(QtCore.QObject):
         self.draw_graphs()
 
 
+
     def set_par(self):
         self.mti_deviation_parameter_mode = 'PAR'    # Check
         self.draw_graphs()
@@ -159,6 +194,7 @@ class MyResultsWindowPresenter(QtCore.QObject):
         self.mti_deviation_parameter_mode = 'Combined'   # Check
         self.draw_graphs()
     
+
 
     def set_clear(self):
         self.mti_deviation_parameter_weather = 'Clear'    # Check
@@ -174,16 +210,19 @@ class MyResultsWindowPresenter(QtCore.QObject):
         self.x_axis_scope = 'Day'
         self.draw_graphs()
         self.view.resultswindows[self.handle].horizontalScrollBar.setEnabled(True)
+        self.update_scrollbar()
 
     def set_x_axis_week(self):
         self.x_axis_scope = 'Week'
         self.draw_graphs()
         self.view.resultswindows[self.handle].horizontalScrollBar.setEnabled(True)
+        self.update_scrollbar()
 
     def set_x_axis_month(self):
         self.x_axis_scope = 'Month'
         self.draw_graphs()
         self.view.resultswindows[self.handle].horizontalScrollBar.setEnabled(True)
+        self.update_scrollbar()
 
     def set_x_axis_year(self):
         pass
@@ -208,7 +247,12 @@ class MyResultsWindowPresenter(QtCore.QObject):
         self.graph_3_y_axis_content = self.y_axis_items[index]
         self.draw_graphs()
         #print(self.y_axis_items[index])
-        
+
+
+
+
+
+
 
 
 
@@ -227,7 +271,7 @@ class MyResultsWindowPresenter(QtCore.QObject):
 
         if number_of_graphs > 0:
 
-            qdate = self.draw_date
+            qdate = self.present_date
             start_qdate = self.draw_date
 
             self.axes = self.view.resultswindows[self.handle].mplCanvasWidget.fig.subplots(nrows=number_of_graphs, ncols=1, sharex=True)
@@ -238,11 +282,13 @@ class MyResultsWindowPresenter(QtCore.QObject):
             for ax, content in zip(self.axes, graph_contents):
 
                 if self.x_axis_scope == 'Day':
-                    self.draw_day_(qdate, ax, content)
+                    self.draw_day_(self.present_date, ax, content)
                 elif self.x_axis_scope == 'Week':
-                    self.draw_week_(qdate, ax, content)
+                    first_date_in_week = self.present_date.addDays( -( self.present_date.dayOfWeek() - 1 ) )
+                    self.draw_week_(first_date_in_week, ax, content)
                 elif self.x_axis_scope == 'Month':
-                    self.draw_month_(qdate, ax, content)
+                    first_date_in_month = self.present_date.addDays( -( self.present_date.day() - 1 ) )
+                    self.draw_month_(first_date_in_month, ax, content)
 
             if self.x_axis_scope == 'Day':
                 self.axes[-1].set_xlabel(qdate.toString())
@@ -260,6 +306,8 @@ class MyResultsWindowPresenter(QtCore.QObject):
             self.view.resultswindows[self.handle].groupBox_Deviation_Parameters.setEnabled(True)
         else:
             self.view.resultswindows[self.handle].groupBox_Deviation_Parameters.setEnabled(False)
+
+
 
 
 
