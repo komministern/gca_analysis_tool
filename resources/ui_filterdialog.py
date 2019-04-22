@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'ui_filterdialog.ui',
 # licensing of 'ui_filterdialog.ui' applies.
 #
-# Created: Tue Apr  9 19:43:21 2019
+# Created: Mon Apr 22 14:47:50 2019
 #      by: pyside2-uic  running on PySide2 5.12.1
 #
 # WARNING! All changes made in this file will be lost!

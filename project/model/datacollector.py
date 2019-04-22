@@ -267,8 +267,8 @@ class Datacollector(QtCore.QObject):
 
             elif dchf.mti_deviation_status_entry(entry):
                 try:
-                    state = (runway, direction, radar_mode, weather, tilt)
-                    mti_deviation_dictionary_day[dchf.time(entry)] = ( state, dchf.mti_deviations(entry) )
+                    #state = (runway, direction, radar_mode, weather, tilt)
+                    mti_deviation_dictionary_day[dchf.time(entry)] = {'tilt': tilt, 'weather_mode': weather, 'rwy': runway, 'direction': direction, 'radar_mode': radar_mode, 'mti_deviation': dchf.mti_deviations(entry)}
                 except UnboundLocalError as e:
                     # This happens sometimes for some reason. (Luleå 130520 for example.) The daily historylog entry
                     # should always start with a state update. But sometimes, very seldom, this does not happen. 
