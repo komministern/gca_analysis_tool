@@ -8,15 +8,18 @@
 import datetime
 from datetime import timedelta
 import matplotlib.pyplot as plt
+import matplotlib
 
-from PySide2 import QtCore, QtGui, QtWidgets
+#from PySide2 import QtCore, QtGui, QtWidgets
+matplotlib.use('Qt5Agg')
 
-#from matplotlib.backends.qt_compat import QtCore, QtGui, QtWidgets
+from matplotlib.backends.qt_compat import QtCore, QtGui, QtWidgets
 from matplotlib.backends.backend_qt5agg import (
         FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
-from matplotlib.widgets import RadioButtons
+#from matplotlib.widgets import RadioButtons
 
+#from presenter.resultswindow.scrollbarpresenter import ScrollBarPresenter
 from view.resultswindow.myresultswindow import MyResultsWindow
 
 
@@ -32,6 +35,8 @@ class MyResultsWindowPresenter(QtCore.QObject):
         self.app = app
         self.handle = handle
 
+        #self.scrollbarpresenter = 
+
         self.draw_date = QtCore.QDate.fromString("20160801", "yyyyMMdd")
 
         self.present_date = self.draw_date
@@ -40,7 +45,8 @@ class MyResultsWindowPresenter(QtCore.QObject):
 
         self.view.create_resultswindow(self.handle)
 
-        self.connect_signals()
+        self.slider_down = False
+
 
         self.x_axis_scope = None
         #self.y_axis_data = None
@@ -48,6 +54,10 @@ class MyResultsWindowPresenter(QtCore.QObject):
         self.graph_1_y_axis_content = ''
         self.graph_2_y_axis_content = ''
         self.graph_3_y_axis_content = ''
+
+
+        self.connect_signals()
+
 
         comboboxes = [self.view.resultswindows[self.handle].comboBox_Y_Subplot_1, self.view.resultswindows[self.handle].comboBox_Y_Subplot_2, self.view.resultswindows[self.handle].comboBox_Y_Subplot_3]
         self.y_axis_items = ['', 'Temperature', 'Autotest level', 'MTI Deviation']
@@ -82,6 +92,8 @@ class MyResultsWindowPresenter(QtCore.QObject):
         #self.dates = self.data['dates']
 
         self.view.resultswindows[self.handle].addToolBar(NavigationToolbar(self.view.resultswindows[self.handle].mplCanvasWidget, self.view.resultswindows[self.handle]))
+
+        
 
         self.update_scrollbar()
 
@@ -125,6 +137,10 @@ class MyResultsWindowPresenter(QtCore.QObject):
         #    last_year = date
         #    number_of_years = 2
 
+        
+
+
+
 
 
     def connect_signals(self):
@@ -155,9 +171,63 @@ class MyResultsWindowPresenter(QtCore.QObject):
         self.view.resultswindows[self.handle].radioButton_Clear.clicked.connect(self.set_clear)
         self.view.resultswindows[self.handle].radioButton_Rain.clicked.connect(self.set_rain)
 
+        self.view.resultswindows[self.handle].horizontalScrollBar.valueChanged.connect(self.new_slider_value)
+        self.view.resultswindows[self.handle].horizontalScrollBar.sliderPressed.connect(self.slider_pressed)
+        self.view.resultswindows[self.handle].horizontalScrollBar.sliderReleased.connect(self.slider_released)
+        self.view.resultswindows[self.handle].horizontalScrollBar.sliderMoved.connect(self.slider_moved)
 
 
 
+    def new_slider_value(self, value):
+        if not self.slider_down:
+            if self.x_axis_scope == 'Day':
+                first_year_date = QtCore.QDate(self.present_date.year(), 1, 1)
+                self.present_date = first_year_date.addDays(self.view.resultswindows[self.handle].horizontalScrollBar.value() - 1)
+            elif self.x_axis_scope == 'Week':
+                previous_week, _ = self.present_date.weekNumber()
+
+        
+        self.draw_graphs()
+
+
+    def slider_pressed(self):
+        self.slider_down = True
+        #self.mylabel = QtWidgets.QLabel(parent=self.view.resultswindows[self.handle])
+        #self.mylabel.setText('Jesus Lever')
+        if self.x_axis_scope == 'Day':
+            first_year_date = QtCore.QDate(self.present_date.year(), 1, 1)
+            new_date = first_year_date.addDays(self.view.resultswindows[self.handle].horizontalScrollBar.value() - 1)
+            text = new_date.toString(f=QtCore.Qt.RFC2822Date)
+        else:
+            text = str(self.view.resultswindows[self.handle].horizontalScrollBar.value())
+        self.mytooltip = QtWidgets.QToolTip.showText(QtGui.QCursor.pos(), text, self.view.resultswindows[self.handle])
+
+        #self.mytooltip = QtWidgets.QToolTip.showText(
+        #        QtGui.QCursor.pos(),
+        #        str(self.view.resultswindows[self.handle].horizontalScrollBar.value()),
+        #        self.view.resultswindows[self.handle]
+        #        )
+    
+    def slider_released(self):
+        self.slider_down = False
+        self.new_slider_value(self.view.resultswindows[self.handle].horizontalScrollBar.value())
+        del self.mytooltip
+        
+        #if self.x_axis_scope == 'Day':
+        #    first_year_date = QtCore.QDate(self.present_date.year(), 1, 1)
+        #    self.present_date = first_year_date.addDays(value)
+        
+
+    def slider_moved(self, value):
+        del self.mytooltip
+        if self.x_axis_scope == 'Day':
+            first_year_date = QtCore.QDate(self.present_date.year(), 1, 1)
+            new_date = first_year_date.addDays(value - 1)
+            text = new_date.toString(f=QtCore.Qt.RFC2822Date)
+        else:
+            text = str(value)
+        self.mytooltip = QtWidgets.QToolTip.showText(QtGui.QCursor.pos(), text, self.view.resultswindows[self.handle])
+        
 
     def set_rwy_1(self):
         self.mti_deviation_parameter_rwy = 'Rwy1'

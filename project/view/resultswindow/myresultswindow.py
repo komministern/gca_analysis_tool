@@ -5,8 +5,14 @@
 #
 #    This file is part of GCA Analysis Tool.
 
+#from matplotlib.backends.qt_compat import QtCore, QtGui, QtWidgets
 
-from PySide2 import QtGui, QtCore, QtWidgets
+import matplotlib
+
+matplotlib.use('Qt5Agg')
+
+from matplotlib.backends.qt_compat import QtCore, QtGui, QtWidgets
+#from PySide2 import QtGui, QtCore, QtWidgets
 from view.ui.ui_resultswindow import Ui_MainWindow
 
 
