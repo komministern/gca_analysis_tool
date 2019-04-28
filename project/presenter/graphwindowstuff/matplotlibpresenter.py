@@ -121,7 +121,7 @@ class MatPlotLibPresenter(QtCore.QObject):
         elif content == self.y_axis_items[3]:  # MTI Deviation
 
             ax.set_title('MTI Deviation')
-            ax.set_ylabel('radians')
+            ax.set_ylabel('degrees')
             
             ax.tick_params(axis='y', labelcolor='blue')
 
@@ -199,7 +199,7 @@ class MatPlotLibPresenter(QtCore.QObject):
         elif content == self.y_axis_items[3]:  # MTI Deviations
 
             ax.set_title('MTI Deviation')
-            ax.set_ylabel('radians')
+            ax.set_ylabel('degrees')
             
             ax.tick_params(axis='y', labelcolor='blue')
 
@@ -290,7 +290,7 @@ class MatPlotLibPresenter(QtCore.QObject):
         elif content == self.y_axis_items[3]:  # MTI Deviations
 
             ax.set_title('MTI Deviation')
-            ax.set_ylabel('radians')
+            ax.set_ylabel('degrees')
 
             ax.tick_params(axis='y', labelcolor='blue')
 
@@ -369,7 +369,7 @@ class MatPlotLibPresenter(QtCore.QObject):
         elif content == self.y_axis_items[3]:  # MTI Deviations
 
             ax.set_title('MTI Deviation')
-            ax.set_ylabel('radians')
+            ax.set_ylabel('degrees')
 
             ax.tick_params(axis='y', labelcolor='blue')
 

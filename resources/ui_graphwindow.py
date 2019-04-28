@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'ui_graphwindow.ui',
 # licensing of 'ui_graphwindow.ui' applies.
 #
-# Created: Sat Apr 27 18:18:44 2019
+# Created: Sun Apr 28 22:40:05 2019
 #      by: pyside2-uic  running on PySide2 5.12.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,8 +17,8 @@ class Ui_MainWindow(object):
         MainWindow.setMinimumSize(QtCore.QSize(0, 0))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.gridLayout_8 = QtWidgets.QGridLayout(self.centralwidget)
-        self.gridLayout_8.setObjectName("gridLayout_8")
+        self.gridLayout_9 = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout_9.setObjectName("gridLayout_9")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -32,12 +32,12 @@ class Ui_MainWindow(object):
         self.mplCanvasWidget = MyMplCanvasWidget(self.groupBox)
         self.mplCanvasWidget.setObjectName("mplCanvasWidget")
         self.gridLayout_2.addWidget(self.mplCanvasWidget, 0, 0, 1, 1)
-        self.gridLayout_8.addWidget(self.groupBox, 0, 0, 1, 4)
+        self.gridLayout_9.addWidget(self.groupBox, 0, 0, 1, 5)
         self.horizontalScrollBar = QtWidgets.QScrollBar(self.centralwidget)
         self.horizontalScrollBar.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalScrollBar.setInvertedAppearance(False)
         self.horizontalScrollBar.setObjectName("horizontalScrollBar")
-        self.gridLayout_8.addWidget(self.horizontalScrollBar, 1, 0, 1, 4)
+        self.gridLayout_9.addWidget(self.horizontalScrollBar, 1, 0, 1, 5)
         self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -59,7 +59,7 @@ class Ui_MainWindow(object):
         self.radioButton_X_Year = QtWidgets.QRadioButton(self.groupBox_2)
         self.radioButton_X_Year.setObjectName("radioButton_X_Year")
         self.gridLayout.addWidget(self.radioButton_X_Year, 3, 0, 1, 1)
-        self.gridLayout_8.addWidget(self.groupBox_2, 2, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.groupBox_2, 2, 0, 1, 1)
         self.groupBox_4 = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -87,7 +87,7 @@ class Ui_MainWindow(object):
         self.comboBox_Y_Subplot_3 = QtWidgets.QComboBox(self.groupBox_4)
         self.comboBox_Y_Subplot_3.setObjectName("comboBox_Y_Subplot_3")
         self.gridLayout_4.addWidget(self.comboBox_Y_Subplot_3, 2, 1, 1, 1)
-        self.gridLayout_8.addWidget(self.groupBox_4, 2, 1, 1, 1)
+        self.gridLayout_9.addWidget(self.groupBox_4, 2, 1, 1, 1)
         self.groupBox_Deviation_Parameters = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox_Deviation_Parameters.setObjectName("groupBox_Deviation_Parameters")
         self.gridLayout_7 = QtWidgets.QGridLayout(self.groupBox_Deviation_Parameters)
@@ -147,9 +147,23 @@ class Ui_MainWindow(object):
         self.radioButton_Rain.setObjectName("radioButton_Rain")
         self.gridLayout_6.addWidget(self.radioButton_Rain, 1, 0, 1, 1)
         self.gridLayout_7.addWidget(self.groupBox_8, 0, 2, 1, 1)
-        self.gridLayout_8.addWidget(self.groupBox_Deviation_Parameters, 2, 2, 1, 1)
+        self.gridLayout_9.addWidget(self.groupBox_Deviation_Parameters, 2, 2, 1, 1)
+        self.groupBox_3 = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_3.setObjectName("groupBox_3")
+        self.gridLayout_8 = QtWidgets.QGridLayout(self.groupBox_3)
+        self.gridLayout_8.setObjectName("gridLayout_8")
+        self.radioButton_DPI100 = QtWidgets.QRadioButton(self.groupBox_3)
+        self.radioButton_DPI100.setObjectName("radioButton_DPI100")
+        self.gridLayout_8.addWidget(self.radioButton_DPI100, 0, 0, 1, 1)
+        self.radioButton_DPI150 = QtWidgets.QRadioButton(self.groupBox_3)
+        self.radioButton_DPI150.setObjectName("radioButton_DPI150")
+        self.gridLayout_8.addWidget(self.radioButton_DPI150, 1, 0, 1, 1)
+        self.radioButton_DPI200 = QtWidgets.QRadioButton(self.groupBox_3)
+        self.radioButton_DPI200.setObjectName("radioButton_DPI200")
+        self.gridLayout_8.addWidget(self.radioButton_DPI200, 2, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.groupBox_3, 2, 3, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(575, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_8.addItem(spacerItem, 2, 3, 1, 1)
+        self.gridLayout_9.addItem(spacerItem, 2, 4, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 614, 20))
@@ -188,5 +202,9 @@ class Ui_MainWindow(object):
         self.groupBox_8.setTitle(QtWidgets.QApplication.translate("MainWindow", "Weather", None, -1))
         self.radioButton_Clear.setText(QtWidgets.QApplication.translate("MainWindow", "Clear", None, -1))
         self.radioButton_Rain.setText(QtWidgets.QApplication.translate("MainWindow", "Rain", None, -1))
+        self.groupBox_3.setTitle(QtWidgets.QApplication.translate("MainWindow", "DPI", None, -1))
+        self.radioButton_DPI100.setText(QtWidgets.QApplication.translate("MainWindow", "100", None, -1))
+        self.radioButton_DPI150.setText(QtWidgets.QApplication.translate("MainWindow", "150", None, -1))
+        self.radioButton_DPI200.setText(QtWidgets.QApplication.translate("MainWindow", "200", None, -1))
 
 from view.graphwindowresources.mplcanvaswidget import MyMplCanvasWidget

@@ -74,6 +74,8 @@ class GraphWindowPresenter(QtCore.QObject):
         #self.x_axis_scope = 'Day'
         self.graphwindow.groupBox_Deviation_Parameters.setEnabled(False)
 
+        self.graphwindow.radioButton_DPI150.setChecked(True)
+
         self.graphwindow.addToolBar(NavigationToolbar(self.graphwindow.mplCanvasWidget, self.graphwindow))
 
         self.scrollbarpresenter.update_scrollbar()
@@ -121,12 +123,34 @@ class GraphWindowPresenter(QtCore.QObject):
         self.graphwindow.radioButton_Clear.clicked.connect(self.set_clear)
         self.graphwindow.radioButton_Rain.clicked.connect(self.set_rain)
 
+        self.graphwindow.radioButton_DPI100.clicked.connect(self.set_dpi_100)
+        self.graphwindow.radioButton_DPI150.clicked.connect(self.set_dpi_150)
+        self.graphwindow.radioButton_DPI200.clicked.connect(self.set_dpi_200)
+
         self.graphwindow.horizontalScrollBar.valueChanged.connect(self.scrollbarpresenter.new_slider_value)
         self.graphwindow.horizontalScrollBar.sliderPressed.connect(self.scrollbarpresenter.slider_pressed)
         self.graphwindow.horizontalScrollBar.sliderReleased.connect(self.scrollbarpresenter.slider_released)
         self.graphwindow.horizontalScrollBar.sliderMoved.connect(self.scrollbarpresenter.slider_moved)
 
 
+
+    def set_dpi_100(self):
+        self.graphwindow.mplCanvasWidget.set_new_dpi(100)
+        #self.graphwindow.mplCanvasWidget.fig.canvas.draw()
+        #self.graphwindow.updateGeometry()
+        self.graphwindow.resize(self.graphwindow.width() - 1, self.graphwindow.height())
+    
+    def set_dpi_150(self):
+        self.graphwindow.mplCanvasWidget.set_new_dpi(150)
+        #self.graphwindow.mplCanvasWidget.fig.canvas.draw()
+        #self.graphwindow.updateGeometry()
+        self.graphwindow.resize(self.graphwindow.width() - 1, self.graphwindow.height())
+    
+    def set_dpi_200(self):
+        self.graphwindow.mplCanvasWidget.set_new_dpi(200)
+        #self.graphwindow.mplCanvasWidget.fig.canvas.draw()
+        #self.graphwindow.updateGeometry()
+        self.graphwindow.resize(self.graphwindow.width() - 1, self.graphwindow.height())
 
 
     def set_rwy_1(self):
