@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'ui_resultswindow.ui',
 # licensing of 'ui_resultswindow.ui' applies.
 #
-# Created: Tue Apr 23 00:46:06 2019
+# Created: Sat Apr 27 18:13:02 2019
 #      by: pyside2-uic  running on PySide2 5.12.1
 #
 # WARNING! All changes made in this file will be lost!

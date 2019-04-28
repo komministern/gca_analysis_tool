@@ -20,20 +20,45 @@ class Datacollector(QtCore.QObject):
 
         self.model = model
 
+
+    def set_progress(self, progress):
+        self.model.io_progress.emit(progress)
+
+
     def get_analysis(self, site_name, start_date, end_date):
 
         analysis = {}
 
+        self.set_progress(10)
+
         self.dates = sorted([date for date in self.model.get_historylog_dictionary(site_name).keys() if (date >= start_date) and (date <= end_date)])
         self.historylog_dict = {date:self.model.get_historylog_dictionary(site_name)[date] for date in self.dates}
 
+        self.set_progress(20)
+
         analysis['system_name'] = site_name
+        self.set_progress(30)
+
         analysis['dates'] = self.dates
+        self.set_progress(40)
+
         analysis['temperatures'] = {date:self.get_temperatures(date) for date in self.dates}
+        self.set_progress(50)
+
         analysis['autotest_levels'] = {date:self.get_autotest_levels(date) for date in self.dates}
+        self.set_progress(60)
+
         analysis['mti_deviations'] = {date:self.get_mti_deviations(date) for date in self.dates}
+        self.set_progress(70)
+
         analysis['minutes_report'] = {date:self.get_minutes_report(date) for date in self.dates}
+        self.set_progress(80)
+
         analysis['faults'] = {date:self.get_faults(date) for date in self.dates}
+        self.set_progress(90)
+
+        analysis['fault_condition'] = {date:self.get_fault_condition(date) for date in self.dates}
+        self.set_progress(100)
 
         return copy.deepcopy(analysis)     # Necessary?
     
@@ -212,6 +237,14 @@ class Datacollector(QtCore.QObject):
             return {}
 
 
+    def get_fault_condition(self, date):
+        fault_condition_entries = [line for line in self.historylog(date).splitlines() if dchf.fault_condition_entry(line)]
+        fault_condition_entries_day = {}
+
+        for fault_condition_entry in fault_condition_entries:
+            fault_condition_entries_day[dchf.time(fault_condition_entry)] = dchf.fault_condition(fault_condition_entry)
+
+        return fault_condition_entries_day
 
 
     def get_faults(self, date):

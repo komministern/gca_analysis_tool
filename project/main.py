@@ -13,7 +13,7 @@ import logging
 import PySide2
 from PySide2 import QtCore, QtGui, QtWidgets
 from view.view import MyView
-from presenter.presenter import MyPresenter
+from presenter.presenter import Presenter
 from model.model import MyModel
 #from model.database import Database
 
@@ -38,9 +38,8 @@ if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
     model = MyModel()
-    view = MyView() 
-    presenter = MyPresenter(model, view, app)
-
+    view = MyView()
+    presenter = Presenter(model, view, app)
 
     #view.mainwindow.show()
 

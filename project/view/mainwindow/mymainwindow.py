@@ -73,7 +73,7 @@ class MyMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.deIgnoreAction = QtWidgets.QAction('Remove all dates', self)
         self.deIgnoreAction.setStatusTip('Clear all dates in ignore list')
 
-        self.analysisAction = QtWidgets.QAction('Analyze...', self)
+        self.analysisAction = QtWidgets.QAction('Graph analyzer...', self)
         self.analysisAction.setStatusTip('Analyze history log between two dates')
 
         self.wrapActionGroup = QtWidgets.QActionGroup(self)
@@ -117,11 +117,12 @@ class MyMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 #        statistics_menu = menubar.addMenu('&Statistics')
 
-        self.aboutAction = QtWidgets.QAction('this program...', self)
+        self.aboutAction = QtWidgets.QAction('About GCA Analysis Tool', self)
+
         #menubar.addAction(self.aboutAction)
 #        menubar.addAction('Test')
-        about_menu = menubar.addMenu('About')
-        about_menu.addAction(self.aboutAction)
+        help_menu = menubar.addMenu('Help')
+        help_menu.addAction(self.aboutAction)
 
 
 

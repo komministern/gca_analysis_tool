@@ -14,7 +14,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 #from presenter.coloringcontainer import ColoringContainer
 #import presenter.textstuff as txt
 #from presenter.filtercontainer import Filter
-from view.mainwindow.localwidgets.myanalysisdialog import MyAnalysisDialog
+#from view.mainwindow.localwidgets.myanalysisdialog import MyAnalysisDialog
 
 #from view.myresultswindow import MyResultsWindow
 
@@ -33,16 +33,21 @@ class AnalysisPresenter(QtCore.QObject):
 
 
 
-    def analyze(self, start_date, end_date):
+    def analyze(self):
         active_site_name = self.presenter.mainwindow.active_site_name
 
         #self.model.analyze(active_site_name, start_date, end_date)
 
-        collected_data = self.model.get_analysis(active_site_name, start_date, end_date)
+        #collected_data = self.model.get_analysis(active_site_name, start_date, end_date)
+
+        self.presenter.mainwindow.inhibit_mouseclicks()
 
         collected_data = self.model.get_analysis(active_site_name, self.model.get_first_entry_date(active_site_name), self.model.get_last_entry_date(active_site_name))
 
-        self.presenter.create_resultswindowpresenter(collected_data)
+        self.presenter.mainwindow.allow_mouseclicks()
+
+        #self.presenter.create_resultswindowpresenter(collected_data)
+        self.presenter.create_graphwindow_presenter(collected_data)
 
 
 
@@ -57,9 +62,9 @@ class AnalysisPresenter(QtCore.QObject):
 
 
 
-    def show_analysis_dialog(self):
-        self.dialog = MyAnalysisDialog(self.view.mainwindow)
-        if self.dialog.exec_():
-            #print('From:  ' + self.dialog.from_date.toString())
-            #print('Until: ' + self.dialog.until_date.toString())
-            self.analyze(self.dialog.from_date, self.dialog.until_date)
+    #def show_analysis_dialog(self):
+    #    self.dialog = MyAnalysisDialog(self.view.mainwindow)
+    #    if self.dialog.exec_():
+    #        #print('From:  ' + self.dialog.from_date.toString())
+    #        #print('Until: ' + self.dialog.until_date.toString())
+    #        self.analyze(self.dialog.from_date, self.dialog.until_date)

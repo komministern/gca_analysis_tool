@@ -51,6 +51,9 @@ def antenna_drive_minutes_report_entry(line):
 def ssr_on_minutes_report_entry(line):
     return ('(08)' == line[:4])
 
+def fault_condition_entry(line):
+    return ('(13)' == line[:4])
+
 def fault_details_entry(line):
     return ('(14)' == line[:4])
 
@@ -190,6 +193,9 @@ def mti_deviations(line):
     mti_deviations_dict['rng'] = float(str_values[2])
 
     return mti_deviations_dict
+
+def fault_condition(line):
+    return line.split()[-1]
 
 
 def fault_details(line):

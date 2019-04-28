@@ -28,9 +28,11 @@ class MenuPresenter(QtCore.QObject):
 
             self.view.mainwindow.ignoreAction.setEnabled(False)
             self.view.mainwindow.deIgnoreAction.setEnabled(False)
+            self.view.mainwindow.analysisAction.setEnabled(False)
 
         else:
             self.view.mainwindow.ignoreAction.setEnabled(True)
+            self.view.mainwindow.analysisAction.setEnabled(True)
 
             if len(self.model.get_ignored_dates(self.presenter.mainwindow.active_site_name)) > 0:
                 self.view.mainwindow.deIgnoreAction.setEnabled(True)

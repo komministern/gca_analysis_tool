@@ -98,7 +98,7 @@ class MyMainWindowPresenter(QtCore.QObject):
 
         self.view.mainwindow.importAction.triggered.connect(self.site.import_capturesite)
 
-        self.view.mainwindow.analysisAction.triggered.connect(self.analysis.show_analysis_dialog)
+        self.view.mainwindow.analysisAction.triggered.connect(self.analysis.analyze)
         
         self.view.mainwindow.ignoreAction.triggered.connect(self.ignore.ignore_date)
         self.view.mainwindow.deIgnoreAction.triggered.connect(self.ignore.deignore_all_dates)
