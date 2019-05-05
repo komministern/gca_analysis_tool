@@ -21,6 +21,8 @@ class MenuPresenter(QtCore.QObject):
         self.view.mainwindow.wrapAction.setCheckable(True)
         self.view.mainwindow.noWrapAction.setChecked(True)
 
+        
+
 
     def update_menu(self):
         
@@ -28,14 +30,32 @@ class MenuPresenter(QtCore.QObject):
 
             self.view.mainwindow.ignoreAction.setEnabled(False)
             self.view.mainwindow.deIgnoreAction.setEnabled(False)
+            self.view.mainwindow.deIgnoreAllAction.setEnabled(False)
+            self.view.mainwindow.nextIgnoredDateAction.setEnabled(False)
+
             self.view.mainwindow.analysisAction.setEnabled(False)
 
         else:
-            self.view.mainwindow.ignoreAction.setEnabled(True)
+
             self.view.mainwindow.analysisAction.setEnabled(True)
 
-            if len(self.model.get_ignored_dates(self.presenter.mainwindow.active_site_name)) > 0:
-                self.view.mainwindow.deIgnoreAction.setEnabled(True)
-            else:
+            if self.presenter.mainwindow.active_date not in self.model.get_ignored_dates(self.presenter.mainwindow.active_site_name):
+
                 self.view.mainwindow.deIgnoreAction.setEnabled(False)
+                
+                text = self.model.get_historylog(self.presenter.mainwindow.active_site_name, self.presenter.mainwindow.active_date)
+                if text != 'No history log exists for this date.':
+                    self.view.mainwindow.ignoreAction.setEnabled(True)
+
+            else:
+                self.view.mainwindow.ignoreAction.setEnabled(False)
+                self.view.mainwindow.deIgnoreAction.setEnabled(True)
+
+
+            if len(self.model.get_ignored_dates(self.presenter.mainwindow.active_site_name)) > 0:
+                self.view.mainwindow.deIgnoreAllAction.setEnabled(True)
+                self.view.mainwindow.nextIgnoredDateAction.setEnabled(True)
+            else:
+                self.view.mainwindow.deIgnoreAllAction.setEnabled(False)
+                self.view.mainwindow.nextIgnoredDateAction.setEnabled(False)
 

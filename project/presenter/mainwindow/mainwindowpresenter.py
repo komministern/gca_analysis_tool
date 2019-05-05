@@ -75,6 +75,8 @@ class MyMainWindowPresenter(QtCore.QObject):
 
         self.view.mainwindow.calendarWidget.setMaximumDate(QtCore.QDate(2019, 12, 31))
 
+        #self.menu.update_menu()
+
         
 
 
@@ -101,7 +103,9 @@ class MyMainWindowPresenter(QtCore.QObject):
         self.view.mainwindow.analysisAction.triggered.connect(self.analysis.analyze)
         
         self.view.mainwindow.ignoreAction.triggered.connect(self.ignore.ignore_date)
-        self.view.mainwindow.deIgnoreAction.triggered.connect(self.ignore.deignore_all_dates)
+        self.view.mainwindow.deIgnoreAction.triggered.connect(self.ignore.deignore_date)
+        self.view.mainwindow.deIgnoreAllAction.triggered.connect(self.ignore.deignore_all_dates)
+        self.view.mainwindow.nextIgnoredDateAction.triggered.connect(self.ignore.jump_to_next_ignored_date)
         
         self.view.mainwindow.aboutAction.triggered.connect(self.about)
 
@@ -152,7 +156,10 @@ class MyMainWindowPresenter(QtCore.QObject):
     def format_text(self, atext):
         return self.filter.format_text(atext)
 
-    
+    @property
+    def active_date(self):
+        return self.view.mainwindow.calendarWidget.selectedDate()
+
 
     @property
     def highlight(self):

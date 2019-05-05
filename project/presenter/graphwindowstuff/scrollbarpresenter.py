@@ -33,12 +33,12 @@ class ScrollBarPresenter(QtCore.QObject):
 
 
     def new_slider_value(self, value):
-        print('------------------')
-        print('method - new_slider_value - entering')
-        print('ignore_new_value_due_to_x_axis_scope_change: ' + str(self.ignore_new_value_due_to_x_axis_scope_change))
-        print('present_date: ' + self.graphwindowpresenter.present_date.toString(f=QtCore.Qt.RFC2822Date))
-        print('new scrollbar value: ' + str(value))
-        print('---')
+        #print('------------------')
+        #print('method - new_slider_value - entering')
+        #print('ignore_new_value_due_to_x_axis_scope_change: ' + str(self.ignore_new_value_due_to_x_axis_scope_change))
+        #print('present_date: ' + self.graphwindowpresenter.present_date.toString(f=QtCore.Qt.RFC2822Date))
+        #print('new scrollbar value: ' + str(value))
+        #print('---')
         
 
         if not self.slider_down and not self.ignore_new_value_due_to_x_axis_scope_change:
@@ -69,9 +69,9 @@ class ScrollBarPresenter(QtCore.QObject):
             
             self.graphwindowpresenter.mplpresenter.draw_graphs()
 
-        print('method - new_slider_value - exiting')
-        print('present_date: ' + self.graphwindowpresenter.present_date.toString(f=QtCore.Qt.RFC2822Date))
-        print('------------------')
+        #print('method - new_slider_value - exiting')
+        #print('present_date: ' + self.graphwindowpresenter.present_date.toString(f=QtCore.Qt.RFC2822Date))
+        #print('------------------')
 
         #self.ignore_new_value_due_to_x_axis_scope_change = False
         #self.graphwindowpresenter.draw_graphs()
@@ -134,9 +134,14 @@ class ScrollBarPresenter(QtCore.QObject):
             self.graphwindow.horizontalScrollBar.setMinimum(1)
             self.graphwindow.horizontalScrollBar.setValue(1)
             last_date_of_year = QtCore.QDate(self.graphwindowpresenter.present_date.year(), 12, 31)
+            print('last_date_of_year: ' + str(last_date_of_year))
             last_week_of_year, _ = last_date_of_year.weekNumber()
+            if last_week_of_year == 1:
+                last_week_of_year, _ = last_date_of_year.addDays(-7).weekNumber()
+            print('last_week_of_year: ' + str(last_week_of_year))
             self.graphwindow.horizontalScrollBar.setMaximum( last_week_of_year )
             present_week, _ = self.graphwindowpresenter.present_date.weekNumber()
+            print('present week: ' + str(present_week))
             self.graphwindow.horizontalScrollBar.setValue( present_week )
 
         elif self.graphwindowpresenter.x_axis_scope == 'Month':

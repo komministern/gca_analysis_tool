@@ -282,5 +282,21 @@ class SiteContainer(QtCore.QObject):
         self.ignored_dates_list.append(date)
 
 
+    def remove_ignored_date(self, date):
+        u_day = str(date.day())
+        if len(u_day) < 2:
+            u_day = u'0' + u_day
+        u_month = str(date.month())
+        if len(u_month) < 2:
+            u_month = u'0' + u_month
+        u_year = str(date.year())[2:4]
+        if len(u_year) < 2:
+            u_year = '0' + u_year
+        file_name = u'A0001_' + u_month + u_day + u_year + u'.txt'
 
+        path_to_ignored_date = os.path.join(self.ignored_directory, file_name)
+
+        os.remove(path_to_ignored_date)
+
+        self.ignored_dates_list.remove(date)
 

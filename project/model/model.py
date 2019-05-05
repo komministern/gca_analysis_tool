@@ -80,6 +80,12 @@ class MyModel(QtCore.QObject):
         self.database.remove_site_from_memory(site_name)
         self.database.read_site_to_memory(site_name)
 
+    def deignore_date(self, site_name, date):
+        self.database.deignore_date(site_name, date)
+        self.database.remove_site_from_memory(site_name)
+        self.database.read_site_to_memory(site_name)
+
+
 
 
 

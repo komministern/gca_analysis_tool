@@ -41,6 +41,7 @@ class CalendarPresenter(QtCore.QObject):
     def new_date_chosen(self):
         self.presenter.mainwindow.update_text()
         self.presenter.mainwindow.update_comment()
+        self.presenter.mainwindow.menu.update_menu()
 
 
     def update_calendar(self):
@@ -88,11 +89,13 @@ class CalendarPresenter(QtCore.QObject):
 
     def set_active_date(self):
         if self.presenter.mainwindow.active_site_name:
-            self.view.mainwindow.calendarWidget.setSelectedDate(self.view.mainwindow.calendarWidget.selectedDate())
+            self.view.mainwindow.calendarWidget.setSelectedDate(self.view.mainwindow.calendarWidget.selectedDate()) # ?????????
             self.update_calendar()
+            
 
     def set_selected_date(self, date):
         self.view.mainwindow.calendarWidget.setSelectedDate(date)
+        print('set selected date')
 
 
     def colored_dates(self, site_name):

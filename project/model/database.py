@@ -372,6 +372,9 @@ class Database(QtCore.QObject):
     def deignore_all_dates(self, site_name):
         self.site_dictionary[site_name].remove_all_ignored_dates()
 
+    def deignore_date(self, site_name, date):
+        self.site_dictionary[site_name].remove_ignored_date(date)
+
 
 
     

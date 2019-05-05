@@ -25,12 +25,8 @@ from matplotlib.figure import Figure
 class MyMplCanvasWidget(FigureCanvas):
     """Ultimately, this is a QWidget (as well as a FigureCanvasAgg, etc.)."""
 
-    def __init__(self, parent=None, width=5, height=4, dpi=150):
-        self.fig = Figure(figsize=(width, height), dpi=dpi)         # Instantiate a completely new MyMplCanvasWidget when changing dpi?????
-        
-        #self.axes = self.fig.add_subplot(111)
-
-        #self.compute_initial_figure()
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        self.fig = Figure(figsize=(width, height), dpi=dpi)
 
         FigureCanvas.__init__(self, self.fig)
         
@@ -40,6 +36,8 @@ class MyMplCanvasWidget(FigureCanvas):
                                    QtWidgets.QSizePolicy.Expanding,
                                    QtWidgets.QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
+
+        self.fig.canvas.draw()
 
     def set_new_dpi(self, dpi):
         self.fig.set_dpi(dpi)

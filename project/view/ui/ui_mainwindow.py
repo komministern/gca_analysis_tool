@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file 'ui_mainwindow.ui',
 # licensing of 'ui_mainwindow.ui' applies.
 #
-# Created: Sun Apr 28 22:40:05 2019
+# Created: Mon Apr 29 20:05:00 2019
 #      by: pyside2-uic  running on PySide2 5.12.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -382,5 +382,5 @@ class Ui_MainWindow(object):
         self.tabWidget_Search.setTabText(self.tabWidget_Search.indexOf(self.tab_4), QtWidgets.QApplication.translate("MainWindow", "Filter", None, -1))
         self.progressBar.setStatusTip(QtWidgets.QApplication.translate("MainWindow", "Indicates progress of file I/O operations, which can be lengthy at times", None, -1))
 
-from view.mainwindow.localwidgets.mycalendarwidget import MyCalendarWidget
 from view.mainwindow.localwidgets.mystringsearchplaintextedit import MyStringSearchPlainTextEdit
+from view.mainwindow.localwidgets.mycalendarwidget import MyCalendarWidget

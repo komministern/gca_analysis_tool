@@ -24,6 +24,9 @@ class GraphWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self, parent=None):
         super(GraphWindow, self).__init__()#parent)
+
+        #self.mousepressed = False
+        #self.resizewhenmousereleased = False
         
         self.setupUi(self)
 
@@ -39,11 +42,34 @@ class GraphWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def resizeEvent(self, event):
+
+        #print('resized')
+
         super(GraphWindow, self).resizeEvent(event)
 
-        self.timer = QtCore.QTimer.singleShot(200, self.draw)
+        #if self.mousepressed:
+        #    self.resizewhenmousereleased = True
+        #    print('pending redraw')
+        
+        self.timer = QtCore.QTimer.singleShot(500, self.draw)
 
         #self.resized = True
+
+    def mousePressEvent(self, event):
+        #self.mousepressed = True
+        #print('mousepressed')
+        super(GraphWindow, self).mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        #if self.resizewhenmousereleased:
+        #    self.draw_graph.emit()
+        #    print('redraw')
+        
+        #self.resizewhenmousereleased = False
+        #self.mousepressed = False
+
+        super(GraphWindow, self).mouseReleaseEvent(event)
+
 
     def draw(self):
         self.draw_graph.emit()

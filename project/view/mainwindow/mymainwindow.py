@@ -67,11 +67,16 @@ class MyMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.importAction = QtWidgets.QAction('Import...', self)
         self.importAction.setStatusTip('Import history log from a capturesite file')
 
-        self.ignoreAction = QtWidgets.QAction('Add active date', self)
+        self.ignoreAction = QtWidgets.QAction('Ignore active date', self)
         self.ignoreAction.setStatusTip('Place active date in the ignore list')
 
-        self.deIgnoreAction = QtWidgets.QAction('Remove all dates', self)
-        self.deIgnoreAction.setStatusTip('Clear all dates in ignore list')
+        self.deIgnoreAction = QtWidgets.QAction('Deignore active date', self)
+        self.deIgnoreAction.setStatusTip('Clear active date from ignore list')
+
+        self.deIgnoreAllAction = QtWidgets.QAction('Deignore all dates', self)
+        self.deIgnoreAllAction.setStatusTip('Clear all dates in ignore list')
+
+        self.nextIgnoredDateAction = QtWidgets.QAction('Jump to next ignored date', self)
 
         self.analysisAction = QtWidgets.QAction('Graph analyzer...', self)
         self.analysisAction.setStatusTip('Analyze history log between two dates')
@@ -106,9 +111,12 @@ class MyMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         text_menu.addAction(self.wrapAction)
 
 
-        ignore_menu = QtWidgets.QMenu('Ignore list')
+        ignore_menu = QtWidgets.QMenu('Ignored dates')
         ignore_menu.addAction(self.ignoreAction)
         ignore_menu.addAction(self.deIgnoreAction)
+        ignore_menu.addAction(self.deIgnoreAllAction)
+        ignore_menu.addAction(self.nextIgnoredDateAction)
+
 
         tools_menu.addMenu(ignore_menu)
 
