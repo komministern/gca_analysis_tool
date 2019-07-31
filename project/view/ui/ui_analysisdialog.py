@@ -3,8 +3,8 @@
 # Form implementation generated from reading ui file 'ui_analysisdialog.ui',
 # licensing of 'ui_analysisdialog.ui' applies.
 #
-# Created: Mon Apr 29 20:05:01 2019
-#      by: pyside2-uic  running on PySide2 5.12.1
+# Created: Wed Jul 31 15:50:35 2019
+#      by: pyside2-uic  running on PySide2 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
 

@@ -11,41 +11,40 @@ from PySide2 import QtCore, QtGui, QtWidgets
 
 class IgnorePresenter(QtCore.QObject):
 
-    def __init__(self, model, view, presenter):
+    def __init__(self, model, mainwindow, mainwindowpresenter):
         super(IgnorePresenter, self).__init__()
         self.model = model
-        self.view = view
-        self.presenter = presenter
+        self.mainwindow = mainwindow
+        self.mainwindowpresenter = mainwindowpresenter
 
 
 
     def ignore_date(self):
         
-        if not self.presenter.mainwindow.active_site_name == u'':
-            date = self.view.mainwindow.calendarWidget.selectedDate()
+        if not self.mainwindowpresenter.active_site_name == u'':
+            date = self.mainwindow.calendarWidget.selectedDate()
 
-            if (self.model.get_historylog(self.presenter.mainwindow.active_site_name, date) != u'No history log exists for this date.') and (date not in self.ignored_dates(self.presenter.mainwindow.active_site_name)): 
+            if (self.model.get_historylog(self.mainwindowpresenter.active_site_name, date) != u'No history log exists for this date.') and (date not in self.ignored_dates(self.mainwindowpresenter.active_site_name)): 
                 try:
                     
-                    #self.presenter.add_ignored_date(self.presenter.mainwindow.active_site_name, date)
-                    self.model.add_ignored_date(self.presenter.mainwindow.active_site_name, date)
+                    #self.presenter.add_ignored_date(self.mainwindowpresenter.active_site_name, date)
+                    self.model.add_ignored_date(self.mainwindowpresenter.active_site_name, date)
 
                     site_items = [u''] + self.model.get_site_names()
-                    index = site_items.index(self.presenter.mainwindow.active_site_name)
+                    index = site_items.index(self.mainwindowpresenter.active_site_name)
                     
-                    self.presenter.mainwindow.set_active_site(index)
+                    self.mainwindowpresenter.set_active_site(index)
 
-                    self.presenter.mainwindow.menu.update_menu()
+                    self.mainwindowpresenter.update_menu()
 
                     
-
                 except Exception as e:
 
-                    self.presenter.mainwindow.message(u'An error occured during ignore operation. Aborting.')
+                    self.mainwindowpresenter.message(u'An error occured during ignore operation. Aborting.')
                     print(e)
 
             else:
-                self.presenter.mainwindow.message(u'The active site either has no historylog for this date, or the date has already been put on the ignore list.')
+                self.mainwindowpresenter.message(u'The active site either has no historylog for this date, or the date has already been put on the ignore list.')
 
 
     def ignored_dates(self, site_name):
@@ -54,8 +53,8 @@ class IgnorePresenter(QtCore.QObject):
 
     def jump_to_next_ignored_date(self):
 
-        active_date = self.view.mainwindow.calendarWidget.selectedDate()
-        active_site = self.presenter.mainwindow.active_site_name
+        active_date = self.mainwindow.calendarWidget.selectedDate()
+        active_site = self.mainwindowpresenter.active_site_name
 
         if active_site != '' and len(self.ignored_dates(active_site)) > 0:
 
@@ -63,52 +62,52 @@ class IgnorePresenter(QtCore.QObject):
             for ignored_date in sorted(self.ignored_dates(active_site)):
                 print(ignored_date)
                 if active_date < ignored_date:
-                    self.presenter.mainwindow.calendar.set_selected_date(ignored_date)
-                    self.presenter.mainwindow.calendar.update_calendar()
+                    self.mainwindowpresenter.calendarpresenter.set_selected_date(ignored_date)
+                    self.mainwindowpresenter.update_calendar()
                     break
                 else:
                     c += 1
                     print(c)
 
             if c == len(self.ignored_dates(active_site)):
-                self.presenter.mainwindow.calendar.set_selected_date(sorted(self.ignored_dates(active_site))[0])
-                self.presenter.mainwindow.calendar.update_calendar()
+                self.mainwindowpresenter.calendarpresenter.set_selected_date(sorted(self.ignored_dates(active_site))[0])
+                self.mainwindowpresenter.update_calendar()
 
 
 
     def deignore_all_dates(self):
-        if not self.presenter.mainwindow.active_site_name == u'':
+        if not self.mainwindowpresenter.active_site_name == u'':
 
             try:
-                #self.presenter.remove_all_ignored_dates(self.presenter.mainwindow.active_site_name)
-                self.model.deignore_all_dates(self.presenter.mainwindow.active_site_name)
+                #self.presenter.remove_all_ignored_dates(self.mainwindowpresenter.active_site_name)
+                self.model.deignore_all_dates(self.mainwindowpresenter.active_site_name)
 
                 site_items = [u''] + self.model.get_site_names()
-                index = site_items.index(self.presenter.mainwindow.active_site_name)
-                self.presenter.mainwindow.set_active_site(index)
+                index = site_items.index(self.mainwindowpresenter.active_site_name)
+                self.mainwindowpresenter.set_active_site(index)
             
             except Exception as e:
-                self.presenter.mainwindow.message(u'An error occured when clearing ignore list. Aborting.')
+                self.mainwindowpresenter.message(u'An error occured when clearing ignore list. Aborting.')
                 #print(e)
         
-        self.presenter.mainwindow.menu.update_menu()
+        self.mainwindowpresenter.update_menu()
 
     def deignore_date(self):
 
-        date = self.view.mainwindow.calendarWidget.selectedDate()
+        date = self.mainwindow.calendarWidget.selectedDate()
 
-        if not self.presenter.mainwindow.active_site_name == u'':
+        if not self.mainwindowpresenter.active_site_name == u'':
 
             try:
-                #self.presenter.remove_all_ignored_dates(self.presenter.mainwindow.active_site_name)
-                self.model.deignore_date(self.presenter.mainwindow.active_site_name, date)
+                #self.presenter.remove_all_ignored_dates(self.mainwindowpresenter.active_site_name)
+                self.model.deignore_date(self.mainwindowpresenter.active_site_name, date)
 
                 site_items = [u''] + self.model.get_site_names()
-                index = site_items.index(self.presenter.mainwindow.active_site_name)
-                self.presenter.mainwindow.set_active_site(index)
+                index = site_items.index(self.mainwindowpresenter.active_site_name)
+                self.mainwindowpresenter.set_active_site(index)
             
             except Exception as e:
-                self.presenter.mainwindow.message(u'An error occured when clearing ignore list. Aborting.')
+                self.mainwindowpresenter.message(u'An error occured when clearing ignore list. Aborting.')
                 #print(e)
 
-        self.presenter.mainwindow.menu.update_menu()
+        self.mainwindowpresenter.update_menu()

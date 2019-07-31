@@ -14,7 +14,7 @@ from matplotlib.figure import Figure
 #from matplotlib.widgets import RadioButtons
 
 #from presenter.resultswindow.scrollbarpresenter import ScrollBarPresenter
-from view.graphwindow import GraphWindow
+from view.graphwindow.graphwindow import GraphWindow
 #from presenter.graphwindowstuff.scrollbarpresenter import ScrollBarPresenter
 #from presenter.graphwindowstuff.graphpresenter import GraphPresenter
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>586</width>
+    <width>712</width>
     <height>401</height>
    </rect>
   </property>
@@ -297,8 +297,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>586</width>
-     <height>20</height>
+     <width>712</width>
+     <height>25</height>
     </rect>
    </property>
   </widget>
@@ -308,7 +308,7 @@
   <customwidget>
    <class>MyMplCanvasWidget</class>
    <extends>QWidget</extends>
-   <header>view/graphwindowresources/mplcanvaswidget.h</header>
+   <header>view/graphwindow/mplcanvaswidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

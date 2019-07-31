@@ -21,11 +21,11 @@ from PySide2 import QtCore, QtGui, QtWidgets
 
 class CommentsPresenter(QtCore.QObject):
 
-    def __init__(self, model, view, presenter):
+    def __init__(self, model, mainwindow, mainwindowpresenter):
         super(CommentsPresenter, self).__init__()
         self.model = model
-        self.view = view
-        self.presenter = presenter
+        self.mainwindow = mainwindow
+        self.mainwindowpresenter = mainwindowpresenter
 
         self.comment_text_changed = False
 
@@ -34,12 +34,12 @@ class CommentsPresenter(QtCore.QObject):
 
 
     def active_date(self):                                          # Move this method
-        return self.view.mainwindow.calendarWidget.selectedDate()
+        return self.mainwindow.calendarWidget.selectedDate()
 
 
     def save_comment(self):
-        if not self.presenter.mainwindow.active_site_name == u'':
-            commented_dates = [date for date in self.model.get_comment_dictionary(self.presenter.mainwindow.active_site_name).keys()]
+        if not self.mainwindowpresenter.active_site_name == u'':
+            commented_dates = [date for date in self.model.get_comment_dictionary(self.mainwindowpresenter.active_site_name).keys()]
             if self.active_date() in commented_dates:
 
             # Does comment exist for this date?
@@ -48,32 +48,32 @@ class CommentsPresenter(QtCore.QObject):
                 # Has the text been changed?
                 #if self.comment_text_changed:
 
-                clicked = self.presenter.mainwindow.message_with_cancel_choice(u'A note already exists for this date.', u'Overwrite?', QtWidgets.QMessageBox.Ok)
+                clicked = self.mainwindowpresenter.message_with_cancel_choice(u'A note already exists for this date.', u'Overwrite?', QtWidgets.QMessageBox.Ok)
 
                 if clicked == QtWidgets.QMessageBox.Ok:
                     # Save it
-                    text_to_save = self.view.mainwindow.plainTextEdit_Comment.toPlainText()
-                    self.model.save_comment(self.presenter.mainwindow.active_site_name, self.view.mainwindow.calendarWidget.selectedDate(), text_to_save)
+                    text_to_save = self.mainwindow.plainTextEdit_Comment.toPlainText()
+                    self.model.save_comment(self.mainwindowpresenter.active_site_name, self.mainwindow.calendarWidget.selectedDate(), text_to_save)
             else:
                 # Just save it
-                text_to_save = self.view.mainwindow.plainTextEdit_Comment.toPlainText()
-                self.model.save_comment(self.presenter.mainwindow.active_site_name, self.view.mainwindow.calendarWidget.selectedDate(), text_to_save)
+                text_to_save = self.mainwindow.plainTextEdit_Comment.toPlainText()
+                self.model.save_comment(self.mainwindowpresenter.active_site_name, self.mainwindow.calendarWidget.selectedDate(), text_to_save)
             #text_to_save = self.view.plainTextEdit_Comment.toPlainText()
             #self.model.save_comment(self.active_site, self.view.calendarWidget.selectedDate(), text_to_save)
             self.update_comment()
-            self.presenter.mainwindow.update_calendar()
+            self.mainwindowpresenter.update_calendar()
 
 
     def delete_comment(self):
-        if not self.presenter.mainwindow.active_site_name == u'':
-            commented_dates = [date for date in self.model.get_comment_dictionary(self.presenter.mainwindow.active_site_name).keys()]
+        if not self.mainwindowpresenter.active_site_name == u'':
+            commented_dates = [date for date in self.model.get_comment_dictionary(self.mainwindowpresenter.active_site_name).keys()]
             if self.active_date() in commented_dates:
         
-                clicked = self.presenter.mainwindow.message_with_cancel_choice(u'This note will be removed from the database.', u'Continue?', QtWidgets.QMessageBox.Cancel)
+                clicked = self.mainwindowpresenter.message_with_cancel_choice(u'This note will be removed from the database.', u'Continue?', QtWidgets.QMessageBox.Cancel)
                 if clicked == QtWidgets.QMessageBox.Ok:
-                    self.model.delete_comment(self.presenter.mainwindow.active_site_name, self.active_date())
+                    self.model.delete_comment(self.mainwindowpresenter.active_site_name, self.active_date())
                     self.update_comment()
-                    self.presenter.mainwindow.update_calendar()
+                    self.mainwindowpresenter.update_calendar()
 
             else:
 
@@ -82,50 +82,50 @@ class CommentsPresenter(QtCore.QObject):
 
     def update_comment(self):
         
-        date = self.view.mainwindow.calendarWidget.selectedDate()
+        date = self.mainwindow.calendarWidget.selectedDate()
             
-        if self.presenter.mainwindow.active_site_name == u'':
+        if self.mainwindowpresenter.active_site_name == u'':
             text = u''
         else:
-            text = self.model.get_comment(self.presenter.mainwindow.active_site_name, self.view.mainwindow.calendarWidget.selectedDate())
+            text = self.model.get_comment(self.mainwindowpresenter.active_site_name, self.mainwindow.calendarWidget.selectedDate())
             
         if text:
-            self.view.mainwindow.plainTextEdit_Comment.setPlainText(text)
+            self.mainwindow.plainTextEdit_Comment.setPlainText(text)
         else:
-            self.view.mainwindow.plainTextEdit_Comment.clear()
+            self.mainwindow.plainTextEdit_Comment.clear()
 
-        if self.presenter.mainwindow.active_site_name == u'':
+        if self.mainwindowpresenter.active_site_name == u'':
             comment_dates = []
         else:
-            comment_dates = [date for date in self.model.get_comment_dictionary(self.presenter.mainwindow.active_site_name).keys()]
+            comment_dates = [date for date in self.model.get_comment_dictionary(self.mainwindowpresenter.active_site_name).keys()]
             
-        self.view.mainwindow.calendarWidget.setTriangleDates(comment_dates)
+        self.mainwindow.calendarWidget.setTriangleDates(comment_dates)
 
 
     def set_next_comment_date(self):
-        if not self.presenter.mainwindow.active_site_name == u'':
-            dates = sorted([date for date, _ in self.model.get_comment_dictionary(self.presenter.mainwindow.active_site_name).items()])
+        if not self.mainwindowpresenter.active_site_name == u'':
+            dates = sorted([date for date, _ in self.model.get_comment_dictionary(self.mainwindowpresenter.active_site_name).items()])
             if not len(dates) == 0:
                 greater_dates = [date for date in dates if date > self.active_date()]
                 if len(greater_dates) == 0:
                     new_index = 0
                 else:
                     new_index = dates.index(greater_dates[0])
-                self.view.mainwindow.calendarWidget.setSelectedDate(dates[new_index])
-                self.view.mainwindow.calendarWidget.updateCells()
+                self.mainwindow.calendarWidget.setSelectedDate(dates[new_index])
+                self.mainwindow.calendarWidget.updateCells()
 
 
 
     def set_previous_comment_date(self):
-        if not self.presenter.mainwindow.active_site_name == u'':
-            dates = sorted([date for date, _ in self.model.get_comment_dictionary(self.presenter.mainwindow.active_site_name).items()])
+        if not self.mainwindowpresenter.active_site_name == u'':
+            dates = sorted([date for date, _ in self.model.get_comment_dictionary(self.mainwindowpresenter.active_site_name).items()])
             if not len(dates) == 0:
                 lesser_dates = [date for date in dates if date < self.active_date()]
                 if len(lesser_dates) == 0:
                     new_index = -1
                 else:
                     new_index = dates.index(lesser_dates[-1])
-                self.view.mainwindow.calendarWidget.setSelectedDate(dates[new_index])
-                self.view.mainwindow.calendarWidget.updateCells()
+                self.mainwindow.calendarWidget.setSelectedDate(dates[new_index])
+                self.mainwindow.calendarWidget.updateCells()
 
 

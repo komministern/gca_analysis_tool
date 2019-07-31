@@ -291,7 +291,7 @@
   <customwidget>
    <class>MyPlainTextEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header>view/mainwindow/localwidgets/myplaintextedit.h</header>
+   <header>view/mainwindow/myplaintextedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

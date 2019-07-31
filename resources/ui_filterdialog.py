@@ -3,8 +3,8 @@
 # Form implementation generated from reading ui file 'ui_filterdialog.ui',
 # licensing of 'ui_filterdialog.ui' applies.
 #
-# Created: Mon Apr 29 20:05:01 2019
-#      by: pyside2-uic  running on PySide2 5.12.1
+# Created: Wed Jul 31 16:06:23 2019
+#      by: pyside2-uic  running on PySide2 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -133,4 +133,4 @@ class Ui_Dialog(object):
         self.pushButton_RemoveContent.setStatusTip(QtWidgets.QApplication.translate("Dialog", "Remove code from filter", None, -1))
         self.pushButton_RemoveContent.setText(QtWidgets.QApplication.translate("Dialog", "<<", None, -1))
 
-from view.mainwindow.localwidgets.myplaintextedit import MyPlainTextEdit
+from view.mainwindow.myplaintextedit import MyPlainTextEdit

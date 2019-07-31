@@ -21,16 +21,18 @@ import presenter.mainwindow.localresources.textstuff as txt
 
 class CalendarPresenter(QtCore.QObject):
 
-    def __init__(self, model, view, presenter):
+    def __init__(self, model, mainwindow, mainwindowpresenter):
         super(CalendarPresenter, self).__init__()
         self.model = model
-        self.view = view
-        self.presenter = presenter
+        #self.view = view
+        self.mainwindow = mainwindow
+        self.mainwindowpresenter = mainwindowpresenter
 
         self.coloring_scheme = 0
 
-        self.view.mainwindow.comboBox_Coloring.addItems([u'Normal/Degraded/Faulted', u'New/Active Faults', 
+        self.mainwindow.comboBox_Coloring.addItems([u'Normal/Degraded/Faulted', u'New/Active Faults', 
                                             u'Temporary Faults', u'Transmitter On', u'Shelter Door Open'])
+
 
         # These are blocked in presenter.py
 
@@ -39,28 +41,28 @@ class CalendarPresenter(QtCore.QObject):
 
 
     def new_date_chosen(self):
-        self.presenter.mainwindow.update_text()
-        self.presenter.mainwindow.update_comment()
-        self.presenter.mainwindow.menu.update_menu()
+        self.mainwindowpresenter.update_text()
+        self.mainwindowpresenter.update_comment()
+        self.mainwindowpresenter.update_menu()
 
 
     def update_calendar(self):
 
         #if self.active_site:
 
-        self.view.mainwindow.calendarWidget.setUpperLeftRedDates( self.presenter.mainwindow.presentation_dict[self.presenter.mainwindow.active_site_name].upper_left_red_dates )
-        self.view.mainwindow.calendarWidget.setUpperLeftGreenDates( self.presenter.mainwindow.presentation_dict[self.presenter.mainwindow.active_site_name].upper_left_green_dates )
-        self.view.mainwindow.calendarWidget.setUpperLeftWhiteDates( self.presenter.mainwindow.presentation_dict[self.presenter.mainwindow.active_site_name].upper_left_white_dates )
-        self.view.mainwindow.calendarWidget.setUpperLeftYellowDates( self.presenter.mainwindow.presentation_dict[self.presenter.mainwindow.active_site_name].upper_left_yellow_dates )
+        self.mainwindow.calendarWidget.setUpperLeftRedDates( self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name].upper_left_red_dates )
+        self.mainwindow.calendarWidget.setUpperLeftGreenDates( self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name].upper_left_green_dates )
+        self.mainwindow.calendarWidget.setUpperLeftWhiteDates( self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name].upper_left_white_dates )
+        self.mainwindow.calendarWidget.setUpperLeftYellowDates( self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name].upper_left_yellow_dates )
 
-        self.view.mainwindow.calendarWidget.setLowerRightRedDates( self.presenter.mainwindow.presentation_dict[self.presenter.mainwindow.active_site_name].lower_right_red_dates )
-        self.view.mainwindow.calendarWidget.setLowerRightGreenDates( self.presenter.mainwindow.presentation_dict[self.presenter.mainwindow.active_site_name].lower_right_green_dates )
-        self.view.mainwindow.calendarWidget.setLowerRightWhiteDates( self.presenter.mainwindow.presentation_dict[self.presenter.mainwindow.active_site_name].lower_right_white_dates )
-        self.view.mainwindow.calendarWidget.setLowerRightYellowDates( self.presenter.mainwindow.presentation_dict[self.presenter.mainwindow.active_site_name].lower_right_yellow_dates )
+        self.mainwindow.calendarWidget.setLowerRightRedDates( self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name].lower_right_red_dates )
+        self.mainwindow.calendarWidget.setLowerRightGreenDates( self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name].lower_right_green_dates )
+        self.mainwindow.calendarWidget.setLowerRightWhiteDates( self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name].lower_right_white_dates )
+        self.mainwindow.calendarWidget.setLowerRightYellowDates( self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name].lower_right_yellow_dates )
 
-        self.view.mainwindow.calendarWidget.setIgnoredDates( self.model.get_ignored_dates(self.presenter.mainwindow.active_site_name) )
+        self.mainwindow.calendarWidget.setIgnoredDates( self.model.get_ignored_dates(self.mainwindowpresenter.active_site_name) )
 
-        self.view.mainwindow.calendarWidget.updateCells()
+        self.mainwindow.calendarWidget.updateCells()
 
 
 
@@ -70,7 +72,7 @@ class CalendarPresenter(QtCore.QObject):
     def set_coloring_scheme(self, index):
         self.coloring_scheme = index
         #self.activate_progressbar(2)
-        self.presenter.mainwindow.presentation_dict[self.presenter.mainwindow.active_site_name] = self.colored_dates(self.presenter.mainwindow.active_site_name)
+        self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name] = self.colored_dates(self.mainwindowpresenter.active_site_name)
         
         #self.view.progressBar.setValue(1)
         self.update_calendar()
@@ -78,24 +80,25 @@ class CalendarPresenter(QtCore.QObject):
         #self.deactivate_progressbar()
 
     def set_last_date(self):
-        if self.presenter.mainwindow.active_site_name:
-            self.set_selected_date(self.model.get_last_entry_date(self.presenter.mainwindow.active_site_name))
+        if self.mainwindowpresenter.active_site_name:
+            self.set_selected_date(self.model.get_last_entry_date(self.mainwindowpresenter.active_site_name))
             self.update_calendar()
 
     def set_first_date(self):
-        if self.presenter.mainwindow.active_site_name:
-            self.set_selected_date(self.model.get_first_entry_date(self.presenter.mainwindow.active_site_name))
+        if self.mainwindowpresenter.active_site_name:
+            self.set_selected_date(self.model.get_first_entry_date(self.mainwindowpresenter.active_site_name))
             self.update_calendar()
 
     def set_active_date(self):
-        if self.presenter.mainwindow.active_site_name:
-            self.view.mainwindow.calendarWidget.setSelectedDate(self.view.mainwindow.calendarWidget.selectedDate()) # ?????????
-            self.update_calendar()
+        if self.mainwindowpresenter.active_site_name:
+            self.mainwindow.calendarWidget.setSelectedDate(self.mainwindow.calendarWidget.selectedDate()) # ?????????
+            #self.update_calendar()
             
 
     def set_selected_date(self, date):
-        self.view.mainwindow.calendarWidget.setSelectedDate(date)
-        print('set selected date')
+        self.mainwindow.calendarWidget.setSelectedDate(date)
+        self.update_calendar()
+        #print('set selected date')
 
 
     def colored_dates(self, site_name):

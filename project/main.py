@@ -7,15 +7,12 @@
 
 
 import sys
-#import time
 import multiprocessing
 import logging
 import PySide2
 from PySide2 import QtCore, QtGui, QtWidgets
-from view.view import MyView
 from presenter.presenter import Presenter
 from model.model import MyModel
-#from model.database import Database
 
 logger = logging.getLogger(__name__)    # Ok here?
 #logging.config.fileConfig('logging.ini', disable_existing_loggers=False)
@@ -38,19 +35,11 @@ if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
     model = MyModel()
-    view = MyView()
-    presenter = Presenter(model, view, app)
+    presenter = Presenter(model, app)
 
-    #view.mainwindow.show()
+    comboBox_Coloring_width = presenter.mainwindowpresenter.mainwindow.comboBox_Coloring.size().width()
+    comboBox_Coloring_height = presenter.mainwindowpresenter.mainwindow.comboBox_Coloring.size().height()
 
-    comboBox_Coloring_width = view.mainwindow.comboBox_Coloring.size().width()
-    comboBox_Coloring_height = view.mainwindow.comboBox_Coloring.size().height()
-
-    view.mainwindow.comboBox_ActiveSite.setFixedWidth(comboBox_Coloring_width * 2.0 / 3.0)
-
-    
-    #print(PySide2.__version__)
-    #print(PySide2.QtCore.__version__)
-
+    presenter.mainwindowpresenter.mainwindow.comboBox_ActiveSite.setFixedWidth(comboBox_Coloring_width * 2.0 / 3.0)
         
     sys.exit(app.exec_())

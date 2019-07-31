@@ -3,8 +3,8 @@
 # Form implementation generated from reading ui file 'ui_graphwindow.ui',
 # licensing of 'ui_graphwindow.ui' applies.
 #
-# Created: Mon Apr 29 20:05:01 2019
-#      by: pyside2-uic  running on PySide2 5.12.1
+# Created: Wed Jul 31 16:06:23 2019
+#      by: pyside2-uic  running on PySide2 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,7 +13,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(586, 401)
+        MainWindow.resize(712, 401)
         MainWindow.setMinimumSize(QtCore.QSize(0, 0))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -160,7 +160,7 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addItem(spacerItem, 2, 4, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 586, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 712, 25))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -200,4 +200,4 @@ class Ui_MainWindow(object):
         self.radioButton_DPI150.setText(QtWidgets.QApplication.translate("MainWindow", "150", None, -1))
         self.radioButton_DPI200.setText(QtWidgets.QApplication.translate("MainWindow", "200", None, -1))
 
-from view.graphwindowresources.mplcanvaswidget import MyMplCanvasWidget
+from view.graphwindow.mplcanvaswidget import MyMplCanvasWidget

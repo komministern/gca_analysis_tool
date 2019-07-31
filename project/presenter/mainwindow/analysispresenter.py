@@ -25,29 +25,29 @@ from PySide2 import QtCore, QtGui, QtWidgets
 
 class AnalysisPresenter(QtCore.QObject):
 
-    def __init__(self, model, view, presenter):
+    def __init__(self, model, mainwindow, mainwindowpresenter):
         super(AnalysisPresenter, self).__init__()
         self.model = model
-        self.view = view
-        self.presenter = presenter
+        self.mainwindow = mainwindow
+        self.mainwindowpresenter = mainwindowpresenter
 
 
 
     def analyze(self):
-        active_site_name = self.presenter.mainwindow.active_site_name
+        active_site_name = self.mainwindowpresenter.active_site_name
 
         #self.model.analyze(active_site_name, start_date, end_date)
 
         #collected_data = self.model.get_analysis(active_site_name, start_date, end_date)
 
-        self.presenter.mainwindow.inhibit_mouseclicks()
+        self.mainwindowpresenter.inhibit_mouseclicks()
 
         collected_data = self.model.get_analysis(active_site_name, self.model.get_first_entry_date(active_site_name), self.model.get_last_entry_date(active_site_name))
 
-        self.presenter.mainwindow.allow_mouseclicks()
+        self.mainwindowpresenter.allow_mouseclicks()
 
         #self.presenter.create_resultswindowpresenter(collected_data)
-        self.presenter.create_graphwindow_presenter(collected_data)
+        self.mainwindowpresenter.presenter.create_graphwindow_presenter(collected_data)
 
 
 
@@ -63,7 +63,7 @@ class AnalysisPresenter(QtCore.QObject):
 
 
     #def show_analysis_dialog(self):
-    #    self.dialog = MyAnalysisDialog(self.view.mainwindow)
+    #    self.dialog = MyAnalysisDialog(self.mainwindow)
     #    if self.dialog.exec_():
     #        #print('From:  ' + self.dialog.from_date.toString())
     #        #print('Until: ' + self.dialog.until_date.toString())

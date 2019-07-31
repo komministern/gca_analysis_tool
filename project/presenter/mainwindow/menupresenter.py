@@ -11,51 +11,49 @@ from PySide2 import QtCore, QtGui, QtWidgets
 
 class MenuPresenter(QtCore.QObject):
 
-    def __init__(self, model, view, presenter):
+    def __init__(self, model, mainwindow, mainwindowpresenter):
         super(MenuPresenter, self).__init__()
         self.model = model
-        self.view = view
-        self.presenter = presenter
+        self.mainwindow = mainwindow
+        self.mainwindowpresenter = mainwindowpresenter
 
-        self.view.mainwindow.noWrapAction.setCheckable(True)
-        self.view.mainwindow.wrapAction.setCheckable(True)
-        self.view.mainwindow.noWrapAction.setChecked(True)
-
-        
+        self.mainwindow.noWrapAction.setCheckable(True)
+        self.mainwindow.wrapAction.setCheckable(True)
+        self.mainwindow.noWrapAction.setChecked(True)
 
 
     def update_menu(self):
         
-        if self.presenter.mainwindow.active_site_name == u'':
+        if self.mainwindowpresenter.active_site_name == u'':
 
-            self.view.mainwindow.ignoreAction.setEnabled(False)
-            self.view.mainwindow.deIgnoreAction.setEnabled(False)
-            self.view.mainwindow.deIgnoreAllAction.setEnabled(False)
-            self.view.mainwindow.nextIgnoredDateAction.setEnabled(False)
+            self.mainwindow.ignoreAction.setEnabled(False)
+            self.mainwindow.deIgnoreAction.setEnabled(False)
+            self.mainwindow.deIgnoreAllAction.setEnabled(False)
+            self.mainwindow.nextIgnoredDateAction.setEnabled(False)
 
-            self.view.mainwindow.analysisAction.setEnabled(False)
+            self.mainwindow.analysisAction.setEnabled(False)
 
         else:
 
-            self.view.mainwindow.analysisAction.setEnabled(True)
+            self.mainwindow.analysisAction.setEnabled(True)
 
-            if self.presenter.mainwindow.active_date not in self.model.get_ignored_dates(self.presenter.mainwindow.active_site_name):
+            if self.mainwindowpresenter.active_date not in self.model.get_ignored_dates(self.mainwindowpresenter.active_site_name):
 
-                self.view.mainwindow.deIgnoreAction.setEnabled(False)
+                self.mainwindow.deIgnoreAction.setEnabled(False)
                 
-                text = self.model.get_historylog(self.presenter.mainwindow.active_site_name, self.presenter.mainwindow.active_date)
+                text = self.model.get_historylog(self.mainwindowpresenter.active_site_name, self.mainwindowpresenter.active_date)
                 if text != 'No history log exists for this date.':
-                    self.view.mainwindow.ignoreAction.setEnabled(True)
+                    self.mainwindow.ignoreAction.setEnabled(True)
 
             else:
-                self.view.mainwindow.ignoreAction.setEnabled(False)
-                self.view.mainwindow.deIgnoreAction.setEnabled(True)
+                self.mainwindow.ignoreAction.setEnabled(False)
+                self.mainwindow.deIgnoreAction.setEnabled(True)
 
 
-            if len(self.model.get_ignored_dates(self.presenter.mainwindow.active_site_name)) > 0:
-                self.view.mainwindow.deIgnoreAllAction.setEnabled(True)
-                self.view.mainwindow.nextIgnoredDateAction.setEnabled(True)
+            if len(self.model.get_ignored_dates(self.mainwindowpresenter.active_site_name)) > 0:
+                self.mainwindow.deIgnoreAllAction.setEnabled(True)
+                self.mainwindow.nextIgnoredDateAction.setEnabled(True)
             else:
-                self.view.mainwindow.deIgnoreAllAction.setEnabled(False)
-                self.view.mainwindow.nextIgnoredDateAction.setEnabled(False)
+                self.mainwindow.deIgnoreAllAction.setEnabled(False)
+                self.mainwindow.nextIgnoredDateAction.setEnabled(False)
 

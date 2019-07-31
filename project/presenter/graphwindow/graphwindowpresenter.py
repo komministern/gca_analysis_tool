@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 
+# -*- coding: utf-8 -*-
 #    Copyright © 2016, 2017, 2018, 2019 Oscar Franzén <oscarfranzen@protonmail.com>
 #
 #    This file is part of GCA Analysis Tool.
@@ -20,9 +20,9 @@ from matplotlib.backends.backend_qt5agg import (
 #from matplotlib.widgets import RadioButtons
 
 #from presenter.resultswindow.scrollbarpresenter import ScrollBarPresenter
-from view.graphwindow import GraphWindow
-from presenter.graphwindowstuff.scrollbarpresenter import ScrollBarPresenter
-from presenter.graphwindowstuff.matplotlibpresenter import MatPlotLibPresenter
+from view.graphwindow.graphwindow import GraphWindow
+from presenter.graphwindow.scrollbarpresenter import ScrollBarPresenter
+from presenter.graphwindow.matplotlibpresenter import MatPlotLibPresenter
 
 
 
@@ -34,10 +34,10 @@ class GraphWindowPresenter(QtCore.QObject):
         super(GraphWindowPresenter, self).__init__()
 
         self.model = model
-        self.toppresenter = presenter
-        self.graphwindow = GraphWindow( parent=self.toppresenter.view.mainwindow )
+        self.presenter = presenter
+        self.graphwindow = GraphWindow(parent=self.presenter.mainwindowpresenter.mainwindow)
         #self.graphwindow.setWindowState(self.graphwindow.windowState() ^ QtCore.Qt.WindowMaximized)
-        self.graphwindow.resize( self.toppresenter.view.mainwindow.size() )
+        self.graphwindow.resize( self.presenter.mainwindowpresenter.mainwindow.size() )
         self.graphwindow.setWindowTitle(data['system_name'])
 
         self.data = data
@@ -50,7 +50,9 @@ class GraphWindowPresenter(QtCore.QObject):
 
 
         # Initialize stuff
-        self.draw_date = QtCore.QDate.fromString("20160801", "yyyyMMdd")
+        
+        self.draw_date = self.presenter.mainwindowpresenter.mainwindow.calendarWidget.selectedDate()
+        #self.draw_date = QtCore.QDate.fromString("20160801", "yyyyMMdd")
 
         self.present_date = self.draw_date
 
@@ -71,8 +73,9 @@ class GraphWindowPresenter(QtCore.QObject):
         self.set_clear()
         #self.mti_deviation_parameter_weather = 'Clear'
 
-        self.graphwindow.radioButton_X_Day.setChecked(True)
-        self.set_x_axis_day()
+        self.graphwindow.radioButton_X_Year.setChecked(True)
+        self.set_x_axis_year()
+        
         #self.x_axis_scope = 'Day'
         self.graphwindow.groupBox_Deviation_Parameters.setEnabled(False)
 
@@ -85,6 +88,12 @@ class GraphWindowPresenter(QtCore.QObject):
         self.connect_signals()
 
         self.graphwindow.show()
+
+        self.graphwindow.comboBox_Y_Subplot_1.setCurrentIndex(1)
+        self.graphwindow.comboBox_Y_Subplot_2.setCurrentIndex(4)
+        
+        
+
 
 
     @property
@@ -253,4 +262,4 @@ class GraphWindowPresenter(QtCore.QObject):
 
 
     def quit(self):
-        self.toppresenter.destroy_graphwindow_presenter(self)
+        self.presenter.destroy_graphwindow_presenter(self)
