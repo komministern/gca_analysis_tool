@@ -34,11 +34,16 @@ class CalendarPresenter(QtCore.QObject):
                                             u'Temporary Faults', u'Transmitter On', u'Shelter Door Open'])
 
 
+    # Properties
+    #selected_date
+    #update_calendar
+
+
         # These are blocked in presenter.py
 
 
-    # -------- Calendar stuff
 
+    # -------- Calendar stuff
 
     def new_date_chosen(self):
         self.mainwindowpresenter.update_text()
@@ -47,9 +52,6 @@ class CalendarPresenter(QtCore.QObject):
 
 
     def update_calendar(self):
-
-        #if self.active_site:
-
         self.mainwindow.calendarWidget.setUpperLeftRedDates( self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name].upper_left_red_dates )
         self.mainwindow.calendarWidget.setUpperLeftGreenDates( self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name].upper_left_green_dates )
         self.mainwindow.calendarWidget.setUpperLeftWhiteDates( self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name].upper_left_white_dates )
@@ -64,42 +66,43 @@ class CalendarPresenter(QtCore.QObject):
 
         self.mainwindow.calendarWidget.updateCells()
 
+    def update_calendar_cells(self):
+        self.mainwindow.calendarWidget.updateCells()
 
-
-
-        
+    def set_comment_dates(self, dates):
+        self.mainwindow.calendarWidget.setTriangleDates(dates)
+    
+    def set_search_hit_dates(self, dates):
+        self.mainwindow.calendarWidget.setCircledDates(dates)
 
     def set_coloring_scheme(self, index):
         self.coloring_scheme = index
-        #self.activate_progressbar(2)
         self.mainwindowpresenter.presentation_dict[self.mainwindowpresenter.active_site_name] = self.colored_dates(self.mainwindowpresenter.active_site_name)
-        
-        #self.view.progressBar.setValue(1)
         self.update_calendar()
-        #self.view.progressBar.setValue(2)
-        #self.deactivate_progressbar()
 
     def set_last_date(self):
         if self.mainwindowpresenter.active_site_name:
-            self.set_selected_date(self.model.get_last_entry_date(self.mainwindowpresenter.active_site_name))
-            self.update_calendar()
+            self.selected_date = self.model.get_last_entry_date(self.mainwindowpresenter.active_site_name)
 
     def set_first_date(self):
         if self.mainwindowpresenter.active_site_name:
-            self.set_selected_date(self.model.get_first_entry_date(self.mainwindowpresenter.active_site_name))
-            self.update_calendar()
+            self.selected_date = self.model.get_first_entry_date(self.mainwindowpresenter.active_site_name)
 
     def set_active_date(self):
         if self.mainwindowpresenter.active_site_name:
-            self.mainwindow.calendarWidget.setSelectedDate(self.mainwindow.calendarWidget.selectedDate()) # ?????????
-            #self.update_calendar()
-            
+            self.selected_date = self.selected_date
 
-    def set_selected_date(self, date):
+
+    @property
+    def selected_date(self):
+        return self.mainwindow.calendarWidget.selectedDate()
+
+    @selected_date.setter
+    def selected_date(self, date):
         self.mainwindow.calendarWidget.setSelectedDate(date)
         self.update_calendar()
-        #print('set selected date')
 
+    
 
     def colored_dates(self, site_name):
 

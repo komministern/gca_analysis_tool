@@ -17,10 +17,9 @@ class SearchPresenter(QtCore.QObject):
         self.mainwindow = mainwindow
         self.mainwindowpresenter = mainwindowpresenter
 
-        self.highlight = ''
+        self.string_to_highlight = ''
 
         self.mainwindow.pushButton_CommitStringSearch.setEnabled(False)
-        #self.mainwindow.pushButton_ResetStringSearch.setEnabled(False)
         self.mainwindow.pushButton_PreviousSearch.setEnabled(False)
         self.mainwindow.pushButton_NextSearch.setEnabled(False)
 
@@ -33,11 +32,11 @@ class SearchPresenter(QtCore.QObject):
             self.mainwindow.pushButton_NextSearch.setEnabled(True)
             self.mainwindow.pushButton_PreviousSearch.setEnabled(True)
 
-        self.highlight = self.mainwindow.plainTextEdit_StringSearch.toPlainText()
+        self.string_to_highlight = self.mainwindow.plainTextEdit_StringSearch.toPlainText()
 
-        self.mainwindow.calendarWidget.setCircledDates(self.list_of_search_string_dates(self.mainwindow.plainTextEdit_StringSearch.toPlainText()))
+        self.mainwindowpresenter.set_search_hit_dates(self.list_of_search_string_dates(self.string_to_highlight))
         
-        self.mainwindow.calendarWidget.updateCells()
+        self.mainwindowpresenter.update_calendar_cells()
         self.mainwindowpresenter.update_text()
 
         cursor = self.mainwindow.plainTextEdit_StringSearch.textCursor()
@@ -56,8 +55,6 @@ class SearchPresenter(QtCore.QObject):
 
 
 
-
-
     def list_of_search_string_dates(self, astring):
         if not astring == '' and not self.mainwindowpresenter.active_site_name == u'':
             return [date for date, text in self.model.get_historylog_dictionary(self.mainwindowpresenter.active_site_name).items() if astring in text]
@@ -71,18 +68,19 @@ class SearchPresenter(QtCore.QObject):
 
         format = QtGui.QTextCharFormat()
         format.setBackground(QtGui.QBrush(QtCore.Qt.white))
+        
         # Select the matched text and apply the desired format
         cursor.setPosition(0)
         cursor.movePosition(QtGui.QTextCursor.End, QtGui.QTextCursor.KeepAnchor, 1)
         self.ignore = True
         cursor.mergeCharFormat(format)
         
-        
-        
-        self.mainwindow.calendarWidget.setCircledDates([])
+        self.mainwindowpresenter.set_search_hit_dates([])
+
         self.mainwindow.plainTextEdit_StringSearch.setPlainText(u'')
-        self.highlight = u''
-        self.mainwindow.calendarWidget.updateCells()
+        self.string_to_highlight = u''
+
+        self.mainwindowpresenter.update_calendar_cells()
         self.mainwindowpresenter.update_text()
 
 
@@ -98,8 +96,9 @@ class SearchPresenter(QtCore.QObject):
                     new_index = 0
                 else:
                     new_index = dates.index(greater_dates[0])
-                self.mainwindow.calendarWidget.setSelectedDate(dates[new_index])
-                self.mainwindow.calendarWidget.updateCells()
+                
+                self.mainwindowpresenter.selected_date = dates[new_index]
+                self.mainwindowpresenter.update_calendar_cells()
 
 
     def set_previous_search_date(self):
@@ -111,8 +110,9 @@ class SearchPresenter(QtCore.QObject):
                     new_index = -1
                 else:
                     new_index = dates.index(lesser_dates[-1])            
-                self.mainwindow.calendarWidget.setSelectedDate(dates[new_index])
-                self.mainwindow.calendarWidget.updateCells()
+                
+                self.mainwindowpresenter.selected_date = dates[new_index]
+                self.mainwindowpresenter.update_calendar_cells()
 
 
     def text_changed(self):
@@ -122,24 +122,21 @@ class SearchPresenter(QtCore.QObject):
         else:
             self.mainwindow.pushButton_CommitStringSearch.setEnabled(False)
 
-        if self.highlight != u'' and not self.ignore:
+        if self.string_to_highlight != u'' and not self.ignore:
             
             self.mainwindow.pushButton_PreviousSearch.setEnabled(False)
             self.mainwindow.pushButton_NextSearch.setEnabled(False)
 
-            self.highlight = u''
+            self.string_to_highlight = u''
             self.mainwindowpresenter.update_text()
 
-            self.mainwindow.calendarWidget.setCircledDates([])
-            self.mainwindow.calendarWidget.updateCells()
+            self.mainwindowpresenter.set_search_hit_dates([])
+            self.mainwindowpresenter.update_calendar_cells()
             
             cursor = self.mainwindow.plainTextEdit_StringSearch.textCursor()
-            #self.view.lineEdit_StringSearch.end(False)
 
             format = QtGui.QTextCharFormat()
             format.setBackground(QtGui.QBrush(QtCore.Qt.white))
-            #print self.test
-
         
             # Select the matched text and apply the desired format
             cursor.setPosition(0)

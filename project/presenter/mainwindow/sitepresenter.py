@@ -17,26 +17,29 @@ class SitePresenter(QtCore.QObject):
         self.mainwindowpresenter = mainwindowpresenter
 
         self.presentation_dict = {}
-
-        self.active_site_name = None
         
         self.temp_site_name = u'_temp'
 
         site_items = [u''] + self.model.get_site_names()
         self.mainwindow.comboBox_ActiveSite.addItems(site_items)
-        self.active_site_name = site_items[0]
 
         self.mainwindow.pushButton_FirstDate.setEnabled(False)
         self.mainwindow.pushButton_LastDate.setEnabled(False)
         self.mainwindow.pushButton_ActiveDate.setEnabled(False)
     
 
+    @property
+    def active_site_name(self):
+        return self.mainwindow.comboBox_ActiveSite.currentText()
+    
+
+    def reload_active_site(self):
+        self.set_active_site(self.mainwindow.comboBox_ActiveSite.currentIndex())
+
+
     def set_active_site(self, index):
         
         self.mainwindowpresenter.inhibit_mouseclicks()
-        
-        site_items = [u''] + self.model.get_site_names()
-        self.active_site_name = site_items[index]
 
         self.presentation_dict[self.active_site_name] = self.mainwindowpresenter.colored_dates(self.active_site_name)
         
@@ -59,8 +62,8 @@ class SitePresenter(QtCore.QObject):
             self.mainwindow.pushButton_LastDate.setEnabled(False)
             self.mainwindow.pushButton_ActiveDate.setEnabled(False)
 
-        if self.mainwindow.calendarWidget.selectedDate() > self.model.get_last_entry_date(self.mainwindowpresenter.active_site_name):
-            self.mainwindowpresenter.calendarpresenter.set_selected_date(self.model.get_last_entry_date(self.mainwindowpresenter.active_site_name))
+        if self.mainwindowpresenter.selected_date > self.model.get_last_entry_date(self.mainwindowpresenter.active_site_name):
+            self.mainwindowpresenter.selected_date = self.model.get_last_entry_date(self.mainwindowpresenter.active_site_name)
 
     def create_new_site(self):
 
@@ -82,10 +85,13 @@ class SitePresenter(QtCore.QObject):
                     self.model.create_new_site_from_temp_site(new_site_name)
 
                     self.presentation_dict[new_site_name] = self.mainwindowpresenter.colored_dates(new_site_name)
+                    
                     self.mainwindow.comboBox_ActiveSite.clear()
+                    
                     site_items = [u''] + self.model.get_site_names()
                     self.mainwindow.comboBox_ActiveSite.addItems(site_items)
                     new_index = site_items.index(new_site_name)
+                    
                     self.mainwindow.comboBox_ActiveSite.setCurrentIndex(new_index)
 
                     self.mainwindowpresenter.allow_mouseclicks()
@@ -172,7 +178,7 @@ class SitePresenter(QtCore.QObject):
             except Exception as e:
 
                 pass
-                print(e)
+                #print(e)
             
 
             self.model.remove_temp_site()

@@ -13,7 +13,6 @@ class TextPresenter(QtCore.QObject):
     def __init__(self, model, mainwindow, mainwindowpresenter):
         super(TextPresenter, self).__init__()
         self.model = model
-        #self.view = view
         self.mainwindow = mainwindow
         self.mainwindowpresenter = mainwindowpresenter
 
@@ -31,15 +30,14 @@ class TextPresenter(QtCore.QObject):
     
     def update_text(self):
 
-        date = self.mainwindow.calendarWidget.selectedDate()
         if self.mainwindowpresenter.active_site_name == u'':
             text = u''
         else:
-            text = self.model.get_historylog(self.mainwindowpresenter.active_site_name, date)
+            text = self.model.get_historylog(self.mainwindowpresenter.active_site_name, self.mainwindowpresenter.selected_date)
                 
-        self.mainwindow.textBrowser_HistoryLog.setPlainText(self.mainwindowpresenter.format_text(text))
+        self.mainwindow.textBrowser_HistoryLog.setPlainText(self.mainwindowpresenter.filtered_text(text))
 
-        if self.mainwindowpresenter.highlight != u'' and text != u'No history log exists for this date.' and text != 'This date is in the list of ignored dates. You must deignore it before you can view the contents of the historylog.': 
+        if self.mainwindowpresenter.string_to_highlight != u'' and text != u'No history log exists for this date.' and text != 'This date is in the list of ignored dates. You must deignore it before you can view the contents of the historylog.': 
 
             text = self.mainwindow.tabWidget_Search.tabText(0)
             if text[-1] != u'*':
@@ -51,7 +49,7 @@ class TextPresenter(QtCore.QObject):
             format = QtGui.QTextCharFormat()
             format.setBackground(QtGui.QBrush(self.mainwindowpresenter.blue))
 
-            pattern = self.mainwindowpresenter.highlight
+            pattern = self.mainwindowpresenter.string_to_highlight
 
             pos = 0
             index = self.mainwindow.textBrowser_HistoryLog.toPlainText().find(pattern)
@@ -72,5 +70,3 @@ class TextPresenter(QtCore.QObject):
             text = self.mainwindow.tabWidget_Search.tabText(0)
             if text[-1] == u'*':
                 self.mainwindow.tabWidget_Search.setTabText(0, text[0:-1])
-
-        self.mainwindowpresenter.update_comment()   # Here?????????????????????????

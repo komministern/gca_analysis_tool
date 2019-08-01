@@ -126,55 +126,67 @@ class MyMainWindowPresenter(QtCore.QObject):
     def update_text(self):
         self.textpresenter.update_text()
 
+
     # MENUPRESENTER
     def update_menu(self):
         self.menupresenter.update_menu()
 
+
     # CALENDARPRESENTER
     def update_calendar(self):
         self.calendarpresenter.update_calendar()
+
+    def update_calendar_cells(self):
+        self.calendarpresenter.update_calendar_cells()
     
     def colored_dates(self, site_name):
         return self.calendarpresenter.colored_dates(site_name)
     
+    def set_comment_dates(self, dates):
+        self.calendarpresenter.set_comment_dates(dates)
+    
+    def set_search_hit_dates(self, dates):
+        self.calendarpresenter.set_search_hit_dates(dates)
+    
     @property
-    def active_date(self):
-        return self.mainwindow.calendarWidget.selectedDate()
+    def selected_date(self):
+        return self.calendarpresenter.selected_date
+
+    @selected_date.setter
+    def selected_date(self, date):
+        self.calendarpresenter.selected_date = date
+
 
     # COMMENTSPRESENTER
     def update_comment(self):
         self.commentspresenter.update_comment()
 
+
     # SEARCHPRESENTER
     def commit_string_search(self):
         self.searchpresenter.commit_string_search()
-    
+
     @property
-    def highlight(self):
-        return self.searchpresenter.highlight
+    def string_to_highlight(self):
+        return self.searchpresenter.string_to_highlight
+
 
     # FILTERPRESENTER
-    def format_text(self, atext):
+    def filtered_text(self, atext):
         return self.filterpresenter.format_text(atext)
+
 
     # SITEPRESENTER
     @property
     def presentation_dict(self):
         return self.sitepresenter.presentation_dict
 
-    def set_active_site(self, index):
-        self.sitepresenter.set_active_site(index)
+    def reload_active_site(self):
+        self.sitepresenter.reload_active_site()
 
     @property
-    def active_site_name(self):
+    def active_site_name(self):                         
         return self.sitepresenter.active_site_name
-
-    @active_site_name.setter
-    def active_site_name(self, site_name):
-        self.sitepresenter.active_site_name = site_name
-
-
-
 
 
     # Misc methods who do not fit into any of the sub-presenters

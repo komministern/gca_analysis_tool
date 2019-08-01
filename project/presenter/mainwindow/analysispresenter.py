@@ -6,22 +6,7 @@
 #    This file is part of GCA Analysis Tool.
 
 
-#import os
-#import string
-#import time
-import copy
 from PySide2 import QtCore, QtGui, QtWidgets
-#from presenter.coloringcontainer import ColoringContainer
-#import presenter.textstuff as txt
-#from presenter.filtercontainer import Filter
-#from view.mainwindow.localwidgets.myanalysisdialog import MyAnalysisDialog
-
-#from view.myresultswindow import MyResultsWindow
-
-
-
-#from presenter.eventfilter import EventBlocker
-
 
 class AnalysisPresenter(QtCore.QObject):
 
@@ -36,35 +21,11 @@ class AnalysisPresenter(QtCore.QObject):
     def analyze(self):
         active_site_name = self.mainwindowpresenter.active_site_name
 
-        #self.model.analyze(active_site_name, start_date, end_date)
-
-        #collected_data = self.model.get_analysis(active_site_name, start_date, end_date)
-
         self.mainwindowpresenter.inhibit_mouseclicks()
 
         collected_data = self.model.get_analysis(active_site_name, self.model.get_first_entry_date(active_site_name), self.model.get_last_entry_date(active_site_name))
 
         self.mainwindowpresenter.allow_mouseclicks()
 
-        #self.presenter.create_resultswindowpresenter(collected_data)
         self.mainwindowpresenter.presenter.create_graphwindow_presenter(collected_data)
 
-
-
-        #self.result_window = MyResultsWindow(self.view)
-        #self.result_window.show()
-        #if self.form.exec_():
-            #print('From:  ' + self.dialog.from_date.toString())
-            #print('Until: ' + self.dialog.until_date.toString())
-            #self.analyze(self.dialog.from_date, self.dialog.until_date)
-        
-        #self.presenter.message('This is still to be implemented, if I can find the time and incentive.')
-
-
-
-    #def show_analysis_dialog(self):
-    #    self.dialog = MyAnalysisDialog(self.mainwindow)
-    #    if self.dialog.exec_():
-    #        #print('From:  ' + self.dialog.from_date.toString())
-    #        #print('Until: ' + self.dialog.until_date.toString())
-    #        self.analyze(self.dialog.from_date, self.dialog.until_date)

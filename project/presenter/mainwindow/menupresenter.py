@@ -37,11 +37,11 @@ class MenuPresenter(QtCore.QObject):
 
             self.mainwindow.analysisAction.setEnabled(True)
 
-            if self.mainwindowpresenter.active_date not in self.model.get_ignored_dates(self.mainwindowpresenter.active_site_name):
+            if self.mainwindowpresenter.selected_date not in self.model.get_ignored_dates(self.mainwindowpresenter.active_site_name):
 
                 self.mainwindow.deIgnoreAction.setEnabled(False)
                 
-                text = self.model.get_historylog(self.mainwindowpresenter.active_site_name, self.mainwindowpresenter.active_date)
+                text = self.model.get_historylog(self.mainwindowpresenter.active_site_name, self.mainwindowpresenter.selected_date)
                 if text != 'No history log exists for this date.':
                     self.mainwindow.ignoreAction.setEnabled(True)
 
