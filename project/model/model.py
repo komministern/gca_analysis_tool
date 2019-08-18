@@ -158,6 +158,5 @@ class MyModel(QtCore.QObject):
         self.database.delete_comment(site_name, date)
         
 
-
     def quit(self):
         QtWidgets.QApplication.quit()

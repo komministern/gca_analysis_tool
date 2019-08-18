@@ -8,9 +8,20 @@
 
 from PySide2 import QtCore
 
+def radar_still_on_entry(line):
+    return ('(00)' == line[:4])
+
+def radar_turned_on_entry(line):
+    return ('(01)' == line[:4])
+
+def radar_turned_off_entry(line):
+    return ('(02)' == line[:4])
 
 def temperature_autotest_status_entry(line):
     return ('(23)' == line[:4])
+
+def heater_control_entry(line):
+    return ('(24)' == line[:4])
 
 def radar_mode_status_entry(line):
     return ('(0e)' == line[:4])
@@ -217,6 +228,79 @@ def fault_details(line):
     fault_details_dict['new condition'] = new_condition
 
     return fault_details_dict
+
+
+def heater_control_status(line):
+    heater_control_status_dict = {}
+
+    az_heater_control_status_first_index = line.find('Az=') + 3
+    az_heater_control_status_last_index = line.find(',', az_heater_control_status_first_index)
+
+    el_heater_control_status_first_index = line.find('=', az_heater_control_status_last_index) + 1
+    el_heater_control_status_last_index = line.find(' ', el_heater_control_status_first_index)
+
+    blower_status_first_index = line.find('=', el_heater_control_status_last_index) + 1
+
+    az_heater_control_status = line[az_heater_control_status_first_index:az_heater_control_status_last_index].strip()
+    el_heater_control_status = line[el_heater_control_status_first_index:el_heater_control_status_last_index].strip()
+    blower_status = line[blower_status_first_index:].strip()
+
+    heater_control_status_dict['az'] = az_heater_control_status
+    heater_control_status_dict['el'] = el_heater_control_status
+    heater_control_status_dict['blower'] = blower_status
+
+    return heater_control_status_dict
+
+def radar_turned_on_off_actions(line):
+    radar_turned_on_off_actions_dict = {}
+
+    if line.find('still') == -1:
+
+        radar_turned_on_off_actions_first_index = line.find('turned') + 7
+
+        radar_turned_on_off_action = line[radar_turned_on_off_actions_first_index:].strip()
+
+        radar_turned_on_off_action = radar_turned_on_off_action[0].upper() + radar_turned_on_off_action[1:]
+
+        if radar_turned_on_off_action == 'On':
+
+            radar_turned_on_off_actions_dict['on'] = 1
+            radar_turned_on_off_actions_dict['off'] = 0
+            radar_turned_on_off_actions_dict['still on'] = 0
+
+
+        elif radar_turned_on_off_action == 'Off':
+
+            radar_turned_on_off_actions_dict['on'] = 0
+            radar_turned_on_off_actions_dict['off'] = 1
+            radar_turned_on_off_actions_dict['still on'] = 0
+        
+        else:
+
+            print('Error (turned on/off) - ' + radar_turned_on_off_action)
+
+    else:
+
+        #radar_still_on_status_first_index = line.find('still') + 6
+
+        #radar_still_on_status = line[radar_still_on_status_first_index:].strip()
+
+        #radar_still_on_status = line[0].upper() + line[1:]
+
+        #if radar_still_on_status == 'On':
+
+        radar_turned_on_off_actions_dict['on'] = 0
+        radar_turned_on_off_actions_dict['off'] = 0
+        radar_turned_on_off_actions_dict['still on'] = 1
+        
+        #else:
+
+        #    print('Error (still on) - ' + radar_still_on_status)
+
+
+    return radar_turned_on_off_actions_dict
+
+
 
 #def radar_mode_minutes_report(line):
 #    return line[]

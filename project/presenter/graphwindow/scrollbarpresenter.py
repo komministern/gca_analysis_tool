@@ -67,7 +67,7 @@ class ScrollBarPresenter(QtCore.QObject):
                     new_present_date = self.graphwindowpresenter.present_date.addYears(new_year - previous_year)
                     self.graphwindowpresenter.present_date = new_present_date
             
-            self.graphwindowpresenter.mplpresenter.draw_graphs()
+            self.graphwindowpresenter.mplpresenter.update_graphs()
 
         #print('method - new_slider_value - exiting')
         #print('present_date: ' + self.graphwindowpresenter.present_date.toString(f=QtCore.Qt.RFC2822Date))

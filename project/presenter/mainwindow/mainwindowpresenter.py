@@ -66,7 +66,7 @@ class MyMainWindowPresenter(QtCore.QObject):
         self.mainwindow.show()
 
         # This is to force people to use an updated version.
-        self.mainwindow.calendarWidget.setMaximumDate(QtCore.QDate(2019, 12, 31))
+        #self.mainwindow.calendarWidget.setMaximumDate(QtCore.QDate(2019, 12, 31))
 
         
     def connect_signals(self):
@@ -235,8 +235,6 @@ class MyMainWindowPresenter(QtCore.QObject):
         return msgBox.exec_()
 
     def about(self):
-        #QtWidgets.QMessageBox.about('''
-        #self.message(u'''
         QtWidgets.QMessageBox.about(self.mainwindow, 'About GCA Analysis Tool...', '''
 GCA Analysis Tool, v3.10
 

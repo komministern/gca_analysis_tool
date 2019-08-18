@@ -38,7 +38,7 @@ class MatPlotLibPresenter(QtCore.QObject):
 
 
 
-    def draw_graphs(self):
+    def update_graphs(self):
 
         graph_contents = []
         for content in [self.graph_1_y_axis_content, self.graph_2_y_axis_content, self.graph_3_y_axis_content]:
@@ -53,9 +53,6 @@ class MatPlotLibPresenter(QtCore.QObject):
 
         if number_of_graphs > 0:
 
-            #qdate = self.graphwindowpresenter.present_date
-            #start_qdate = self.graphwindowpresenter.draw_date   # ------------------ ?????????????????
-
             self.axes = self.graphwindow.mplCanvasWidget.fig.subplots(nrows=number_of_graphs, ncols=1, sharex=True)
 
             if number_of_graphs == 1:
@@ -64,624 +61,269 @@ class MatPlotLibPresenter(QtCore.QObject):
             for ax, content in zip(self.axes, graph_contents):
 
                 if self.x_axis_scope == 'Day':
-                    self.draw_day_(self.graphwindowpresenter.present_date, ax, content)
+                    first_qdate = self.graphwindowpresenter.present_date
+                    last_qdate = self.graphwindowpresenter.present_date
+
+                    ax.set_xlim([self.to_datetime(first_qdate, QtCore.QTime.fromString("0.0", "m.s")), self.to_datetime(last_qdate, QtCore.QTime.fromString("0.0", "m.s")) + datetime.timedelta(days=1) - datetime.timedelta(seconds=1)])
+                    ax.xaxis.set_minor_locator(matplotlib.dates.HourLocator())
+
+                    ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%H:%M'))
+                    for label in ax.get_xticklabels():
+                        label.set_ha("right")
+                        label.set_rotation(30)
+
+                    self.axes[-1].set_xlabel(first_qdate.toString(f=QtCore.Qt.DefaultLocaleLongDate)) # FIX DIS
+
+                    ax.grid(True, 'major')
+                    
+
                 elif self.x_axis_scope == 'Week':
-                    first_date_in_week = self.graphwindowpresenter.present_date.addDays( -( self.graphwindowpresenter.present_date.dayOfWeek() - 1 ) )
-                    self.draw_week_(first_date_in_week, ax, content)
+                    first_qdate_in_week = self.graphwindowpresenter.present_date.addDays( -( self.graphwindowpresenter.present_date.dayOfWeek() - 1 ) )
+
+                    first_qdate = first_qdate_in_week
+                    last_qdate = first_qdate.addDays(6)
+
+                    ax.set_xlim([self.to_datetime(first_qdate, QtCore.QTime.fromString("0.0", "m.s")), self.to_datetime(first_qdate, QtCore.QTime.fromString("0.0", "m.s")) + datetime.timedelta(days=7) - datetime.timedelta(seconds=1)])
+        
+                    #set major ticks every day
+                    ax.xaxis.set_major_locator(matplotlib.dates.DayLocator())
+
+                    #set major ticks format
+                    ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%a, %d %b %H:%M'))
+
+                    for label in ax.get_xticklabels():
+                        label.set_ha("right")
+                        label.set_rotation(30)
+
+                    week, _ = first_qdate.weekNumber()
+                    self.axes[-1].set_xlabel('Week ' + str(week) + ', ' + str(self.graphwindowpresenter.present_date.year()))
+
+                    ax.grid(True)
+
+                    
                 elif self.x_axis_scope == 'Month':
-                    first_date_in_month = self.graphwindowpresenter.present_date.addDays( -( self.graphwindowpresenter.present_date.day() - 1 ) )
-                    self.draw_month_(first_date_in_month, ax, content)
+                    first_qdate_in_month = self.graphwindowpresenter.present_date.addDays( -( self.graphwindowpresenter.present_date.day() - 1 ) )
+                    
+                    first_qdate = first_qdate_in_month
+                    last_qdate = first_qdate.addDays(first_qdate.daysInMonth())
+
+                    ax.set_xlim([self.to_datetime(first_qdate, QtCore.QTime.fromString("0.0", "m.s")), self.to_datetime(first_qdate, QtCore.QTime.fromString("0.0", "m.s")) + datetime.timedelta(days=first_qdate.daysInMonth()) - datetime.timedelta(seconds=1)])
+        
+                    first_thursday_qdate_of_month = first_qdate.addDays( (7 - (first_qdate.dayOfWeek() - 1) + 3 ) % 7)
+
+                    list_of_minor_ticks = []
+                    qdate = first_thursday_qdate_of_month
+                    while qdate.month() == first_qdate.month():
+                        list_of_minor_ticks.append( self.to_datetime(qdate, QtCore.QTime(12, 00)) )
+                        qdate = qdate.addDays(7)
+                    ax.set_xticks(list_of_minor_ticks, minor=True)
+
+                    #set minor ticks format
+                    ax.xaxis.set_minor_formatter(matplotlib.dates.DateFormatter('%W'))
+
+                    ax.xaxis.set_major_locator(matplotlib.dates.WeekdayLocator( matplotlib.dates.MO))
+
+                    #set major ticks format
+                    ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%a, %d %b'))
+                    for label in ax.get_xticklabels():
+                        label.set_ha("right")
+                        label.set_rotation(30)
+
+                    self.axes[-1].set_xlabel(QtCore.QDate.longMonthName(first_qdate.month()) + ', ' + str(first_qdate.year()))
+
+                    ax.grid(True, 'major')
+
+
                 elif self.x_axis_scope == 'Year':
-                    first_date_in_year = QtCore.QDate(self.graphwindowpresenter.present_date.year(), 1, 1)
-                    self.draw_year_(first_date_in_year, ax, content)
+                    first_qdate_in_year = QtCore.QDate(self.graphwindowpresenter.present_date.year(), 1, 1)
+                    
+                    first_qdate = first_qdate_in_year
+                    last_qdate = first_qdate.addDays(first_qdate.daysInYear())
+
+                    ax.set_xlim([self.to_datetime(first_qdate, QtCore.QTime.fromString("0.0", "m.s")), self.to_datetime(first_qdate, QtCore.QTime.fromString("0.0", "m.s")) + datetime.timedelta(days=first_qdate.daysInYear()) - datetime.timedelta(seconds=1)])
+        
+                    #set major ticks every month
+                    ax.xaxis.set_major_locator(matplotlib.dates.MonthLocator())
+
+                    #set major ticks format
+                    ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%d %b'))
+
+                    for label in ax.get_xticklabels():
+                        label.set_ha("right")
+                        label.set_rotation(30)
+
+                    self.axes[-1].set_xlabel(str(first_qdate.year()))
+
+                    ax.grid(True)
 
 
-        self.graphwindow.mplCanvasWidget.fig.tight_layout()
-        self.graphwindow.mplCanvasWidget.draw()
+                if content == 'Temperature':  # Temperature
 
-        if self.y_axis_items[3] in graph_contents:      # MTI Deviations
+                    self.plot_temperature_period(first_qdate, last_qdate, ax)
+
+                elif content == 'Autotest Level':  # Autotest
+
+                    self.plot_autotest_period(first_qdate, last_qdate, ax)
+
+                elif content == 'MTI Deviation':  # MTI Deviations
+
+                    self.plot_mti_period(first_qdate, last_qdate, ax)
+                
+                elif content == 'Fault Condition':  # Fault Condition
+
+                    ax.set_ylim([-1.2, 1.2])
+                    ax.set_yticks([-1, 0, 1])
+                    ax.set_yticklabels(['Normal', 'Warning', 'Fault'])
+
+                    colors = ['green', 'black', 'red']
+                    for label, color in zip(ax.get_yticklabels(), colors):
+                        label.set_color(color)
+
+                    self.plot_fault_condition_period(first_qdate, last_qdate, ax)
+
+                    ax.set_title('Fault Condition')
+
+                elif content == 'Heater Control':   # heater_control_status
+            
+                    self.plot_heater_control_period(first_qdate, last_qdate, ax)
+            
+                elif content == 'Radar On':   # radar on or off
+
+                    self.plot_radar_on_off_status_period(first_qdate, last_qdate, ax)
+
+        self.draw_graphs()
+
+        if 'MTI Deviation' in graph_contents:      # MTI Deviations
             self.graphwindow.groupBox_Deviation_Parameters.setEnabled(True)
         else:
             self.graphwindow.groupBox_Deviation_Parameters.setEnabled(False)
 
+    
+    def draw_graphs(self):
+        self.graphwindow.mplCanvasWidget.fig.tight_layout()
+        self.graphwindow.mplCanvasWidget.draw()
 
 
-    def draw_day_(self, qdate, ax, content):
-
-        #print(self.graphwindowpresenter.data['fault_condition'][QtCore.QDate(2016, 8, 2)])
-
-        ax.set_xlim([self.to_datetime(qdate, QtCore.QTime.fromString("0.0", "m.s")), self.to_datetime(qdate, QtCore.QTime.fromString("0.0", "m.s")) + datetime.timedelta(days=1) - datetime.timedelta(seconds=1)])
-        ax.xaxis.set_minor_locator(matplotlib.dates.HourLocator())
-
-        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%H:%M'))
-        for label in ax.get_xticklabels():
-                label.set_ha("right")
-                label.set_rotation(30)
-
-        self.axes[-1].set_xlabel(qdate.toString(f=QtCore.Qt.DefaultLocaleLongDate)) # FIX DIS
-
-        ax.grid(True, 'major')
-
-        if content == self.y_axis_items[1]:  # Temperature
-
-            self.plot_temperature_period(qdate, qdate, ax)
-
-            ax.set_title('Temperature')
-            ax.set_ylabel('°Celsius')
-            ax.legend(loc='best')
-            
-        elif content == self.y_axis_items[2]:  # Autotest
-
-            self.plot_autotest_period(qdate, qdate, ax)
-
-            ax.set_title('Autotest Level')
-            ax.set_ylabel('dB')
-            ax.legend(loc='best')
-
-        elif content == self.y_axis_items[3]:  # MTI Deviation
-
-            ax.set_title('MTI Deviation')
-            ax.set_ylabel('degrees')
-            
-            ax.tick_params(axis='y', labelcolor='blue')
-
-            ax2 = ax.twinx()
-            ax2.set_ylabel('feet')
-            ax2.tick_params(axis='y', labelcolor='red')
-
-            self.plot_mti_period(qdate, qdate, ax, ax2, self.mti_deviation_parameter_rwy, self.mti_deviation_parameter_mode, self.mti_deviation_parameter_weather)
-
-            lines, labels = ax.get_legend_handles_labels()
-            lines2, labels2 = ax2.get_legend_handles_labels()
-            ax.legend(lines + lines2, labels + labels2, loc='best')
-
-            #it seems that the ax2 takes precedence when drawing the x-axis, so we must add the following:
-            ax2.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%H:%M'))
-
-        elif content == self.y_axis_items[4]:  # Fault Condition
-
-            ax.set_ylim([-1.2, 1.2])
-            ax.set_yticks([-1, 0, 1])
-            ax.set_yticklabels(['Normal', 'Warning', 'Fault'])
-
-            colors = ['green', 'black', 'red']
-            for label, color in zip(ax.get_yticklabels(), colors):
-                label.set_color(color)
-
-            self.plot_fault_condition_period(qdate, qdate, ax)
-
-            ax.set_title('Fault Condition')
-            #ax.set_ylabel('dB')
-            #ax.legend(loc='best')
-
-
-
-
-    def draw_week_(self, start_qdate, ax, content):
-
-        end_qdate = start_qdate.addDays(6)
-
-        ax.set_xlim([self.to_datetime(start_qdate, QtCore.QTime.fromString("0.0", "m.s")), self.to_datetime(start_qdate, QtCore.QTime.fromString("0.0", "m.s")) + datetime.timedelta(days=7) - datetime.timedelta(seconds=1)])
-        
-        #set major ticks every day
-        ax.xaxis.set_major_locator(matplotlib.dates.DayLocator())
-
-        #set major ticks format
-        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%a, %d %b %H:%M'))
-
-        for label in ax.get_xticklabels():
-            label.set_ha("right")
-            label.set_rotation(30)
-
-        week, _ = start_qdate.weekNumber()
-        self.axes[-1].set_xlabel('Week ' + str(week) + ', ' + str(self.graphwindowpresenter.present_date.year()))
-
-        ax.grid(True)
-
-        if content == self.y_axis_items[1]:  # Temperature
-
-            self.plot_temperature_period(start_qdate, end_qdate, ax)
-
-            ax.set_title('Temperature')
-            ax.set_ylabel('°Celsius')
-            
-            ax.legend(loc='best')
-            
-        elif content == self.y_axis_items[2]:  # Autotest
-
-            self.plot_autotest_period(start_qdate, end_qdate, ax)
-
-            ax.set_title('Autotest Level')
-            ax.set_ylabel('dB')
-            
-            ax.legend(loc='best')
-            
-        elif content == self.y_axis_items[3]:  # MTI Deviations
-
-            ax.set_title('MTI Deviation')
-            ax.set_ylabel('degrees')
-            
-            ax.tick_params(axis='y', labelcolor='blue')
-
-            ax2 = ax.twinx()
-            ax2.set_ylabel('feet')
-            ax2.tick_params(axis='y', labelcolor='red')
-
-            self.plot_mti_period(start_qdate, end_qdate, ax, ax2, self.mti_deviation_parameter_rwy, self.mti_deviation_parameter_mode, self.mti_deviation_parameter_weather)
-
-            lines, labels = ax.get_legend_handles_labels()
-            lines2, labels2 = ax2.get_legend_handles_labels()
-            ax.legend(lines + lines2, labels + labels2, loc='best')
-
-            #it seems that the ax2 takes precedence when drawing the x-axis, so we must add the following:
-            #set ticks every week
-            ax2.xaxis.set_major_locator(matplotlib.dates.DayLocator())
-            #set major ticks format
-            ax2.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%a %b %d %H:%M'))
-
-        elif content == self.y_axis_items[4]:  # Fault Condition
-
-            ax.set_ylim([-1.2, 1.2])
-            ax.set_yticks([-1, 0, 1])
-            ax.set_yticklabels(['Normal', 'Warning', 'Fault'])
-
-            colors = ['green', 'black', 'red']
-            for label, color in zip(ax.get_yticklabels(), colors):
-                label.set_color(color)
-
-            self.plot_fault_condition_period(start_qdate, end_qdate, ax)
-
-            ax.set_title('Fault Condition')
-
-
-
-    def draw_month_(self, start_qdate, ax, content):
-
-        end_qdate = start_qdate.addDays( start_qdate.daysInMonth() )
-
-        ax.set_xlim([self.to_datetime(start_qdate, QtCore.QTime.fromString("0.0", "m.s")), self.to_datetime(start_qdate, QtCore.QTime.fromString("0.0", "m.s")) + datetime.timedelta(days=start_qdate.daysInMonth()) - datetime.timedelta(seconds=1)])
-        
-        first_thursday_qdate_of_month = start_qdate.addDays( (7 - (start_qdate.dayOfWeek() - 1) + 3 ) % 7)
-
-        list_of_minor_ticks = []
-        qdate = first_thursday_qdate_of_month
-        while qdate.month() == start_qdate.month():
-            list_of_minor_ticks.append( self.to_datetime(qdate, QtCore.QTime(12, 00)) )
-            qdate = qdate.addDays(7)
-        ax.set_xticks(list_of_minor_ticks, minor=True)
-
-        #set minor ticks format
-        ax.xaxis.set_minor_formatter(matplotlib.dates.DateFormatter('%W'))
-
-        ax.xaxis.set_major_locator(matplotlib.dates.WeekdayLocator( matplotlib.dates.MO))
-
-        #set major ticks format
-        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%a, %d %b'))
-        for label in ax.get_xticklabels():
-            label.set_ha("right")
-            label.set_rotation(30)
-
-        self.axes[-1].set_xlabel(QtCore.QDate.longMonthName(start_qdate.month()) + ', ' + str(start_qdate.year()))
-
-        ax.grid(True, 'major')
-        
-
-
-        if content == self.y_axis_items[1]:  # Temperature
-
-            self.plot_temperature_period(start_qdate, end_qdate, ax)
-
-            ax.set_title('Temperature')
-            ax.set_ylabel('°Celsius')
-            
-            ax.legend(loc='best')
-            
-
-        elif content == self.y_axis_items[2]:  # Autotest
-
-            self.plot_autotest_period(start_qdate, end_qdate, ax)
-
-            ax.set_title('Autotest Level')
-            ax.set_ylabel('dB')
-            
-            ax.legend(loc='best')
-            
-
-        elif content == self.y_axis_items[3]:  # MTI Deviations
-
-            ax.set_title('MTI Deviation')
-            ax.set_ylabel('degrees')
-
-            ax.tick_params(axis='y', labelcolor='blue')
-
-            ax2 = ax.twinx()
-            ax2.set_ylabel('feet')
-            ax2.tick_params(axis='y', labelcolor='red')
-
-            self.plot_mti_period(start_qdate, end_qdate, ax, ax2, self.mti_deviation_parameter_rwy, self.mti_deviation_parameter_mode, self.mti_deviation_parameter_weather)
-
-            lines, labels = ax.get_legend_handles_labels()
-            lines2, labels2 = ax2.get_legend_handles_labels()
-            ax.legend(lines + lines2, labels + labels2, loc='best')
-
-            ax2.xaxis.set_major_locator( matplotlib.dates.WeekdayLocator( matplotlib.dates.MO ))
-            ax2.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%a, %d %b'))
-
-        elif content == self.y_axis_items[4]:  # Fault Condition
-
-            ax.set_ylim([-1.2, 1.2])
-            ax.set_yticks([-1, 0, 1])
-            ax.set_yticklabels(['Normal', 'Warning', 'Fault'])
-
-            colors = ['green', 'black', 'red']
-            for label, color in zip(ax.get_yticklabels(), colors):
-                label.set_color(color)
-
-            self.plot_fault_condition_period(start_qdate, end_qdate, ax)
-
-            ax.set_title('Fault Condition')
-
-
-
-
-    def draw_year_(self, start_qdate, ax, content):
-
-        end_qdate = start_qdate.addDays(start_qdate.daysInYear())
-
-        ax.set_xlim([self.to_datetime(start_qdate, QtCore.QTime.fromString("0.0", "m.s")), self.to_datetime(start_qdate, QtCore.QTime.fromString("0.0", "m.s")) + datetime.timedelta(days=start_qdate.daysInYear()) - datetime.timedelta(seconds=1)])
-        
-        #set major ticks every month
-        ax.xaxis.set_major_locator(matplotlib.dates.MonthLocator())
-
-        #set major ticks format
-        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%d %b'))
-
-        for label in ax.get_xticklabels():
-            label.set_ha("right")
-            label.set_rotation(30)
-
-        self.axes[-1].set_xlabel(str(start_qdate.year()))
-
-        ax.grid(True)
-
-
-
-        if content == self.y_axis_items[1]:  # Temperature
-
-            self.plot_temperature_period(start_qdate, end_qdate, ax)
-
-            ax.set_title('Temperature')
-            ax.set_ylabel('°Celsius')
-            
-            ax.legend(loc='best')
-            
-
-        elif content == self.y_axis_items[2]:  # Autotest
-
-            self.plot_autotest_period(start_qdate, end_qdate, ax)
-
-            ax.set_title('Autotest Levels')
-            ax.set_ylabel('dB')
-            
-            ax.legend(loc='best')
-            
-
-        elif content == self.y_axis_items[3]:  # MTI Deviations
-
-            ax.set_title('MTI Deviation')
-            ax.set_ylabel('degrees')
-
-            ax.tick_params(axis='y', labelcolor='blue')
-
-            ax2 = ax.twinx()
-            ax2.set_ylabel('feet')
-            ax2.tick_params(axis='y', labelcolor='red')
-
-            self.plot_mti_period(start_qdate, end_qdate, ax, ax2, self.mti_deviation_parameter_rwy, self.mti_deviation_parameter_mode, self.mti_deviation_parameter_weather)
-
-            lines, labels = ax.get_legend_handles_labels()
-            lines2, labels2 = ax2.get_legend_handles_labels()
-            ax.legend(lines + lines2, labels + labels2, loc='best')
-
-            ax2.xaxis.set_major_locator( matplotlib.dates.MonthLocator())
-            ax2.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%d %b'))
-
-        elif content == self.y_axis_items[4]:  # Fault Condition
-
-            ax.set_ylim([-1.2, 1.2])
-            ax.set_yticks([-1, 0, 1])
-            ax.set_yticklabels(['Normal', 'Warning', 'Fault'])
-
-            colors = ['green', 'black', 'red']
-            for label, color in zip(ax.get_yticklabels(), colors):
-                label.set_color(color)
-
-            self.plot_fault_condition_period(start_qdate, end_qdate, ax)
-
-            ax.set_title('Fault Condition')
-
-
- 
-    def partition(self, datetimes):
-
-        current_partition = []
-        partitioned_datetimes = []
-        previous_datetime = None
-
-        for datetime in datetimes:
-
-            if previous_datetime == None:
-
-                previous_datetime = datetime
-
-                current_partition.append(datetime)
-
-            else:
-
-                #from datetime import timedelta
-
-                if datetime < previous_datetime:
-
-                    #current_partition.append(datetime + timedelta(days=1))
-                    datetime += timedelta(days=1)
-
-
-                elif (datetime - previous_datetime) < timedelta(seconds=5000):
-
-                    current_partition.append(datetime)
-                
-                else:
-
-                    partitioned_datetimes.append(current_partition)
-
-                    current_partition = []
-                    
-                    current_partition.append(datetime)
-
-            previous_datetime = datetime
-
-        if len(current_partition) > 0:
-
-            partitioned_datetimes.append(current_partition)
-
-        return partitioned_datetimes
 
 
 
     def plot_temperature_period(self, start_qdate, stop_qdate, ax):
 
-        qdates = []
-        qdate = start_qdate
-
-        while qdate <= stop_qdate:
-            qdates.append(qdate)
-            qdate = qdate.addDays(1)
-
-        datetimes = []
-        az_temperatures = []
-        el_temperatures = []
-        shelter_temperatures = []
-
-        for qdate in qdates:
-
-            try:
-                temp_qtimes = self.graphwindowpresenter.data['temperatures'][qdate].keys()
-
-                temp_az_temperatures = [self.graphwindowpresenter.data['temperatures'][qdate][qtime]['az'] for qtime in temp_qtimes]
-                temp_el_temperatures = [self.graphwindowpresenter.data['temperatures'][qdate][qtime]['el'] for qtime in temp_qtimes]
-                temp_shelter_temperatures = [self.graphwindowpresenter.data['temperatures'][qdate][qtime]['shelter'] for qtime in temp_qtimes]
+        ax.set_title('Temperature')
+        ax.set_ylabel('°Celsius')
             
-                temp_datetimes = [self.to_datetime(qdate, qtime) for qtime in temp_qtimes]
+        t, az_temp = self.graphwindowpresenter.graphpresenter.get_temperature_graph(start_qdate, stop_qdate, 'az')
+        ax.plot(t, az_temp,'b--', label='Az')
 
-                datetimes.extend(temp_datetimes)
+        t, el_temp = self.graphwindowpresenter.graphpresenter.get_temperature_graph(start_qdate, stop_qdate, 'el')
+        ax.plot(t, el_temp, 'r-.', label='El')
 
-                az_temperatures.extend(temp_az_temperatures)
-                el_temperatures.extend(temp_el_temperatures)
-                shelter_temperatures.extend(temp_shelter_temperatures)
-            except KeyError:
-                pass
+        t, shelter_temp = self.graphwindowpresenter.graphpresenter.get_temperature_graph(start_qdate, stop_qdate, 'shelter')
+        ax.plot(t, shelter_temp, 'g', label='Shelter')
 
-        partitioned_datetimes = self.partition(datetimes)
+        ax.legend(loc='best')
+
+
+
+    def plot_radar_on_off_status_period(self, start_qdate, stop_qdate, ax):
+        ax.set_ylim([-0.2, 1.2])
+        ax.set_yticks([0, 1])
+        ax.set_yticklabels(['Radar Off', 'Radar On'])
+        t, s = self.graphwindowpresenter.graphpresenter.get_radar_on_off_graph(start_qdate, stop_qdate)
+        ax.plot(t, s, 'g-')
+        ax.set_title('Radar On/Off')
+
+
+
+    def plot_mti_period(self, start_qdate, stop_qdate, ax):#, ax2): #, rwy, radar_mode, weather_mode):
+
+        ax.set_title('MTI Deviation')
+        ax.set_ylabel('degrees')
             
-        new_datetimes = []
-        new_az_temperatures = []
-        new_el_temperatures = []
-        new_shelter_temperatures = []
+        ax.tick_params(axis='y', labelcolor='blue')
 
-        i = 0
-        for partition in partitioned_datetimes:
+        ax2 = ax.twinx()
+        ax2.set_ylabel('feet')
+        ax2.tick_params(axis='y', labelcolor='red')
 
-            new_datetimes.extend(partition)
-            new_az_temperatures.extend(az_temperatures[i:i+len(partition)])
-            new_el_temperatures.extend(el_temperatures[i:i+len(partition)])
-            new_shelter_temperatures.extend(shelter_temperatures[i:i+len(partition)])
+        t, az_mti_deviation = self.graphwindowpresenter.graphpresenter.get_mti_deviation_graph(start_qdate, stop_qdate, self.graphwindowpresenter.mti_deviation_parameter_rwy, self.graphwindowpresenter.mti_deviation_parameter_mode, self.graphwindowpresenter.mti_deviation_parameter_weather, 'az')
+        ax.scatter(t, az_mti_deviation, c='blue', marker='^', label='Az')
 
-            new_datetimes.append(partition[-1] + datetime.timedelta(seconds=5000))
-            new_az_temperatures.append(None)
-            new_el_temperatures.append(None)
-            new_shelter_temperatures.append(None)
+        t, el_mti_deviation = self.graphwindowpresenter.graphpresenter.get_mti_deviation_graph(start_qdate, stop_qdate, self.graphwindowpresenter.mti_deviation_parameter_rwy, self.graphwindowpresenter.mti_deviation_parameter_mode, self.graphwindowpresenter.mti_deviation_parameter_weather, 'el')
+        ax.scatter(t, el_mti_deviation, c='blue', marker='o', label='El')
 
-            i += len(partition)
-            
-        if len(new_datetimes) > 1:
+        t, rng_mti_deviation = self.graphwindowpresenter.graphpresenter.get_mti_deviation_graph(start_qdate, stop_qdate, self.graphwindowpresenter.mti_deviation_parameter_rwy, self.graphwindowpresenter.mti_deviation_parameter_mode, self.graphwindowpresenter.mti_deviation_parameter_weather, 'rng')
+        ax2.scatter(t, rng_mti_deviation, c='red', marker='s', label='Rng')
 
-            del new_datetimes[-1]
-            del new_az_temperatures[-1]
-            del new_el_temperatures[-1]
-            del new_shelter_temperatures[-1]
 
-        #self.graphwindow.mplCanvasWidget.fig.clf()
+        lines, labels = ax.get_legend_handles_labels()
+        lines2, labels2 = ax2.get_legend_handles_labels()
+        ax.legend(lines + lines2, labels + labels2, loc='best')
+
+        #it seems that the ax2 takes precedence when drawing the x-axis, so we must add the following:
+        if start_qdate.daysTo(stop_qdate) > 300:
+            ax2.xaxis.set_major_locator( matplotlib.dates.MonthLocator())
+            ax2.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%d %b'))
         
-        #self.axes = self.graphwindow.mplCanvasWidget.fig.add_subplot(111)
-
-        ax.plot(new_datetimes, new_az_temperatures, 'b--', label='Az')
-        ax.plot(new_datetimes, new_el_temperatures, 'r-.', label='El')
-        ax.plot(new_datetimes, new_shelter_temperatures, 'g', label='Shelter')
-
-    
-
-
-    def plot_autotest_period(self, start_qdate, stop_qdate, ax):#, axes):
-
-        qdates = []
-        qdate = start_qdate
-
-        while qdate <= stop_qdate:
-            qdates.append(qdate)
-            qdate = qdate.addDays(1)
-
-        datetimes = []
-        az_autotests = []
-        el_autotests = []
-
-        for qdate in qdates:
-
-            try:
-                temp_qtimes = self.graphwindowpresenter.data['autotest_levels'][qdate].keys()
-
-                temp_az_autotests = [self.graphwindowpresenter.data['autotest_levels'][qdate][qtime]['az'] for qtime in temp_qtimes]
-                temp_el_autotests = [self.graphwindowpresenter.data['autotest_levels'][qdate][qtime]['el'] for qtime in temp_qtimes]
-            
-                temp_datetimes = [self.to_datetime(qdate, qtime) for qtime in temp_qtimes]
-
-                datetimes.extend(temp_datetimes)
-
-                az_autotests.extend(temp_az_autotests)
-                el_autotests.extend(temp_el_autotests)
-
-            except KeyError:
-                pass
-
-        partitioned_datetimes = self.partition(datetimes)
-
-        new_datetimes = []
-        new_az_autotests = []
-        new_el_autotests = []
-
-        i = 0
-        for partition in partitioned_datetimes:
-
-            new_datetimes.extend(partition)
-            new_az_autotests.extend(az_autotests[i:i+len(partition)])
-            new_el_autotests.extend(el_autotests[i:i+len(partition)])
-
-            new_datetimes.append(partition[-1] + datetime.timedelta(seconds=5000))
-            new_az_autotests.append(None)
-            new_el_autotests.append(None)
-            
-            i += len(partition)
-            
-        if len(new_datetimes) > 1:
-
-            del new_datetimes[-1]
-            del new_az_autotests[-1]
-            del new_el_autotests[-1]
-            
-        #self.graphwindow.mplCanvasWidget.fig.clf()
-        #self.axes = self.graphwindow.mplCanvasWidget.fig.add_subplot(111)
-
-        ax.plot(new_datetimes, new_el_autotests, 'r-.', label='El')
-        ax.plot(new_datetimes, new_az_autotests, 'b--', label='Az')
+        elif start_qdate.daysTo(stop_qdate) > 25:
+            ax2.xaxis.set_major_locator( matplotlib.dates.WeekdayLocator( matplotlib.dates.MO ))
+            ax2.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%a, %d %b'))
+        
+        elif start_qdate.daysTo(stop_qdate) > 1:
+            ax2.xaxis.set_major_locator(matplotlib.dates.DayLocator())
+            ax2.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%a %b %d %H:%M'))
+        
+        else:
+            ax2.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%H:%M'))
         
 
 
 
+    def plot_autotest_period(self, start_qdate, stop_qdate, ax):
+
+        ax.set_title('Autotest Level')
+        ax.set_ylabel('dB')
+
+        t, az_autotests = self.graphwindowpresenter.graphpresenter.get_autotest_level_graph(start_qdate, stop_qdate, 'az')
+        ax.plot(t, az_autotests, 'b--', label='Az')
+
+        t, el_autotests = self.graphwindowpresenter.graphpresenter.get_autotest_level_graph(start_qdate, stop_qdate, 'el')
+        ax.plot(t, el_autotests, 'r-.', label='El')
+
+        ax.legend(loc='best')
+        
 
 
-    def plot_mti_period(self, start_qdate, stop_qdate, ax, ax2, rwy, radar_mode, weather_mode):
+    def plot_heater_control_period(self, start_qdate, stop_qdate, ax):
 
-        #print(self.graphwindowpresenter.data['mti_deviations'])
+        ax.set_ylim([-2.0, 2.0])
+        ax.set_yticks([-1.8, -0.8, -0.5, 0.5, 0.8, 1.8])
+        ax.set_yticklabels(['Blower Off', 'Blower On', 'El Heater Off', 'El Heater On', 'Az Heater Off', 'Az Heater On'])
 
-        #axcolor = 'lightgoldenrodyellow'
-        #rax = plt.axes([0.05, 0.7, 0.15, 0.15], facecolor=axcolor)
-        #radio = RadioButtons(rax, ('2 Hz', '4 Hz', '8 Hz'))
+        colors = ['green', 'green', 'red', 'red', 'blue', 'blue']
+        for label, color in zip(ax.get_yticklabels(), colors):
+            label.set_color(color)
 
-        #radio = RadioButtons(ax, ('rwy1', 'rwy2', 'rwy3'))
+        t, az_heater = self.graphwindowpresenter.graphpresenter.get_heater_control_graph(start_qdate, stop_qdate, 'az')
+        ax.plot(t, az_heater, 'b-', label='Az')
 
-        qdates = []
-        qdate = start_qdate
+        t, el_heater = self.graphwindowpresenter.graphpresenter.get_heater_control_graph(start_qdate, stop_qdate, 'el')
+        ax.plot(t, el_heater, 'r-', label='El')
+        
+        t, blower = self.graphwindowpresenter.graphpresenter.get_heater_control_graph(start_qdate, stop_qdate, 'blower')
+        ax.plot(t, blower, 'g-', label='Blower')
+        
+        ax.set_title('Climate Control')
+        
+        ax.legend(loc='best')
 
-        while qdate <= stop_qdate:
-            qdates.append(qdate)
-            qdate = qdate.addDays(1)
+        if start_qdate == stop_qdate:
+            print(t)
+            print(el_heater)
 
-        datetimes = []
-        az_mti_deviations = []
-        el_mti_deviations = []
-        rng_mti_deviations = []
 
-        for qdate in qdates:
-
-            try:
-                temp_qtimes = self.graphwindowpresenter.data['mti_deviations'][qdate].keys()
-
-                temp_az_mti_deviations = [self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['mti_deviation']['az'] for qtime in temp_qtimes if 
-                                            (self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['rwy'] == rwy and
-                                            self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['radar_mode'] == radar_mode and
-                                            self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['weather_mode'] == weather_mode)]
-                
-                temp_el_mti_deviations = [self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['mti_deviation']['el'] for qtime in temp_qtimes if 
-                                            (self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['rwy'] == rwy and
-                                            self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['radar_mode'] == radar_mode and
-                                            self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['weather_mode'] == weather_mode)]
-
-                temp_rng_mti_deviations = [self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['mti_deviation']['rng'] for qtime in temp_qtimes if 
-                                            (self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['rwy'] == rwy and
-                                            self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['radar_mode'] == radar_mode and
-                                            self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['weather_mode'] == weather_mode)]
-            
-                temp_datetimes = [self.to_datetime(qdate, qtime) for qtime in temp_qtimes if 
-                                            (self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['rwy'] == rwy and
-                                            self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['radar_mode'] == radar_mode and
-                                            self.graphwindowpresenter.data['mti_deviations'][qdate][qtime]['weather_mode'] == weather_mode)]
-
-                datetimes.extend(temp_datetimes)
-
-                az_mti_deviations.extend(temp_az_mti_deviations)
-                el_mti_deviations.extend(temp_el_mti_deviations)
-                rng_mti_deviations.extend(temp_rng_mti_deviations)
-
-            except Exception as e:
-                print(e)
 
         
-        #ax2.scatter(datetimes, rng_mti_deviations, c='red', marker='s', label='Rng')
-
-        ax.scatter(datetimes, az_mti_deviations, c='blue', marker='^', label='Az')#, 'b', label='Az')
-        ax.scatter(datetimes, el_mti_deviations, c='blue', marker='o', label='El')#, 'r.', label='El')
-
-        ax2.scatter(datetimes, rng_mti_deviations, c='red', marker='s', label='Rng')
-
-        #ax2 = ax.twinx()
-        #ax2.set_ylabel('feet')#, color='red')  # we already handled the x-label with ax1
-        
-        #ax2.scatter(datetimes, rng_mti_deviations, c='red', marker='s', label='Rng')
-
-        #ax2.tick_params(axis='y', labelcolor='red')
-
-        #ax.tick_params(axis='y', labelcolor='blue')
-
-        #lines, labels = ax.get_legend_handles_labels()
-        #lines2, labels2 = ax2.get_legend_handles_labels()
-        #ax2.legend(lines + lines2, labels + labels2, loc='best')
-
-
-        #ax.set_ylabel('radians')#, color='blue')
-
-        #ax.set_title('MTI Deviation')
-
-        #for label in ax.get_xticklabels():
-        #    label.set_ha("right")
-        #    label.set_rotation(30)
-        #ax.plot(new_datetimes, new_rng_mti_deviations, 'g', label='Rng')
-
-#lines, labels = ax.get_legend_handles_labels()
-#lines2, labels2 = ax2.get_legend_handles_labels()
-#ax2.legend(lines + lines2, labels + labels2, loc='best')
-
-#lns = lns1+lns2+lns3
-#labs = [l.get_label() for l in lns]
-#ax.legend(lns, labs, loc=0)
 
 
 
@@ -698,6 +340,9 @@ class MatPlotLibPresenter(QtCore.QObject):
         second = qtime.second()
         return datetime.datetime(year, month, day, hour, minute, second)
     
+
+
+
 
 
 
@@ -828,3 +473,11 @@ class MatPlotLibPresenter(QtCore.QObject):
         ax.scatter(datetimes, failed_indications, s=new_size, c='r')#, label='Az')
         ax.scatter(datetimes, warning_indications, s=new_size, c='y')#, label='El')
         ax.scatter(datetimes, normal_indications, s=new_size, c='g')#, label='Shelter')
+    
+
+
+
+
+
+
+    

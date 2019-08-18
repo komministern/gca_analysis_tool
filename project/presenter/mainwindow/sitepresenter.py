@@ -173,6 +173,8 @@ class SitePresenter(QtCore.QObject):
                                      site_to_be_updated + u' site, but it contains fewer history log entries and thus ' +
                                      u'probably predates it. Aborting import.')
 
+                elif len(possible_matching_sites) > 1:
+                    print('Several possibilities!!!!!!!!!!!!!! FIX.')
                     
 
             except Exception as e:

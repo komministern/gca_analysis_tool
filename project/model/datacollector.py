@@ -65,24 +65,32 @@ class Datacollector(QtCore.QObject):
         self.set_progress(90)
 
         analysis['fault_condition'] = {date:self.get_fault_condition(date) for date in self.dates}
+        self.set_progress(93)
+
+        analysis['heater_control_status'] = {date:self.get_heater_control_status(date) for date in self.dates}
+        self.set_progress(97)
+
+        analysis['radar_turned_on_off_status'] = {date: self.get_radar_turned_on_off_actions(date) for date in self.dates}
         self.set_progress(100)
 
-        return copy.deepcopy(analysis)     # Necessary?
-    
+        #return copy.deepcopy(analysis)     # Necessary?
+        return analysis
+
     #def get_fault_codes(self, site_name):
     #    self.dates = self.model.get_historylog_dictionary(site_name).keys()
 
 
-    def analyze(self, site_name, start_date, end_date):
+    #def analyze(self, site_name, start_date, end_date):
 
-        self.dates = sorted([date for date in self.model.get_historylog_dictionary(site_name).keys() if (date >= start_date) and (date <= end_date)])
-        self.historylog_dict = copy.deepcopy({date:self.model.get_historylog_dictionary(site_name)[date] for date in self.dates})
+    #    self.dates = sorted([date for date in self.model.get_historylog_dictionary(site_name).keys() if (date >= start_date) and (date <= end_date)])
+    #    self.historylog_dict = copy.deepcopy({date:self.model.get_historylog_dictionary(site_name)[date] for date in self.dates})
 
-        self.temperatures = {date:self.get_temperatures(date) for date in self.dates}
-        self.autotest_levels = {date:self.get_autotest_levels(date) for date in self.dates}
-        self.mti_deviations = {date:self.get_mti_deviations(date) for date in self.dates}
-        self.minutes_report = {date:self.get_minutes_report(date) for date in self.dates}
-        self.faults = {date:self.get_faults(date) for date in self.dates}
+    #    self.temperatures = {date:self.get_temperatures(date) for date in self.dates}
+    #    self.autotest_levels = {date:self.get_autotest_levels(date) for date in self.dates}
+    #    self.mti_deviations = {date:self.get_mti_deviations(date) for date in self.dates}
+    #    self.minutes_report = {date:self.get_minutes_report(date) for date in self.dates}
+    #    self.faults = {date:self.get_faults(date) for date in self.dates}
+    #    self.heater_control_status = {date:self.get_heater_control_status(date) for date in self.dates}
 
         #self.update_fault_index_file()
 
@@ -244,6 +252,16 @@ class Datacollector(QtCore.QObject):
             return {}
 
 
+    def get_radar_turned_on_off_actions(self, date):
+        radar_turned_on_off_entries = [line for line in self.historylog(date).splitlines() if (dchf.radar_still_on_entry(line) or dchf.radar_turned_on_entry(line) or dchf.radar_turned_off_entry(line))]
+        radar_turned_on_off_entries_day = {}
+
+        for radar_turned_on_off_entry in radar_turned_on_off_entries:
+            radar_turned_on_off_entries_day[dchf.time(radar_turned_on_off_entry)] = dchf.radar_turned_on_off_actions(radar_turned_on_off_entry)
+
+        return radar_turned_on_off_entries_day
+
+
     def get_fault_condition(self, date):
         fault_condition_entries = [line for line in self.historylog(date).splitlines() if dchf.fault_condition_entry(line)]
         fault_condition_entries_day = {}
@@ -262,6 +280,16 @@ class Datacollector(QtCore.QObject):
             fault_entries_day[dchf.time(fault_entry)] = dchf.fault_details(fault_entry)
 
         return fault_entries_day
+
+
+    def get_heater_control_status(self, date):
+        heater_control_entries = [line for line in self.historylog(date).splitlines() if dchf.heater_control_entry(line)]
+        heater_control_dictionary_day = {}
+
+        for heater_control_entry in heater_control_entries:
+            heater_control_dictionary_day[dchf.time(heater_control_entry)] = dchf.heater_control_status(heater_control_entry)
+        
+        return heater_control_dictionary_day
 
 
     def get_temperatures(self, date):
