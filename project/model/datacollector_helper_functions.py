@@ -17,50 +17,44 @@ def radar_turned_on_entry(line):
 def radar_turned_off_entry(line):
     return ('(02)' == line[:4])
 
-def temperature_autotest_status_entry(line):
-    return ('(23)' == line[:4])
-
-def heater_control_entry(line):
-    return ('(24)' == line[:4])
-
-def radar_mode_status_entry(line):
-    return ('(0e)' == line[:4])
-
-def mti_deviation_status_entry(line):
-    return ('(1e)' == line[:4])
-
-def tilt_status_entry(line):
-    return ('(1b)' == line[:4])
-
-def weather_status_entry(line):
-    return ('(1a)' == line[:4])
-
-def runway_status_entry(line):
-    return ('(11)' == line[:4])
-
-def runway_number_minutes_report(line):
-    return ('(0a)' == line[:4])
-
-def radar_mode_minutes_report_entry(line):
-    return ('(07)' == line[:4])
-
 def function_status_minutes_report_entry(line):
     return ('(03)' == line[:4])
-
-def system_off_minutes_report_entry(line):
-    return ('(12)' == line[:4])
-
-def maintenance_mode_minutes_report_entry(line):
-    return ('(09)' == line[:4])
-
-def transmitter_minutes_report_entry(line):
-    return ('(05)' == line[:4])
 
 def antenna_drive_minutes_report_entry(line):
     return ('(04)' == line[:4])
 
+def transmitter_minutes_report_entry(line):
+    return ('(05)' == line[:4])
+
+def radar_mode_minutes_report_entry(line):
+    return ('(07)' == line[:4])
+
 def ssr_on_minutes_report_entry(line):
     return ('(08)' == line[:4])
+
+def runway_number_minutes_report(line):
+    return ('(0a)' == line[:4])
+
+def antenna_drive_status_entry(line):
+    return ('(0c)' == line[:4])
+
+def transmitter_status_entry(line):
+    return ('(0d)' == line[:4])
+
+def radar_mode_status_entry(line):
+    return ('(0e)' == line[:4])
+
+def maintenance_mode_minutes_report_entry(line):
+    return ('(09)' == line[:4])
+
+def maintenance_mode_status_entry(line):
+    return ('(10)' == line[:4])
+
+def runway_status_entry(line):
+    return ('(11)' == line[:4])
+
+def system_off_minutes_report_entry(line):
+    return ('(12)' == line[:4])
 
 def fault_condition_entry(line):
     return ('(13)' == line[:4])
@@ -71,14 +65,33 @@ def fault_details_entry(line):
 def further_fault_details_entry(line):
     return ('(15)' == line[:4])
 
+def weather_status_entry(line):
+    return ('(1a)' == line[:4])
+
+def tilt_status_entry(line):
+    return ('(1b)' == line[:4])
+
+def mti_deviation_status_entry(line):
+    return ('(1e)' == line[:4])
+
+def temperature_autotest_status_entry(line):
+    return ('(23)' == line[:4])
+
+def heater_control_entry(line):
+    return ('(24)' == line[:4])
+
+
+
+
+
+
+
 
 def time(line):
     hour = int(line[14:16])
     minute = int(line[17:19])
     second = int(line[20:22])
     return QtCore.QTime(hour, minute, second)
-
-
 
 def runway(line):
     if mti_deviation_status_entry(line):
@@ -96,15 +109,12 @@ def weather(line):
 def radar_mode(line):
     return line[35:].strip()
 
-def tilt(line):
+def tilt_value(line):
     return line[37:].strip()
-
-
 
 def runway_x_minutes(line, n):
     runway_minutes_strings = line[24:].split()[0].split('/')
     return int( runway_minutes_strings[n - 1] )
-
 
 def x_status_minutes(line, n):
     temp_string = line[24:40].replace(' ', '')

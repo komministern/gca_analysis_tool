@@ -59,7 +59,7 @@ class GraphWindowPresenter(QtCore.QObject):
         self.present_date = self.draw_date
 
         comboboxes = [self.graphwindow.comboBox_Y_Subplot_1, self.graphwindow.comboBox_Y_Subplot_2, self.graphwindow.comboBox_Y_Subplot_3]
-        self.mplpresenter.y_axis_items = ['', 'Temperature', 'Autotest Level', 'MTI Deviation', 'Fault Condition', 'Radar On']
+        self.mplpresenter.y_axis_items = ['', 'Temperature', 'Autotest Level', 'MTI Deviation', 'Fault Condition', 'Radar On', 'Tilt Angle']
         #self.mplpresenter.y_axis_items = ['', 'Temperature', 'Autotest Level', 'MTI Deviation', 'Fault Condition', 'Heater Control', 'Radar On']
         for each in comboboxes:
             each.addItems(self.mplpresenter.y_axis_items)

@@ -10,6 +10,8 @@ import presenter.graphwindow.temperaturegraph as temperaturegraph
 import presenter.graphwindow.mtigraph as mtigraph
 import presenter.graphwindow.autotestgraph as autotestgraph
 import presenter.graphwindow.heatergraph as heatergraph
+import presenter.graphwindow.faultgraph as faultgraph
+import presenter.graphwindow.tiltgraph as tiltgraph
 
 
 class GraphPresenter(QtCore.QObject):
@@ -33,6 +35,18 @@ class GraphPresenter(QtCore.QObject):
         self.mti_deviation_graphs = mtigraph.construct_mti_deviation_graphs(self.historylog_qdates, self.all_qdates, self.data)
         self.autotest_level_graphs = autotestgraph.construct_autotest_level_graphs(self.historylog_qdates, self.all_qdates, self.data)
         #self.heater_control_graphs = heatergraph.construct_heater_control_graphs(self.historylog_qdates, self.all_qdates, self.data, self.radar_on_datetimes, self.radar_off_datetimes)
+        self.fault_condition_graphs = faultgraph.construct_fault_condition_graphs(self.historylog_qdates, self.all_qdates, self.data)
+        self.tilt_graph = tiltgraph.construct_tilt_graph(self.historylog_qdates, self.all_qdates, self.data)
+
+
+
+
+
+
+
+
+
+
 
 
     # The dates given in the data object are in the form of QDate objects.
@@ -51,11 +65,20 @@ class GraphPresenter(QtCore.QObject):
         else:
             return [[], []]
 
+
+    def get_fault_condition_graph(self, first_qdate, last_qdate, which):
+        first_datetime = gess.to_datetime(first_qdate, QtCore.QTime(0, 0, s=1))
+        last_datetime = gess.to_datetime(last_qdate, QtCore.QTime(23, 59, s=59))
+        fault_condition_graph = list(zip(*[(t, v) for (t, v) in zip(*self.fault_condition_graphs[which]) if (t >= first_datetime and t <= last_datetime)]))
+        if fault_condition_graph:
+            return fault_condition_graph
+        else:
+            return [[], []]
+
     
     def get_temperature_graph(self, first_qdate, last_qdate, which):
         first_datetime = gess.to_datetime(first_qdate, QtCore.QTime(0, 0, s=1))
         last_datetime = gess.to_datetime(last_qdate, QtCore.QTime(23, 59, s=59))
-
         temperature_graph = list(zip(*[(t, v) for (t, v) in zip(*self.temperature_graphs[which]) if (t >= first_datetime and t <= last_datetime)]))
         if temperature_graph:
             return temperature_graph
@@ -91,6 +114,32 @@ class GraphPresenter(QtCore.QObject):
             return heater_control_graph
         else:
             return [[], []]
+
+    
+    def get_tilt_value_graph(self, first_qdate, last_qdate):
+        first_datetime = gess.to_datetime(first_qdate, QtCore.QTime(0, 0, s=1))
+        last_datetime = gess.to_datetime(last_qdate, QtCore.QTime(23, 59, s=59))
+        tilt_value_graph = list(zip(*[(t, v) for (t, v) in zip(*self.tilt_graph) if (t >= first_datetime and t <= last_datetime)]))
+        if tilt_value_graph:
+            return tilt_value_graph
+        else:
+            return [[], []]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

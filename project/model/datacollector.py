@@ -41,60 +41,64 @@ class Datacollector(QtCore.QObject):
         
         self.historylog_dict = {date:self.model.get_historylog_dictionary(site_name)[date] for date in self.dates}
 
-        self.set_progress(20)
+
+
+
+
+        self.set_progress(0)
+
+        n = 10
+        d = int(95/n)
+        prog = 5
 
         analysis['system_name'] = site_name
-        self.set_progress(30)
+        self.set_progress(prog)
+        prog += d
 
         analysis['dates'] = self.dates
-        self.set_progress(40)
+        self.set_progress(prog)
+        prog += d
 
         analysis['temperatures'] = {date:self.get_temperatures(date) for date in self.dates}
-        self.set_progress(50)
+        self.set_progress(prog)
+        prog += d
 
         analysis['autotest_levels'] = {date:self.get_autotest_levels(date) for date in self.dates}
-        self.set_progress(60)
+        self.set_progress(prog)
+        prog += d
 
         analysis['mti_deviations'] = {date:self.get_mti_deviations(date) for date in self.dates}
-        self.set_progress(70)
+        self.set_progress(prog)
+        prog += d
 
         analysis['minutes_report'] = {date:self.get_minutes_report(date) for date in self.dates}
-        self.set_progress(80)
+        self.set_progress(prog)
+        prog += d
 
-        analysis['faults'] = {date:self.get_faults(date) for date in self.dates}
-        self.set_progress(90)
+        #analysis['faults'] = {date:self.get_faults(date) for date in self.dates}
+        #self.set_progress(90)
 
-        analysis['fault_condition'] = {date:self.get_fault_condition(date) for date in self.dates}
-        self.set_progress(93)
+        analysis['fault_conditions'] = {date:self.get_fault_condition(date) for date in self.dates}
+        self.set_progress(prog)
+        prog += d
 
         analysis['heater_control_status'] = {date:self.get_heater_control_status(date) for date in self.dates}
-        self.set_progress(97)
+        self.set_progress(prog)
+        prog += d
 
         analysis['radar_turned_on_off_status'] = {date: self.get_radar_turned_on_off_actions(date) for date in self.dates}
+        self.set_progress(prog)
+        prog += d
+
+        analysis['tilt_values'] = {date: self.get_tilt_values(date) for date in self.dates}
         self.set_progress(100)
+
+
+
 
         #return copy.deepcopy(analysis)     # Necessary?
         return analysis
 
-    #def get_fault_codes(self, site_name):
-    #    self.dates = self.model.get_historylog_dictionary(site_name).keys()
-
-
-    #def analyze(self, site_name, start_date, end_date):
-
-    #    self.dates = sorted([date for date in self.model.get_historylog_dictionary(site_name).keys() if (date >= start_date) and (date <= end_date)])
-    #    self.historylog_dict = copy.deepcopy({date:self.model.get_historylog_dictionary(site_name)[date] for date in self.dates})
-
-    #    self.temperatures = {date:self.get_temperatures(date) for date in self.dates}
-    #    self.autotest_levels = {date:self.get_autotest_levels(date) for date in self.dates}
-    #    self.mti_deviations = {date:self.get_mti_deviations(date) for date in self.dates}
-    #    self.minutes_report = {date:self.get_minutes_report(date) for date in self.dates}
-    #    self.faults = {date:self.get_faults(date) for date in self.dates}
-    #    self.heater_control_status = {date:self.get_heater_control_status(date) for date in self.dates}
-
-        #self.update_fault_index_file()
-
-        #print('Done.')
 
 
 
@@ -272,6 +276,17 @@ class Datacollector(QtCore.QObject):
         return fault_condition_entries_day
 
 
+    def get_tilt_values(self, date):
+        tilt_status_entries = [line for line in self.historylog(date).splitlines() if dchf.tilt_status_entry(line)]
+        tilt_status_entries_day = {}
+
+        for tilt_status_entry in tilt_status_entries:
+            tilt_status_entries_day[dchf.time(tilt_status_entry)] = dchf.tilt_value(tilt_status_entry)
+
+        return tilt_status_entries_day
+
+
+
     def get_faults(self, date):
         fault_entries = [line for line in self.historylog(date).splitlines() if dchf.fault_details_entry(line)]
         fault_entries_day = {}
@@ -321,7 +336,7 @@ class Datacollector(QtCore.QObject):
         for entry in relevant_status_entries:
 
             if dchf.tilt_status_entry(entry):
-                tilt = dchf.tilt(entry)
+                tilt = dchf.tilt_value(entry)
 
             elif dchf.weather_status_entry(entry):
                 weather = dchf.weather(entry)
