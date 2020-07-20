@@ -1,9 +1,25 @@
-﻿#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+﻿"""
+    This file is part of GCA Analysis Tool.
 
-#    Copyright © 2016, 2017, 2018, 2019 Oscar Franzén <oscarfranzen@protonmail.com>
-#
-#    This file is part of GCA Analysis Tool.
+    Copyright (C) 2016-2020  Oscar Franzén  oscarfranzen@protonmail.com
+
+    GCA Analysis Tool is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    GCA Analysis Tool is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with GCA Analysis Tool. If not, see <https://www.gnu.org/licenses/>.
+
+"""
+
+import matplotlib
+import numpy
 
 import PySide2
 import platform
@@ -23,7 +39,7 @@ from presenter.mainwindow.menupresenter import MenuPresenter
 from presenter.mainwindow.ignorepresenter import IgnorePresenter
 from presenter.mainwindow.analysispresenter import AnalysisPresenter
 
-import matplotlib
+
 
 class MyMainWindowPresenter(QtCore.QObject):
 
@@ -236,18 +252,21 @@ class MyMainWindowPresenter(QtCore.QObject):
 
     def about(self):
         QtWidgets.QMessageBox.about(self.mainwindow, 'About GCA Analysis Tool...', '''
-GCA Analysis Tool, v3.10
 
-Copyright © 2016-2019 Oscar Franzén <oscarfranzen@protonmail.com>
+GCA Analysis Tool, v3.20, a simple toot for inspecting GCA history logs.
+    
+Copyright (C) 2016-2020 Oscar Franzén
 
-This is a free version of the GCA Analysis Tool. It is fully functional until 2019-12-31. It may be copied and used freely.
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 Software used:
 Python ''' + platform.python_version() + '''
 PySide2 ''' + PySide2.__version__ + '''
 Qt ''' + PySide2.QtCore.__version__ + '''
 Matplotlib ''' + matplotlib.__version__ + '''
-Numpy ''' + matplotlib.__version__numpy__ )
+Numpy ''' + numpy.__version__ )
 

@@ -1,10 +1,22 @@
-﻿#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+﻿"""
+    This file is part of GCA Analysis Tool.
 
-#    Copyright © 2016, 2017, 2018, 2019 Oscar Franzén <oscarfranzen@protonmail.com>
-#
-#    This file is part of GCA Analysis Tool.
+    Copyright (C) 2016-2020  Oscar Franzén  oscarfranzen@protonmail.com
 
+    GCA Analysis Tool is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    GCA Analysis Tool is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with GCA Analysis Tool. If not, see <https://www.gnu.org/licenses/>.
+
+"""
 
 import sys
 import os
@@ -31,7 +43,13 @@ class Database(QtCore.QObject):
 
         self.home_directory = os.path.expanduser(u'~')
 
-        self.top_directory = os.path.join(self.home_directory, u'GCA Analyzer')
+        # The "GCA Analyzer" directory should, if it exists, be renamed to "GCA Analysis Data"
+
+        
+
+        self.old_top_directory = os.path.join(self.home_directory, u'GCA Analyzer')
+        self.top_directory = os.path.join(self.home_directory, u'GCA Analysis Data')
+
         self.sites_directory = os.path.join(self.top_directory, u'sites')
         self.filters_directory = os.path.join(self.top_directory, u'filters')
 
@@ -55,7 +73,12 @@ class Database(QtCore.QObject):
     # Check filestructure
 
     def check_or_fix_database_directory_structure(self):
-        if not os.path.isdir(self.top_directory):
+
+        # Start with renaming the top directory.
+        
+        if os.path.isdir(self.old_top_directory):
+            os.rename(self.old_top_directory, self.top_directory)
+        elif not os.path.isdir(self.top_directory):
             os.mkdir(self.top_directory)
         if not os.path.isdir(self.sites_directory):
             os.mkdir(self.sites_directory)    
