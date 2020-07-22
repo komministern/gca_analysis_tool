@@ -1,0 +1,16 @@
+Run this command from within the project catalouge (Windows):
+
+The "GCA Analysis Tool.spec" is created with the following command:
+
+pyi-makespec --windowed --icon=../resources/gca.ico --name="GCA Analysis Tool" --onefile main.py
+
+You must then add this:
+
+datas=[('resources\\gca.ico', 'resources')],
+
+
+With the correct .spec file, just run:
+
+pyinstaller "GCA Analysis Tool.spec"
+
+Voila!
