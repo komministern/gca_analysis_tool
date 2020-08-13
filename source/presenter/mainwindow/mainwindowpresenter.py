@@ -258,7 +258,7 @@ class MyMainWindowPresenter(QtCore.QObject):
 
 GCA Analysis Tool, a simple tool for inspecting GCA history logs.
 
-Version 4.00
+Version 4.01
     
 Copyright (C) 2020 Oscar Franzén <oscarfranzen@protonmail.com>.
 

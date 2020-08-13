@@ -26,7 +26,9 @@ import tarfile
 import subprocess
 import multiprocessing
 import pickle
+
 from PySide2 import QtCore, QtGui, QtWidgets
+
 from model.sitecontainer import SiteContainer
 from presenter.mainwindow.localresources.filtercontainer import Filter  # Move this to presenter - hideous
 
@@ -241,7 +243,7 @@ class Database(QtCore.QObject):
                 
                 counter += 1
                 
-                self.io_progress.emit(20 + int(round(80.0*counter/nbr_of_members)))
+                self.set_progress(20 + int(round(80.0*counter/nbr_of_members)))
 
         os.remove( os.path.join(dest_path, 'CAPTURESITE_TAR') )
 
