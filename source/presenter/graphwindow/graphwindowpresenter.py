@@ -28,12 +28,10 @@ from matplotlib.backends.backend_qt5agg import (
 #from matplotlib.widgets import RadioButtons
 
 #from presenter.resultswindow.scrollbarpresenter import ScrollBarPresenter
-from view.graphwindow.graphwindow import GraphWindow
-from presenter.graphwindow.scrollbarpresenter import ScrollBarPresenter
-from presenter.graphwindow.matplotlibpresenter import MatPlotLibPresenter
-from presenter.graphwindow.graphpresenter import GraphPresenter
-
-
+from ...view.graphwindow.graphwindow import GraphWindow
+from . scrollbarpresenter import ScrollBarPresenter
+from . matplotlibpresenter import MatPlotLibPresenter
+from . graphpresenter import GraphPresenter
 
 
 class GraphWindowPresenter(QtCore.QObject):

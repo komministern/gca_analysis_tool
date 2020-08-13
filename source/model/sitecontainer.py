@@ -19,11 +19,13 @@
 """
 
 
-from PySide2 import QtCore   #, QtGui
+#from PySide2 import QtCore   #, QtGui
 import os
 import shutil
 import codecs
 import logging
+
+from PySide2 import QtCore
 
 logger = logging.getLogger(__name__)
 

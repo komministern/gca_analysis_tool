@@ -19,8 +19,8 @@
 """
 
 from PySide2 import QtCore, QtGui, QtWidgets
-from presenter.mainwindow.mainwindowpresenter import MyMainWindowPresenter
-from presenter.graphwindow.graphwindowpresenter import GraphWindowPresenter
+from .mainwindow.mainwindowpresenter import MyMainWindowPresenter
+from .graphwindow.graphwindowpresenter import GraphWindowPresenter
 
 class Presenter(QtCore.QObject):
 

@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['source\\main.py'],
-             pathex=['C:\\Users\\Komministern\\Dev\\GitHub\\gca_analysis_tool\\source'],
+a = Analysis(['start.py'],
+             pathex=['C:\\Users\\oscar\\Dev\\GitHub\\gca_analysis_tool'],
              binaries=[],
              datas=[('resources\\gca.ico', 'resources')],
              hiddenimports=[],
@@ -30,4 +30,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False, icon='resources\\gca.ico')
+          console=False , icon='resources\\gca.ico')

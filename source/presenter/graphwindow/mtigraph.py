@@ -21,7 +21,8 @@
 from PySide2 import QtCore
 import datetime as dt
 
-import presenter.graphwindow.graphessentials as gess
+from . import graphessentials as gess
+#import presenter.graphwindow.graphessentials as gess
 
 
 def construct_mti_deviation_graphs(historylog_qdates, all_qdates, data):

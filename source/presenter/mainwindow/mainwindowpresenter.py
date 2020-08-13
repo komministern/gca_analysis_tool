@@ -25,19 +25,19 @@ import PySide2
 import platform
 from PySide2 import QtCore, QtGui, QtWidgets
 
-from view.mainwindow.mymainwindow import MyMainWindow
+from ...view.mainwindow.mymainwindow import MyMainWindow
 
-from presenter.mainwindow.localresources.eventfilter import EventBlocker
+from .localresources.eventfilter import EventBlocker
 
-from presenter.mainwindow.filterpresenter import FilterPresenter
-from presenter.mainwindow.commentspresenter import CommentsPresenter
-from presenter.mainwindow.sitepresenter import SitePresenter
-from presenter.mainwindow.textpresenter import TextPresenter
-from presenter.mainwindow.calendarpresenter import CalendarPresenter
-from presenter.mainwindow.searchpresenter import SearchPresenter
-from presenter.mainwindow.menupresenter import MenuPresenter
-from presenter.mainwindow.ignorepresenter import IgnorePresenter
-from presenter.mainwindow.analysispresenter import AnalysisPresenter
+from .filterpresenter import FilterPresenter
+from .commentspresenter import CommentsPresenter
+from .sitepresenter import SitePresenter
+from .textpresenter import TextPresenter
+from .calendarpresenter import CalendarPresenter
+from .searchpresenter import SearchPresenter
+from .menupresenter import MenuPresenter
+from .ignorepresenter import IgnorePresenter
+from .analysispresenter import AnalysisPresenter
 
 
 
@@ -258,7 +258,7 @@ class MyMainWindowPresenter(QtCore.QObject):
 
 GCA Analysis Tool, a simple tool for inspecting GCA history logs.
 
-Version 4.01
+Version 4.1
     
 Copyright (C) 2020 Oscar Franzén <oscarfranzen@protonmail.com>.
 
@@ -268,5 +268,5 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-Software used: Python ''' + platform.python_version() + ''', PySide2/Qt ''' + PySide2.__version__ + ''', Matplotlib ''' + matplotlib.__version__ + ''', Numpy ''' + numpy.__version__ + '''.''')
+Built with Python ''' + platform.python_version() + ''', PySide2/Qt ''' + PySide2.__version__ + ''', Matplotlib ''' + matplotlib.__version__ + ''', Numpy ''' + numpy.__version__ + ''', and bundled with Pyinstaller 4.0.''')
 

@@ -21,7 +21,7 @@
 from PySide2 import QtCore
 import datetime as dt
 
-import presenter.graphwindow.graphessentials as gess
+from . import graphessentials as gess
 
 
 def construct_temperature_graphs(historylog_qdates, all_qdates, data):

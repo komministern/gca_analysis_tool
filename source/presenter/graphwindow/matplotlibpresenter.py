@@ -22,8 +22,8 @@ import datetime
 from datetime import timedelta
 import matplotlib.pyplot as plt
 import matplotlib
-import presenter.graphwindow.graphessentials as gess
 
+from . import graphessentials as gess
 
 from PySide2 import QtCore, QtGui, QtWidgets
 #matplotlib.use('Qt5Agg')
@@ -35,7 +35,7 @@ from matplotlib.figure import Figure
 #from matplotlib.widgets import RadioButtons
 
 #from presenter.resultswindow.scrollbarpresenter import ScrollBarPresenter
-from view.graphwindow.graphwindow import GraphWindow
+from ...view.graphwindow.graphwindow import GraphWindow
 #from presenter.graphwindowstuff.scrollbarpresenter import ScrollBarPresenter
 #from presenter.graphwindowstuff.graphpresenter import GraphPresenter
 

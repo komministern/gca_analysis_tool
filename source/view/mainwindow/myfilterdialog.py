@@ -21,8 +21,8 @@
 
 
 from PySide2 import QtGui, QtCore, QtWidgets
-from view.ui.ui_filterdialog import Ui_Dialog
-from presenter.mainwindow.localresources.filtercontainer import Filter
+from ...view.ui.ui_filterdialog import Ui_Dialog
+from ...presenter.mainwindow.localresources.filtercontainer import Filter
 
 class MyFilterDialog(QtWidgets.QDialog, Ui_Dialog):
 

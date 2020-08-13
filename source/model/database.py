@@ -29,8 +29,8 @@ import pickle
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
-from model.sitecontainer import SiteContainer
-from presenter.mainwindow.localresources.filtercontainer import Filter  # Move this to presenter - hideous
+from .sitecontainer import SiteContainer
+from ..presenter.mainwindow.localresources.filtercontainer import Filter  # Move this to presenter - hideous
 
 logger = logging.getLogger(__name__)
 

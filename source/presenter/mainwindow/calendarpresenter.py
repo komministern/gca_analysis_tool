@@ -23,8 +23,11 @@
 #import string
 #import time
 from PySide2 import QtCore, QtGui, QtWidgets
-from presenter.mainwindow.localresources.coloringcontainer import ColoringContainer
-import presenter.mainwindow.localresources.textstuff as txt
+
+from .localresources.coloringcontainer import ColoringContainer
+from .localresources import textstuff as txt
+
+
 #from presenter.filtercontainer import Filter
 #from view.myfilterdialog import MyFilterDialog
 #from presenter.eventfilter import EventBlocker

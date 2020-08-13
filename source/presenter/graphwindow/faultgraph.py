@@ -18,11 +18,12 @@
 
 """
 
-from PySide2 import QtCore
 import datetime as dt
 
+from PySide2 import QtCore
 import numpy as np
-import presenter.graphwindow.graphessentials as gess
+
+from ..graphwindow import graphessentials as gess
 
 
 def construct_fault_condition_graphs(historylog_qdates, all_qdates, data):

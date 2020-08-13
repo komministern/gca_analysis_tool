@@ -260,7 +260,7 @@
      </property>
      <property name="maximumSize">
       <size>
-       <width>16777215</width>
+       <width>84</width>
        <height>16777215</height>
       </size>
      </property>
@@ -291,7 +291,7 @@
   <customwidget>
    <class>MyPlainTextEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header>view/mainwindow/myplaintextedit.h</header>
+   <header>../view/mainwindow/myplaintextedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

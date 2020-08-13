@@ -29,9 +29,9 @@
 import os
 
 from PySide2 import QtGui, QtCore, QtWidgets
-from view.ui.ui_graphwindow import Ui_MainWindow
+from ...view.ui.ui_graphwindow import Ui_MainWindow
 
-import common.frozenstuff as frozenstuff
+from ...common import frozenstuff as frozenstuff
 
 
 class GraphWindow(QtWidgets.QMainWindow, Ui_MainWindow):

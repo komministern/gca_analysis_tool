@@ -21,7 +21,7 @@
 
 
 from PySide2 import QtGui, QtCore, QtWidgets
-from view.ui.ui_analysisdialog import Ui_Dialog
+from ...view.ui.ui_analysisdialog import Ui_Dialog
 #from presenter.filtercontainer import Filter
 
 class MyAnalysisDialog(QtWidgets.QDialog, Ui_Dialog):

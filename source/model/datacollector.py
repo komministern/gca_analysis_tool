@@ -22,7 +22,7 @@ from PySide2 import QtCore
 
 import copy
 
-import model.datacollector_helper_functions as dchf
+from . import datacollector_helper_functions as dchf
 
 class Datacollector(QtCore.QObject):
 

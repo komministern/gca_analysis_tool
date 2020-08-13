@@ -25,8 +25,8 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 #from presenter.coloringcontainer import ColoringContainer
 #import presenter.textstuff as txt
-from presenter.mainwindow.localresources.filtercontainer import Filter
-from view.mainwindow.myfilterdialog import MyFilterDialog
+from .localresources.filtercontainer import Filter
+from ...view.mainwindow.myfilterdialog import MyFilterDialog
 #from presenter.eventfilter import EventBlocker
 
 

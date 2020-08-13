@@ -22,15 +22,16 @@
 import sys
 import multiprocessing
 import logging
-import PySide2
+
 from PySide2 import QtCore, QtGui, QtWidgets
-from presenter.presenter import Presenter
-from model.model import MyModel
+
+from .presenter.presenter import Presenter
+from .model.model import MyModel
 
 logger = logging.getLogger(__name__)    # Ok here?
 #logging.config.fileConfig('logging.ini', disable_existing_loggers=False)
 
-if __name__ == '__main__':
+def main():
 
     multiprocessing.freeze_support()
 
@@ -56,3 +57,6 @@ if __name__ == '__main__':
     presenter.mainwindowpresenter.mainwindow.comboBox_ActiveSite.setFixedWidth(comboBox_Coloring_width * 2.0 / 3.0)
         
     sys.exit(app.exec_())
+
+#if __name__ == '__main__':
+#    main()

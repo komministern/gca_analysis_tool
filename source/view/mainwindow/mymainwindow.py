@@ -19,13 +19,12 @@
 """
 
 
-#import math
 import os
 from PySide2 import QtGui, QtCore, QtWidgets
-#from ui_mainwindow import Ui_MainWindow
-from view.ui.ui_mainwindow import Ui_MainWindow
 
-import common.frozenstuff as frozenstuff
+from ..ui.ui_mainwindow import Ui_MainWindow
+
+from ...common import frozenstuff
 
 #from view.ui_menu import setupMenu
 #from licensewindow import MyLicenseWindow

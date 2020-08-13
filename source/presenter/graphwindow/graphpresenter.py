@@ -23,14 +23,15 @@ import datetime
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
-import presenter.graphwindow.graphessentials as gess
-import presenter.graphwindow.radarstatusgraph as radarstatusgraph
-import presenter.graphwindow.temperaturegraph as temperaturegraph
-import presenter.graphwindow.mtigraph as mtigraph
-import presenter.graphwindow.autotestgraph as autotestgraph
-import presenter.graphwindow.heatergraph as heatergraph
-import presenter.graphwindow.faultgraph as faultgraph
-import presenter.graphwindow.tiltgraph as tiltgraph
+from . import graphessentials as gess
+from . import radarstatusgraph as radarstatusgraph
+from . import temperaturegraph as temperaturegraph
+from . import mtigraph as mtigraph
+from . import autotestgraph as autotestgraph
+from . import heatergraph as heatergraph
+from . import faultgraph as faultgraph
+from . import tiltgraph as tiltgraph
+
 
 
 class GraphPresenter(QtCore.QObject):

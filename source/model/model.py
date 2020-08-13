@@ -20,8 +20,8 @@
 
 
 from PySide2 import QtCore, QtGui, QtWidgets
-from model.database import Database
-from model.datacollector import Datacollector
+from .database import Database
+from .datacollector import Datacollector
 
 #logger = logging.getLogger(__name__)
 

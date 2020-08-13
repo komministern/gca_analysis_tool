@@ -22,7 +22,7 @@ from PySide2 import QtCore
 import datetime as dt
 
 #import numpy as np
-import presenter.graphwindow.graphessentials as gess
+from . import graphessentials as gess
 
 
 def construct_tilt_graph(historylog_qdates, all_qdates, data):

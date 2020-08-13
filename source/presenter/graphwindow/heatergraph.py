@@ -22,7 +22,8 @@ from PySide2 import QtCore
 import datetime as dt
 
 import numpy as np
-import presenter.graphwindow.graphessentials as gess
+
+from . import graphessentials as gess
 
 
 
