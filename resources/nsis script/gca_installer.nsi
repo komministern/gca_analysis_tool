@@ -7,7 +7,7 @@
 Name "GCA Analysis Tool Installer"
 
 ; The file to write
-OutFile "GCA Analysis Tool v4.10.exe"
+OutFile "../../dist/GCA Analysis Tool v4.10.exe"
 
 ; Request application privileges for Windows Vista
 RequestExecutionLevel admin
