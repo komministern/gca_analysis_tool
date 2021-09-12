@@ -44,7 +44,13 @@ class GraphPresenter(QtCore.QObject):
 
         # Let's gather some basic stuff
         self.historylog_qdates = data['dates']
+
+        print(self.historylog_qdates)
+
         self.all_qdates = self.get_all_qdates()
+
+        # print(self.all_qdates)
+
         self.radar_on_datetimes = self.get_radar_on_datetimes()
         self.radar_off_datetimes = self.get_radar_off_datetimes()
 

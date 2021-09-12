@@ -22,6 +22,7 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 from .database import Database
 from .datacollector import Datacollector
+# import dbstuff
 
 #logger = logging.getLogger(__name__)
 
@@ -35,6 +36,8 @@ class MyModel(QtCore.QObject):
 
         self.database = Database(self)
         self.datacollector = Datacollector(self)
+
+        self.remove_temp_site()
 
 
     def get_filter_list(self):
@@ -107,6 +110,8 @@ class MyModel(QtCore.QObject):
     
     def update_site_from_temp_site(self, site_name):
         self.database.copy_historylogs_from_site_to_site(self.database.temp_site_name, site_name)
+        self.database.remove_site_from_memory(site_name)
+        self.database.read_site_to_memory(site_name)
     
     def create_temp_site(self, capturesite_filename):
         self.database.create_new_site_from_capturesite_file(capturesite_filename, self.database.temp_site_name)
@@ -128,7 +133,9 @@ class MyModel(QtCore.QObject):
                 
         temp_dates = sorted(self.database.get_historylog_dictionary(self.database.temp_site_name).keys())
 
-        compare_dates = temp_dates[:3]
+        compare_dates = temp_dates[:1]  # 3
+        print('compare dates: ')
+        print(compare_dates)
         compare_logs = [self.database.get_historylog_dictionary(self.database.temp_site_name)[date] for date in compare_dates]
 
         possible_candidates = []
@@ -138,9 +145,12 @@ class MyModel(QtCore.QObject):
             if site_name != self.database.temp_site_name:
                         
                 logs = [self.database.get_historylog_from_disc(site_name, date) for date in compare_dates]
-                        
+
                 if logs == compare_logs:
                     possible_candidates.append(site_name)
+        
+        print('There are %d possible site candidates.' % len(possible_candidates))
+        print(possible_candidates)
         
         return possible_candidates
 

@@ -47,6 +47,8 @@ class Database(QtCore.QObject):
 
         # The "GCA Analyzer" directory should, if it exists, be renamed to "GCA Analysis Data"
 
+        # The complete directory shouls also be moved to the Documents directory....
+
         
 
         self.old_top_directory = os.path.join(self.home_directory, u'GCA Analyzer')
@@ -153,6 +155,11 @@ class Database(QtCore.QObject):
         self.set_progress(20)
 
         shutil.rmtree(dest_historylog_directory)
+
+        # dir = dest_historylog_directory
+        # for f in os.listdir(dir):
+        #     os.remove(os.path.join(dir, f))
+
         os.mkdir(dest_historylog_directory)
 
         counter = 0

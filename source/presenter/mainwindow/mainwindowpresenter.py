@@ -20,6 +20,7 @@
 
 import matplotlib
 import numpy
+import PyInstaller
 
 import PySide2
 import platform
@@ -258,9 +259,9 @@ class MyMainWindowPresenter(QtCore.QObject):
 
 GCA Analysis Tool, a simple tool for inspecting GCA history logs.
 
-Version 4.1
+Version 4.12
     
-Copyright (C) 2020 Oscar Franzén <oscarfranzen@protonmail.com>.
+Copyright (C) 2020-2021 Oscar Franzén <oscarfranzen@protonmail.com>.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -268,5 +269,5 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-Built with Python ''' + platform.python_version() + ''', PySide2/Qt ''' + PySide2.__version__ + ''', Matplotlib ''' + matplotlib.__version__ + ''', Numpy ''' + numpy.__version__ + ''', and bundled with Pyinstaller 4.0.''')
+Built with Python ''' + platform.python_version() + ''', PySide2/Qt ''' + PySide2.__version__ + ''', Matplotlib ''' + matplotlib.__version__ + ''', Numpy ''' + numpy.__version__ + ''', and bundled with PyInstaller ''' + PyInstaller.__version__ + '''.''')
 

@@ -42,21 +42,26 @@ class Datacollector(QtCore.QObject):
 
     def get_analysis(self, site_name, start_date, end_date, use_ignored=False):
 
+        # print('..................')
+        # print(start_date)
+        # print(end_date)
+
         analysis = {}
 
         self.set_progress(10)
 
         if use_ignored:
-            self.dates = sorted([date for date in self.model.get_historylog_dictionary(site_name).keys() if (date >= start_date) and (date <= end_date) and (date <= self.last_working_date)])
+            self.dates = sorted([date for date in self.model.get_historylog_dictionary(site_name).keys() if (date >= start_date) and (date <= end_date)]) # and (date <= self.last_working_date)])
         else:
             ignored_dates = self.model.get_ignored_dates(site_name)
-            self.dates = sorted([date for date in self.model.get_historylog_dictionary(site_name).keys() if (date >= start_date) and (date <= end_date) and (date <= self.last_working_date) and date not in ignored_dates])
+            self.dates = sorted([date for date in self.model.get_historylog_dictionary(site_name).keys() if (date >= start_date) and (date <= end_date) and (date not in ignored_dates)]) # and (date <= self.last_working_date)])
         
         self.historylog_dict = {date:self.model.get_historylog_dictionary(site_name)[date] for date in self.dates}
 
+        # print(self.dates[0])
+        # print(self.dates[-1])
 
-
-
+        # print(end_date)
 
         self.set_progress(0)
 

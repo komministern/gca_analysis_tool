@@ -77,8 +77,8 @@ class SitePresenter(QtCore.QObject):
             self.mainwindow.pushButton_LastDate.setEnabled(True)
             self.mainwindow.pushButton_ActiveDate.setEnabled(True)
 
-            if self.mainwindowpresenter.selected_date > self.model.get_last_entry_date(self.mainwindowpresenter.active_site_name):
-                self.mainwindowpresenter.selected_date = self.model.get_last_entry_date(self.mainwindowpresenter.active_site_name)
+            # if self.mainwindowpresenter.selected_date > self.model.get_last_entry_date(self.mainwindowpresenter.active_site_name):
+            #     self.mainwindowpresenter.selected_date = self.model.get_last_entry_date(self.mainwindowpresenter.active_site_name)
 
         else:
             self.mainwindow.pushButton_FirstDate.setEnabled(False)
@@ -131,28 +131,35 @@ class SitePresenter(QtCore.QObject):
 
 
     def update_site(self, site_name):
-        
-        self.mainwindowpresenter.inhibit_mouseclicks()
+
+        # self.mainwindowpresenter.inhibit_mouseclicks()
         
         self.model.update_site_from_temp_site(site_name)
 
         site_items = [u''] + self.model.get_site_names()
 
-        old_index = self.view.comboBox_ActiveSite.currentIndex()
+        old_index = self.mainwindow.comboBox_ActiveSite.currentIndex()
         new_index = site_items.index(site_name)
+
+        # if self.mainwindowpresenter.selected_date > self.model.get_last_entry_date(self.mainwindowpresenter.active_site_name):
+        # self.mainwindowpresenter.selected_date = self.model.get_last_entry_date(site_name)
+
 
         # This call will change the index in the comboBox, and also
         # update all the views ONLY IF old_index differs from new_index!
-        self.view.comboBox_ActiveSite.setCurrentIndex(new_index)
+        self.mainwindow.comboBox_ActiveSite.setCurrentIndex(new_index)
                             
         # So...
         if old_index == new_index:
             self.set_active_site(new_index)
         
-        self.mainwindowpresenter.allow_mouseclicks()
+        # self.mainwindowpresenter.allow_mouseclicks()
 
 
     # ---------- Import a capturesite file
+
+    
+
 
     def import_capturesite(self):
 
@@ -166,7 +173,7 @@ class SitePresenter(QtCore.QObject):
                 path_to_7z, _ = QtWidgets.QFileDialog.getOpenFileName(self.mainwindow, u'Path to 7z.exe', self.model.database.home_directory, u'7z console application (7z.exe)')
                 self.model.database.set_path_to_7z(path_to_7z)
 
-        if (capturesite_filename[-2:] != '.Z') or ((capturesite_filename[-2:] == '.Z') and self.model.database.exist_7z()):
+        if (capturesite_filename[-2:] != '.Z') or ( (capturesite_filename[-2:] == '.Z') and self.model.database.exist_7z() ):
 
             self.mainwindowpresenter.inhibit_mouseclicks()
 
@@ -176,15 +183,36 @@ class SitePresenter(QtCore.QObject):
                 print('B')
                 possible_matching_sites = self.model.get_possible_matching_sites_to_temp_site()
 
+                for each in possible_matching_sites:
+                    self.model.database.read_site_to_memory(each)
+
+                print('BB')
+
+                # Now check the second latest date from the existing sites with the new one.
+
+                definite_matching_sites = []
+
+                for site_name in possible_matching_sites:
+                    next_to_last_date = sorted(self.model.database.site_dictionary[site_name].get_dates_list())[-5] # -1 did not work for all sites
+                    next_to_last_log = self.model.database.site_dictionary[site_name].get_historylog(next_to_last_date)
+                    print(site_name)
+                    print(next_to_last_date)
+                    if next_to_last_log == self.model.database.site_dictionary[self.model.database.temp_site_name].get_historylog(next_to_last_date):
+                        definite_matching_sites.append(site_name)
+
+                print('definite_matching_sites')
+                print(definite_matching_sites)
+
                 self.mainwindowpresenter.allow_mouseclicks()
 
-                if len(possible_matching_sites) == 0:
+                if len(definite_matching_sites) == 0:
                     print('C')
                     self.create_new_site()
 
                     print('D')
-                elif len(possible_matching_sites) == 1:
-                    site_to_be_updated = possible_matching_sites[0]
+
+                elif len(definite_matching_sites) == 1:
+                    site_to_be_updated = definite_matching_sites[0]
 
                     if self.model.temp_site_newer_than(site_to_be_updated):
                         clicked = self.mainwindowpresenter.message_with_cancel_choice(u'The capturesite file seems to be affiliated with the already existing ' + site_to_be_updated + ' site.', 
@@ -203,8 +231,8 @@ class SitePresenter(QtCore.QObject):
                                      site_to_be_updated + u' site, but it contains fewer history log entries and thus ' +
                                      u'probably predates it. Aborting import.')
 
-                elif len(possible_matching_sites) > 1:
-                    print('Several possibilities!!!!!!!!!!!!!! FIX.')
+                elif len(definite_matching_sites) > 1:
+                    print('Several possibilities!!!!!!!!!!!!!! ERROR.')
                     
 
             except Exception as e:
@@ -214,6 +242,7 @@ class SitePresenter(QtCore.QObject):
             
 
             self.model.remove_temp_site()
+            self.mainwindowpresenter.calendarpresenter.set_last_date()
             self.mainwindowpresenter.allow_mouseclicks()
 
 

@@ -3,6 +3,7 @@ Run this command from within the project catalouge (Windows):
 The "GCA Analysis Tool.spec" is created with the following command:
 
 pyi-makespec --windowed --icon=resources/gca.ico --name="GCA Analysis Tool" --add-data "resources\gca.ico;resources" --onefile start.py
+pyi-makespec --windowed --icon=resources/gca.ico --name="GCA Analysis Tool" --add-data "resources\gca.ico;resources" start.py
 
 With the .spec file generated, just run:
 
