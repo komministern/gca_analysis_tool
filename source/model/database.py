@@ -142,6 +142,7 @@ class Database(QtCore.QObject):
 
 
     def copy_historylogs_from_site_to_site(self, from_site_name, to_site_name):
+        print('Copying historylogs from %s to %s.' % (from_site_name, to_site_name))
         source_site_directory = os.path.join(self.sites_directory, from_site_name)
         source_historylog_directory = os.path.join(source_site_directory, u'historylogs')
     
@@ -151,16 +152,27 @@ class Database(QtCore.QObject):
 
         files_to_copy = [f for f in os.listdir(source_historylog_directory) if os.path.isfile(os.path.join(source_historylog_directory, f))]
         nbr_of_files_to_copy = len(files_to_copy)
+        print('Number of files to copy: %d' % nbr_of_files_to_copy)
 
         self.set_progress(20)
 
+        print('Recursively removing %s.' % dest_historylog_directory)
         shutil.rmtree(dest_historylog_directory)
+
+        # Here we must verify that the dest_historylog_directory really is gone, before proceeding!!!!
+        import time
+        while os.path.isdir(dest_historylog_directory):
+            print('waiting...')
+            time.sleep(0.1)
 
         # dir = dest_historylog_directory
         # for f in os.listdir(dir):
         #     os.remove(os.path.join(dir, f))
 
+        print('Creating %s.' % dest_historylog_directory)
         os.mkdir(dest_historylog_directory)
+
+        print('Copying %d files from %s to %s.' % (nbr_of_files_to_copy, source_historylog_directory, dest_historylog_directory))
 
         counter = 0
 
@@ -170,6 +182,7 @@ class Database(QtCore.QObject):
             counter += 1
             self.set_progress(20 + int(round(80.0*counter/nbr_of_files_to_copy)))
 
+        print('Copied %d files. Done.' % counter)
 
 
     def remove_site_from_disc(self, site_name):

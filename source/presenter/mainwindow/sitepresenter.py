@@ -163,6 +163,8 @@ class SitePresenter(QtCore.QObject):
 
     def import_capturesite(self):
 
+        self.model.remove_temp_site()
+
         capturesite_filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.mainwindow, u'Choose capturesite file to import', self.model.database.home_directory, u'Capturesite (*tar.gz *TAR.Z)')
 
         if capturesite_filename[-2:] == '.Z':
