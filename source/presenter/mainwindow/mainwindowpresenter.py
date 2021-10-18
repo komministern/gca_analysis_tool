@@ -39,6 +39,7 @@ from .searchpresenter import SearchPresenter
 from .menupresenter import MenuPresenter
 from .ignorepresenter import IgnorePresenter
 from .analysispresenter import AnalysisPresenter
+from .comparepresenter import ComparePresenter
 
 
 
@@ -63,6 +64,7 @@ class MyMainWindowPresenter(QtCore.QObject):
         self.menupresenter = MenuPresenter(self.model, self.mainwindow, self)
         self.ignorepresenter = IgnorePresenter(self.model, self.mainwindow, self)
         self.analysispresenter = AnalysisPresenter(self.model, self.mainwindow, self)
+        self.comparepresenter = ComparePresenter(self.model, self.mainwindow, self)
 
         # Colors
         self.green = QtGui.QColor.fromRgbF(0.248478, 1.000000, 0.431632, 1.000000)
@@ -106,6 +108,7 @@ class MyMainWindowPresenter(QtCore.QObject):
         self.mainwindow.importAction.triggered.connect(self.sitepresenter.import_capturesite)
 
         self.mainwindow.analysisAction.triggered.connect(self.analysispresenter.analyze)
+        self.mainwindow.compareAction.triggered.connect(self.comparepresenter.compare)
         
         self.mainwindow.ignoreAction.triggered.connect(self.ignorepresenter.ignore_date)
         self.mainwindow.deIgnoreAction.triggered.connect(self.ignorepresenter.deignore_date)
@@ -259,7 +262,7 @@ class MyMainWindowPresenter(QtCore.QObject):
 
 GCA Analysis Tool, a simple tool for inspecting GCA history logs.
 
-Version 4.12
+Version 4.13
     
 Copyright (C) 2020-2021 Oscar Franzén <oscarfranzen@protonmail.com>.
 

@@ -195,11 +195,15 @@ class SitePresenter(QtCore.QObject):
                 definite_matching_sites = []
 
                 for site_name in possible_matching_sites:
-                    next_to_last_date = sorted(self.model.database.site_dictionary[site_name].get_dates_list())[-5] # -1 did not work for all sites
-                    next_to_last_log = self.model.database.site_dictionary[site_name].get_historylog(next_to_last_date)
+                    if len(self.model.database.site_dictionary[site_name].get_dates_list()) < len(self.model.database.site_dictionary[self.model.database.temp_site_name].get_dates_list()):
+                        comparison_date = sorted(self.model.database.site_dictionary[site_name].get_dates_list())[-2] # -1 did not work for all sites
+                    else:
+                        comparison_date = sorted(self.model.database.site_dictionary[self.model.database.temp_site_name].get_dates_list())[-2]
+
+                    comparison_log = self.model.database.site_dictionary[site_name].get_historylog(comparison_date)
                     print(site_name)
-                    print(next_to_last_date)
-                    if next_to_last_log == self.model.database.site_dictionary[self.model.database.temp_site_name].get_historylog(next_to_last_date):
+                    print(comparison_date)
+                    if comparison_log == self.model.database.site_dictionary[self.model.database.temp_site_name].get_historylog(comparison_date):
                         definite_matching_sites.append(site_name)
 
                 print('definite_matching_sites')

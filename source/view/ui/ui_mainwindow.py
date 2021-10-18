@@ -3,16 +3,13 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_mainwindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.0
+## Created by: Qt User Interface Compiler version 5.15.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QMetaObject,
-    QObject, QPoint, QRect, QSize, QTime, QUrl, Qt)
-from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-    QFontDatabase, QIcon, QKeySequence, QLinearGradient, QPalette, QPainter,
-    QPixmap, QRadialGradient)
+from PySide2.QtCore import *
+from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from ...view.mainwindow.mystringsearchplaintextedit import MyStringSearchPlainTextEdit
@@ -364,17 +361,29 @@ class Ui_MainWindow(object):
         self.comboBox_ActiveSite.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(statustip)
-        self.comboBox_ActiveSite.setStatusTip(QCoreApplication.translate("MainWindow", u"Choose active site", None))
+        self.comboBox_ActiveSite.setStatusTip(QCoreApplication.translate("MainWindow", u"Select active site", None))
 #endif // QT_CONFIG(statustip)
         self.groupBox_3.setTitle(QCoreApplication.translate("MainWindow", u"Calendar", None))
+#if QT_CONFIG(statustip)
+        self.pushButton_FirstDate.setStatusTip(QCoreApplication.translate("MainWindow", u"Select the date of the first recorded history log for this system", None))
+#endif // QT_CONFIG(statustip)
         self.pushButton_FirstDate.setText(QCoreApplication.translate("MainWindow", u"First", None))
+#if QT_CONFIG(statustip)
+        self.pushButton_LastDate.setStatusTip(QCoreApplication.translate("MainWindow", u"Select the date of the last recorded history log for this system", None))
+#endif // QT_CONFIG(statustip)
         self.pushButton_LastDate.setText(QCoreApplication.translate("MainWindow", u"Latest", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("MainWindow", u"Coloring Scheme", None))
 #if QT_CONFIG(tooltip)
         self.comboBox_Coloring.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(statustip)
-        self.comboBox_Coloring.setStatusTip(QCoreApplication.translate("MainWindow", u"Choose different coloring rules for the calendar", None))
+        self.comboBox_Coloring.setStatusTip(QCoreApplication.translate("MainWindow", u"Select coloring rules for the calendar", None))
+#endif // QT_CONFIG(statustip)
+#if QT_CONFIG(statustip)
+        self.calendarWidget.setStatusTip(QCoreApplication.translate("MainWindow", u"Select date of interest", None))
+#endif // QT_CONFIG(statustip)
+#if QT_CONFIG(statustip)
+        self.pushButton_ActiveDate.setStatusTip(QCoreApplication.translate("MainWindow", u"Show selected date", None))
 #endif // QT_CONFIG(statustip)
         self.pushButton_ActiveDate.setText(QCoreApplication.translate("MainWindow", u"Active", None))
         self.tabWidget_TextFields.setTabText(self.tabWidget_TextFields.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"History Log", None))
@@ -427,18 +436,18 @@ class Ui_MainWindow(object):
         self.pushButton_ResetStringSearch.setText(QCoreApplication.translate("MainWindow", u"Clear", None))
         self.tabWidget_Search.setTabText(self.tabWidget_Search.indexOf(self.tab_3), QCoreApplication.translate("MainWindow", u"String Search", None))
 #if QT_CONFIG(statustip)
-        self.comboBox_ChooseFilter.setStatusTip(QCoreApplication.translate("MainWindow", u"Choose history log filter", None))
+        self.comboBox_ChooseFilter.setStatusTip(QCoreApplication.translate("MainWindow", u"Select filter", None))
 #endif // QT_CONFIG(statustip)
 #if QT_CONFIG(statustip)
         self.pushButton_NewFilter.setStatusTip(QCoreApplication.translate("MainWindow", u"Create a new filter", None))
 #endif // QT_CONFIG(statustip)
         self.pushButton_NewFilter.setText(QCoreApplication.translate("MainWindow", u"New", None))
 #if QT_CONFIG(statustip)
-        self.pushButton_EditFilter.setStatusTip(QCoreApplication.translate("MainWindow", u"Edit currently chosen filter", None))
+        self.pushButton_EditFilter.setStatusTip(QCoreApplication.translate("MainWindow", u"Edit the currently selected filter", None))
 #endif // QT_CONFIG(statustip)
         self.pushButton_EditFilter.setText(QCoreApplication.translate("MainWindow", u"Edit", None))
 #if QT_CONFIG(statustip)
-        self.pushButton_DeleteFilter.setStatusTip(QCoreApplication.translate("MainWindow", u"Delete currently chosen filter", None))
+        self.pushButton_DeleteFilter.setStatusTip(QCoreApplication.translate("MainWindow", u"Delete the currently selected filter", None))
 #endif // QT_CONFIG(statustip)
         self.pushButton_DeleteFilter.setText(QCoreApplication.translate("MainWindow", u"Delete", None))
         self.tabWidget_Search.setTabText(self.tabWidget_Search.indexOf(self.tab_4), QCoreApplication.translate("MainWindow", u"Filter", None))

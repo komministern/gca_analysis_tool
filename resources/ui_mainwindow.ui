@@ -63,7 +63,7 @@
           <string/>
          </property>
          <property name="statusTip">
-          <string>Choose active site</string>
+          <string>Select active site</string>
          </property>
         </widget>
        </item>
@@ -102,6 +102,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="statusTip">
+          <string>Select the date of the first recorded history log for this system</string>
+         </property>
          <property name="text">
           <string>First</string>
          </property>
@@ -114,6 +117,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="statusTip">
+          <string>Select the date of the last recorded history log for this system</string>
          </property>
          <property name="text">
           <string>Latest</string>
@@ -168,7 +174,7 @@
              <string/>
             </property>
             <property name="statusTip">
-             <string>Choose different coloring rules for the calendar</string>
+             <string>Select coloring rules for the calendar</string>
             </property>
            </widget>
           </item>
@@ -191,6 +197,9 @@
            <bold>false</bold>
           </font>
          </property>
+         <property name="statusTip">
+          <string>Select date of interest</string>
+         </property>
          <property name="firstDayOfWeek">
           <enum>Qt::Monday</enum>
          </property>
@@ -206,6 +215,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="statusTip">
+          <string>Show selected date</string>
          </property>
          <property name="text">
           <string>Active</string>
@@ -622,7 +634,7 @@
            </size>
           </property>
           <property name="statusTip">
-           <string>Choose history log filter</string>
+           <string>Select filter</string>
           </property>
          </widget>
         </item>
@@ -675,7 +687,7 @@
            </size>
           </property>
           <property name="statusTip">
-           <string>Edit currently chosen filter</string>
+           <string>Edit the currently selected filter</string>
           </property>
           <property name="text">
            <string>Edit</string>
@@ -703,7 +715,7 @@
            </size>
           </property>
           <property name="statusTip">
-           <string>Delete currently chosen filter</string>
+           <string>Delete the currently selected filter</string>
           </property>
           <property name="text">
            <string>Delete</string>

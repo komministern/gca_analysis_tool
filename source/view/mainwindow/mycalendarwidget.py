@@ -122,6 +122,7 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
         self.lower_right_painted = True
 
     def paintCell(self, painter, rect, date):
+        painter.setRenderHint(QtGui.QPainter.Antialiasing)
 
         rectF = QtCore.QRectF(rect)
 
@@ -230,7 +231,11 @@ class MyCalendarWidget(QtWidgets.QCalendarWidget):
             modified_pen.setWidth(rect_thickness) #3
             modified_pen.setColor(QtGui.QColor('blue'))
             painter.setPen(modified_pen)
-            painter.drawRect(new_rect)
+            
+            # painter.drawRect(new_rect)
+            painter.drawEllipse(new_rect)
+
+
             painter.setPen(saved_pen)
 
 

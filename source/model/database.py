@@ -97,6 +97,10 @@ class Database(QtCore.QObject):
         sites = [site_name for site_name in sorted(QtCore.QDir(self.sites_directory).entryList(QtCore.QDir.Dirs | QtCore.QDir.NoDotAndDotDot)) if site_name != self.temp_site_name]  # This gives utf-8!!!!
         return sites
 
+    def read_temp_site_to_memory(self):
+        pass
+        # Hmmmmmm......
+
 
     def read_site_to_memory(self, site_name):
         if not site_name in self.site_dictionary.keys():

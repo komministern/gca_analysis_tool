@@ -102,6 +102,9 @@ class MyMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.analysisAction = QtWidgets.QAction('Graphs...', self)
         self.analysisAction.setStatusTip('Analyze history log between two dates')
 
+        self.compareAction = QtWidgets.QAction('Compare...', self)
+        self.compareAction.setStatusTip('Compare historylogs between two capturesite files')
+
         self.wrapActionGroup = QtWidgets.QActionGroup(self)
         self.wrapAction = QtWidgets.QAction('Wrap', self.wrapActionGroup)
         self.noWrapAction = QtWidgets.QAction('No Wrap', self.wrapActionGroup)
@@ -124,6 +127,7 @@ class MyMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         tools_menu = menubar.addMenu('Tools')
         tools_menu.addAction(self.analysisAction)
+        tools_menu.addAction(self.compareAction)
 
         view_menu = menubar.addMenu('View')
 
