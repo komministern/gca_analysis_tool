@@ -154,7 +154,7 @@ class MyMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         #menubar.addAction(self.aboutAction)
 #        menubar.addAction('Test')
-        help_menu = menubar.addMenu('Help')
+        help_menu = menubar.addMenu('About')
         help_menu.addAction(self.aboutAction)
 
 
